@@ -36,3 +36,13 @@ func CoreCareerToModel(input user.CareerCore) database.Career {
 		Date_end:     input.Date_end,
 	}
 }
+
+func ModelUserToCore(input database.User) user.UserCore {
+	return user.UserCore{
+		ID:        input.ID,
+		Full_name: input.Full_name,
+		Email:     input.Email,
+		Password:  input.Password,
+		Role:      input.Role,
+	}
+}
