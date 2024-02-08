@@ -1,6 +1,7 @@
 package router
 
 import (
+	"JobHuntz/app/middlewares"
 	_userData "JobHuntz/features/user/data"
 	_userHandler "JobHuntz/features/user/handler"
 	_userService "JobHuntz/features/user/service"
@@ -44,9 +45,9 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// paymentHandler := _paymenthandler.New(paymentService)
 
 	// user
-	//e.POST("/login", userHandlerAPI.Login)
 	e.POST("/users", userHandlerAPI.RegisterUser)
-	e.POST("/users/career", userHandlerAPI.CreateCareer)
+	e.POST("/login", userHandlerAPI.Login)
+	e.POST("/users/career", userHandlerAPI.CreateCareer, middlewares.JWTMiddleware())
 	// e.GET("/users", userHandlerAPI.GetUserById, middlewares.JWTMiddleware())
 	// e.PUT("/users", userHandlerAPI.UpdateUserById, middlewares.JWTMiddleware())
 	// e.DELETE("/users", userHandlerAPI.DeleteUserById, middlewares.JWTMiddleware())
