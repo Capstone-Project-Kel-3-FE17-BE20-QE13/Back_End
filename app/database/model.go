@@ -33,7 +33,7 @@ type Career struct {
 	JobseekerID  uint      `json:"jobseeker_id" form:"jobseeker_id"`
 	Position     string    `json:"position" form:"position"`
 	Company_name string    `json:"company_name" form:"company_name"`
-	Date_start   time.Time `json:"	Jobseeker Jobseedate_start" form:"date_start"`
+	Date_start   time.Time `json:"date_start" form:"date_start"`
 	Date_end     time.Time `json:"date_end" form:"date_end"`
 	Jobseeker    Jobseeker
 }
