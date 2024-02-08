@@ -1,9 +1,9 @@
 package main
 
 import (
-	config "Laptop/app/configs"
-	"Laptop/app/database"
-	router "Laptop/app/routers"
+	config "JobHuntz/app/configs"
+	"JobHuntz/app/database"
+	router "JobHuntz/app/routers"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -33,7 +33,7 @@ func main() {
 	router.InitRouter(dbMysql, e)
 
 	//start server and port
-	e.Logger.Fatal(e.Start(":8083"))
+	e.Logger.Fatal(e.Start(":8070"))
 }
 
 // func customTLSConfig() (*tls.Config, error) {
