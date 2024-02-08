@@ -20,3 +20,9 @@ func (service *UserService) Register(input user.Core) error {
 	err := service.userData.Register(input)
 	return err
 }
+
+func (service *UserService) AddCareer(input user.CareerCore) error {
+	// logic validation
+	err := service.userData.AddCareer(input)
+	return err
+}
