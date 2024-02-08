@@ -20,7 +20,15 @@ type UserRequest struct {
 	CV                  []byte    `json:"cv" form:"cv"`
 }
 
-func RequestToCore(input UserRequest) user.Core {
+type CareerRequest struct {
+	UserID       uint      `json:"user_id" form:"user_id"`
+	Position     string    `json:"position" form:"position"`
+	Company_name string    `json:"company_name" form:"company_name"`
+	Date_start   time.Time `json:"date_start" form:"date_start"`
+	Date_end     time.Time `json:"date_end" form:"date_end"`
+}
+
+func RequestUserToCore(input UserRequest) user.Core {
 	return user.Core{
 		Full_name:           input.Full_name,
 		Email:               input.Email,
@@ -34,5 +42,15 @@ func RequestToCore(input UserRequest) user.Core {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		CV:                  input.CV,
+	}
+}
+
+func RequestCareerToCore(input CareerRequest) user.CareerCore {
+	return user.CareerCore{
+		UserID:       input.UserID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
+		Date_start:   input.Date_start,
+		Date_end:     input.Date_end,
 	}
 }

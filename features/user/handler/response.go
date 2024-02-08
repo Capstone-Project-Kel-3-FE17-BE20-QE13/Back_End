@@ -21,7 +21,16 @@ type UserResponse struct {
 	CV                  []byte    `json:"cv" form:"cv"`
 }
 
-func CoreToResponse(input user.Core) UserResponse {
+type CareerResponse struct {
+	ID           uint      `json:"id" form:"id"`
+	UserID       uint      `json:"user_id" form:"user_id"`
+	Position     string    `json:"position" form:"position"`
+	Company_name string    `json:"company_name" form:"company_name"`
+	Date_start   time.Time `json:"date_start" form:"date_start"`
+	Date_end     time.Time `json:"date_end" form:"date_end"`
+}
+
+func CoreUserToResponse(input user.Core) UserResponse {
 	return UserResponse{
 		ID:                  input.ID,
 		Full_name:           input.Full_name,
@@ -36,5 +45,16 @@ func CoreToResponse(input user.Core) UserResponse {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		CV:                  input.CV,
+	}
+}
+
+func CoreCareerToResponse(input user.CareerCore) CareerResponse {
+	return CareerResponse{
+		ID:           input.ID,
+		UserID:       input.UserID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
+		Date_start:   input.Date_start,
+		Date_end:     input.Date_end,
 	}
 }
