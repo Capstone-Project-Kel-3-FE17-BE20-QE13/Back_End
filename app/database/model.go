@@ -22,6 +22,16 @@ type User struct {
 	CV                  []byte    `json:"cv" form:"cv"`
 }
 
+type Career struct {
+	gorm.Model
+	UserID       uint      `json:"user_id" form:"user_id"`
+	Position     string    `json:"position" form:"position"`
+	Company_name string    `json:"company_name" form:"company_name"`
+	Date_start   time.Time `json:"date_start" form:"date_start"`
+	Date_end     time.Time `json:"date_end" form:"date_end"`
+	User         User
+}
+
 // type Store struct {
 // 	gorm.Model
 // 	UserID     uint   `gorm:"type:string" json:"user_id" form:"user_id"`
