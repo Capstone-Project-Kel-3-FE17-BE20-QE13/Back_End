@@ -6,6 +6,13 @@ import (
 )
 
 type UserRequest struct {
+	Full_name string `gorm:"not null" json:"full_name" form:"full_name"`
+	Email     string `gorm:"not null;unique" json:"email" form:"email"`
+	Password  string `gorm:"not null" json:"password" form:"password"`
+	Role      string `json:"role" form:"role"`
+}
+
+type JobseekerRequest struct {
 	Full_name           string    `gorm:"not null" json:"full_name" form:"full_name"`
 	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
 	Password            string    `gorm:"not null" json:"password" form:"password"`
@@ -17,19 +24,28 @@ type UserRequest struct {
 	Birth_date          time.Time `json:"birth_date" form:"birth_date"`
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
-	CV                  []byte    `json:"cv" form:"cv"`
+	CV                  string    `json:"cv" form:"cv"`
 }
 
 type CareerRequest struct {
-	UserID       uint      `json:"user_id" form:"user_id"`
+	JobseekerID  uint      `json:"jobseeker_id" form:"jobseeker_id"`
 	Position     string    `json:"position" form:"position"`
 	Company_name string    `json:"company_name" form:"company_name"`
 	Date_start   time.Time `json:"date_start" form:"date_start"`
 	Date_end     time.Time `json:"date_end" form:"date_end"`
 }
 
-func RequestUserToCore(input UserRequest) user.Core {
-	return user.Core{
+func RequestUserToCore(input UserRequest) user.UserCore {
+	return user.UserCore{
+		Full_name: input.Full_name,
+		Email:     input.Email,
+		Password:  input.Password,
+		Role:      input.Role,
+	}
+}
+
+func RequestSeekerToCore(input JobseekerRequest) user.JobseekerCore {
+	return user.JobseekerCore{
 		Full_name:           input.Full_name,
 		Email:               input.Email,
 		Password:            input.Password,
@@ -47,7 +63,7 @@ func RequestUserToCore(input UserRequest) user.Core {
 
 func RequestCareerToCore(input CareerRequest) user.CareerCore {
 	return user.CareerCore{
-		UserID:       input.UserID,
+		JobseekerID:  input.JobseekerID,
 		Position:     input.Position,
 		Company_name: input.Company_name,
 		Date_start:   input.Date_start,

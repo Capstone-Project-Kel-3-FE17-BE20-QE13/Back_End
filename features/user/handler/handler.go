@@ -38,10 +38,10 @@ func (handler *UserHandler) RegisterUser(c echo.Context) error {
 }
 
 func (handler *UserHandler) CreateCareer(c echo.Context) error {
-	userID := 1
+	seekerID := 1
 
 	newCareer := CareerRequest{}
-	newCareer.UserID = uint(userID)
+	newCareer.JobseekerID = uint(seekerID)
 
 	errBind := c.Bind(&newCareer)
 	if errBind != nil {
