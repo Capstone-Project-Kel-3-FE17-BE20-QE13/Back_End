@@ -15,7 +15,7 @@ func New(repo user.UserDataInterface) user.UserServiceInterface {
 	}
 }
 
-func (service *UserService) Register(input user.Core) error {
+func (service *UserService) Register(input user.UserCore) error {
 	// logic validation
 	err := service.userData.Register(input)
 	return err
