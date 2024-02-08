@@ -1,4 +1,4 @@
-module Laptop
+module JobHuntz
 
 go 1.21.3
 

@@ -1,7 +1,7 @@
 package database
 
 import (
-	config "Laptop/app/configs"
+	config "JobHuntz/app/configs"
 	"database/sql"
 	"fmt"
 	"log"

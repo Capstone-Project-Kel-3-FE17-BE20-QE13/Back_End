@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	config "Laptop/app/configs"
+	config "JobHuntz/app/configs"
 	"errors"
 	"time"
 
