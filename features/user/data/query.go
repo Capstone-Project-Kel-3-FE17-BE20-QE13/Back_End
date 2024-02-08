@@ -4,6 +4,7 @@ import (
 	"JobHuntz/app/database"
 	"JobHuntz/features/user"
 	"JobHuntz/utils/responses"
+	"errors"
 	"log"
 
 	"gorm.io/gorm"
@@ -50,6 +51,22 @@ func (repo *UserQuery) Register(input user.UserCore) error {
 	repo.AddVerif(newSeekerStat.Status_Verification, newUserGorm.Email)
 
 	return nil
+}
+
+// Login implements user.UserDataInterface.
+func (repo *UserQuery) Login(email string) (user.UserCore, error) {
+	var dataUser database.User
+	tx := repo.db.Where("email = ?", email).First(&dataUser)
+	if tx.Error != nil {
+		return user.UserCore{}, errors.New(tx.Error.Error() + ", invalid email")
+	}
+
+	if tx.RowsAffected == 0 {
+		return user.UserCore{}, errors.New("login failed, invalid email")
+	}
+
+	userCore := ModelUserToCore(dataUser)
+	return userCore, nil
 }
 
 func (repo *UserQuery) AddCareer(input user.CareerCore) error {

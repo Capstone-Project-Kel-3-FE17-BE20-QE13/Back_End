@@ -43,10 +43,12 @@ type CareerCore struct {
 type UserServiceInterface interface {
 	Register(input UserCore) error
 	AddCareer(input CareerCore) error
+	Login(email string, password string) (UserCore, string, error)
 }
 
 // interface untuk Data Layer
 type UserDataInterface interface {
 	Register(input UserCore) error
 	AddCareer(input CareerCore) error
+	Login(email string) (UserCore, error)
 }

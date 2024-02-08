@@ -37,6 +37,23 @@ func (handler *UserHandler) RegisterUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully registered", userResponse))
 }
 
+func (handler *UserHandler) Login(c echo.Context) error {
+	newLogin := UserRequest{}
+	errBind := c.Bind(&newLogin)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	resLogin, token, err := handler.userService.Login(newLogin.Email, newLogin.Password)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, err.Error(), nil))
+	}
+
+	loginResponse := CoreUserToResponseLogin(resLogin, token)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully login", loginResponse))
+}
+
 func (handler *UserHandler) CreateCareer(c echo.Context) error {
 	seekerID := 1
 
