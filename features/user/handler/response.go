@@ -1,10 +1,11 @@
-package user
+package handler
 
 import (
+	"JobHuntz/features/user"
 	"time"
 )
 
-type Core struct {
+type UserResponse struct {
 	ID                  uint      `json:"id" form:"id"`
 	Full_name           string    `gorm:"not null" json:"full_name" form:"full_name"`
 	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
@@ -18,16 +19,22 @@ type Core struct {
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
 	CV                  []byte    `json:"cv" form:"cv"`
-	CreatedAt           time.Time `json:"created_at" form:"created_at"`
-	UpdatedAt           time.Time `json:"updated_at" form:"updated_at"`
 }
 
-// interface untuk Service Layer
-type UserServiceInterface interface {
-	Register(input Core) error
-}
-
-// interface untuk Data Layer
-type UserDataInterface interface {
-	Register(input Core) error
+func CoreToResponse(input user.Core) UserResponse {
+	return UserResponse{
+		ID:                  input.ID,
+		Full_name:           input.Full_name,
+		Email:               input.Email,
+		Password:            input.Password,
+		Role:                input.Role,
+		Username:            input.Username,
+		Address:             input.Address,
+		Phone:               input.Phone,
+		Status_Verification: input.Status_Verification,
+		Birth_date:          input.Birth_date,
+		Gender:              input.Gender,
+		Resume:              input.Resume,
+		CV:                  input.CV,
+	}
 }
