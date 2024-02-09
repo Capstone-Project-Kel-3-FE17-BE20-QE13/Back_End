@@ -55,11 +55,10 @@ type Company struct {
 
 type Job struct {
 	gorm.Model
-	Name    string
-	TypeJob string
-	Salary  string
-	// CategoryId  int
-	// Categorys   Category
+	Name        string
+	TypeJob     string
+	Salary      string
+	CategoryId  int
 	JobDesc     string
 	Requirement string
 	CreatedBy   uint
