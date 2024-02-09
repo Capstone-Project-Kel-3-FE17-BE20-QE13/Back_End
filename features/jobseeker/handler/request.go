@@ -1,30 +1,21 @@
 package handler
 
 import (
-	"JobHuntz/features/user"
+	"JobHuntz/features/jobseeker"
 	"time"
 )
 
-type UserRequest struct {
-	Full_name string `gorm:"not null" json:"full_name" form:"full_name"`
-	Email     string `gorm:"not null;unique" json:"email" form:"email"`
-	Password  string `gorm:"not null" json:"password" form:"password"`
-	Role      string `json:"role" form:"role"`
-}
-
 type JobseekerRequest struct {
 	Full_name           string    `gorm:"not null" json:"full_name" form:"full_name"`
+	Username            string    `gorm:"not null" json:"username" form:"username"`
 	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
 	Password            string    `gorm:"not null" json:"password" form:"password"`
-	Role                string    `json:"role" form:"role"`
-	Username            string    `gorm:"not null" json:"username" form:"username"`
-	Address             string    `json:"alamat" form:"alamat"`
+	Address             string    `json:"address" form:"address"`
 	Phone               string    `json:"phone" form:"phone"`
-	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
 	Birth_date          time.Time `json:"birth_date" form:"birth_date"`
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
-	CV                  string    `json:"cv" form:"cv"`
+	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
 }
 
 type CareerRequest struct {
@@ -35,34 +26,23 @@ type CareerRequest struct {
 	Date_end     time.Time `json:"date_end" form:"date_end"`
 }
 
-func RequestUserToCore(input UserRequest) user.UserCore {
-	return user.UserCore{
-		Full_name: input.Full_name,
-		Email:     input.Email,
-		Password:  input.Password,
-		Role:      input.Role,
-	}
-}
-
-func RequestSeekerToCore(input JobseekerRequest) user.JobseekerCore {
-	return user.JobseekerCore{
+func RequestJobseekerToCore(input JobseekerRequest) jobseeker.JobseekerCore {
+	return jobseeker.JobseekerCore{
 		Full_name:           input.Full_name,
+		Username:            input.Username,
 		Email:               input.Email,
 		Password:            input.Password,
-		Role:                input.Role,
-		Username:            input.Username,
 		Address:             input.Address,
 		Phone:               input.Phone,
-		Status_Verification: input.Status_Verification,
 		Birth_date:          input.Birth_date,
 		Gender:              input.Gender,
 		Resume:              input.Resume,
-		CV:                  input.CV,
+		Status_Verification: input.Status_Verification,
 	}
 }
 
-func RequestCareerToCore(input CareerRequest) user.CareerCore {
-	return user.CareerCore{
+func RequestCareerToCore(input CareerRequest) jobseeker.CareerCore {
+	return jobseeker.CareerCore{
 		JobseekerID:  input.JobseekerID,
 		Position:     input.Position,
 		Company_name: input.Company_name,

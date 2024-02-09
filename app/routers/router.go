@@ -1,19 +1,18 @@
 package router
 
 import (
-	"JobHuntz/app/middlewares"
-	_userData "JobHuntz/features/user/data"
-	_userHandler "JobHuntz/features/user/handler"
-	_userService "JobHuntz/features/user/service"
+	_jobseekerData "JobHuntz/features/jobseeker/data"
+	_jobseekerHandler "JobHuntz/features/jobseeker/handler"
+	_jobseekerService "JobHuntz/features/jobseeker/service"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
-	userData := _userData.New(db)
-	userService := _userService.New(userData)
-	userHandlerAPI := _userHandler.New(userService)
+	jobseekerData := _jobseekerData.New(db)
+	jobseekerService := _jobseekerService.New(jobseekerData)
+	jobseekerHandlerAPI := _jobseekerHandler.New(jobseekerService)
 
 	// productData := _dataProduct.New(db)
 	// productService := _productService.New(productData)
@@ -45,9 +44,9 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// paymentHandler := _paymenthandler.New(paymentService)
 
 	// user
-	e.POST("/users", userHandlerAPI.RegisterUser)
-	e.POST("/login", userHandlerAPI.Login)
-	e.POST("/users/career", userHandlerAPI.CreateCareer, middlewares.JWTMiddleware())
+	e.POST("/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
+	//e.POST("/login", userHandlerAPI.Login)
+	//e.POST("/jobseeker/career", userHandlerAPI.CreateCareer, middlewares.JWTMiddleware())
 	// e.GET("/users", userHandlerAPI.GetUserById, middlewares.JWTMiddleware())
 	// e.PUT("/users", userHandlerAPI.UpdateUserById, middlewares.JWTMiddleware())
 	// e.DELETE("/users", userHandlerAPI.DeleteUserById, middlewares.JWTMiddleware())
