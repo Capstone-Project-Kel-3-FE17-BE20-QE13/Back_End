@@ -51,15 +51,14 @@ func CoreJobseekerToResponse(input jobseeker.JobseekerCore) JobseekerResponse {
 	}
 }
 
-// func CoreSeekerToResponseLogin(input user.UserCore, token string) LoginResponse {
-// 	return LoginResponse{
-// 		ID:        input.ID,
-// 		Full_name: input.Full_name,
-// 		Email:     input.Email,
-// 		Role:      input.Role,
-// 		Token:     token,
-// 	}
-// }
+func CoreJobseekerToResponseLogin(input jobseeker.JobseekerCore, token string) LoginResponse {
+	return LoginResponse{
+		ID:        input.ID,
+		Full_name: input.Full_name,
+		Email:     input.Email,
+		Token:     token,
+	}
+}
 
 // func CoreCareerToResponse(input user.CareerCore) CareerResponse {
 // 	return CareerResponse{

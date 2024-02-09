@@ -32,13 +32,13 @@ type CareerCore struct {
 // interface untuk Service Layer
 type JobseekerServiceInterface interface {
 	Register(input JobseekerCore) error
+	Login(email string, password string) (JobseekerCore, string, error)
 	// AddCareer(input CareerCore) error
-	// Login(email string, password string) (JobseekerCore, string, error)
 }
 
 // interface untuk Data Layer
 type JobseekerDataInterface interface {
 	Register(input JobseekerCore) error
+	Login(email string) (JobseekerCore, error)
 	// AddCareer(input CareerCore) error
-	// Login(email string) (JobseekerCore, error)
 }

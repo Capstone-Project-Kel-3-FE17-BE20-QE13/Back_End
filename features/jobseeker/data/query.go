@@ -1,8 +1,10 @@
 package data
 
 import (
+	"JobHuntz/app/database"
 	"JobHuntz/features/jobseeker"
 	"JobHuntz/utils/responses"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -30,21 +32,21 @@ func (repo *JobseekerQuery) Register(input jobseeker.JobseekerCore) error {
 	return nil
 }
 
-// // Login implements user.UserDataInterface.
-// func (repo *UserQuery) Login(email string) (user.UserCore, error) {
-// 	var dataUser database.User
-// 	tx := repo.db.Where("email = ?", email).First(&dataUser)
-// 	if tx.Error != nil {
-// 		return user.UserCore{}, errors.New(tx.Error.Error() + ", invalid email")
-// 	}
+// Login implements user.UserDataInterface.
+func (repo *JobseekerQuery) Login(email string) (jobseeker.JobseekerCore, error) {
+	var dataSeeker database.Jobseeker
+	tx := repo.db.Where("email = ?", email).First(&dataSeeker)
+	if tx.Error != nil {
+		return jobseeker.JobseekerCore{}, errors.New(tx.Error.Error() + ", invalid email")
+	}
 
-// 	if tx.RowsAffected == 0 {
-// 		return user.UserCore{}, errors.New("login failed, invalid email")
-// 	}
+	if tx.RowsAffected == 0 {
+		return jobseeker.JobseekerCore{}, errors.New("login failed, invalid email")
+	}
 
-// 	userCore := ModelUserToCore(dataUser)
-// 	return userCore, nil
-// }
+	userCore := ModelJobseekerToCore(dataSeeker)
+	return userCore, nil
+}
 
 // func (repo *UserQuery) AddCareer(input user.CareerCore) error {
 // 	// simpan ke DB
