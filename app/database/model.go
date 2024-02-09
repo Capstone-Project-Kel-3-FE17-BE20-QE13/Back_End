@@ -67,3 +67,8 @@ type Job struct {
 	// Company      companies.Domain
 	// Applications []applications.Domain
 }
+
+type Categories struct {
+	Id       int    `gorm:"primaryKey"`
+	Category string `gorm:"unique"`
+}
