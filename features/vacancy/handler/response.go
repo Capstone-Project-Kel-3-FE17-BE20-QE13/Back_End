@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"JobHuntz/features/jobs"
-	"time"
+	"JobHuntz/features/vacancy"
 )
 
 type JobResponse struct {
@@ -17,11 +16,10 @@ type JobResponse struct {
 	CreatedBy   uint   `json:"createdBy"`
 	CompanyId   uint   `json:"companyId"`
 	// Applications []_appResponses.ApplicationResponse `json:"applications"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+
 }
 
-func FromCore(domain jobs.Core) JobResponse {
+func FromCore(domain vacancy.Core) JobResponse {
 	return JobResponse{
 		ID:   domain.ID,
 		Name: domain.Name,
@@ -32,12 +30,11 @@ func FromCore(domain jobs.Core) JobResponse {
 		CreatedBy:   domain.CreatedBy,
 		CompanyId:   domain.CompanyId,
 		// Applications: _appResponses.ListFromDomain(domain.Applications),
-		CreatedAt: domain.CreatedAt,
-		UpdatedAt: domain.UpdatedAt,
+
 	}
 }
 
-func ListFromCore(domain []jobs.Core) (response []JobResponse) {
+func ListFromCore(domain []vacancy.Core) (response []JobResponse) {
 	for _, job := range domain {
 		response = append(response, FromCore(job))
 	}
