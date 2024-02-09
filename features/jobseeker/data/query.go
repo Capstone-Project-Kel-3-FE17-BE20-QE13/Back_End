@@ -92,6 +92,18 @@ func (repo *JobseekerQuery) AddCV(input jobseeker.CVCore) error {
 	return nil
 }
 
+func (repo *JobseekerQuery) ReadCV(seekerID uint) (jobseeker.CVCore, error) {
+	var singleCVGorm database.CV
+	tx := repo.db.First(&singleCVGorm, seekerID)
+	if tx.Error != nil {
+		return jobseeker.CVCore{}, errors.New(tx.Error.Error() + "cannot get data of cv")
+	}
+
+	singleCVCore := ModelCVToCore(singleCVGorm)
+
+	return singleCVCore, nil
+}
+
 // func (repo *UserQuery) AddCareer(input user.CareerCore) error {
 // 	// simpan ke DB
 // 	newCareerGorm := CoreCareerToModel(input)

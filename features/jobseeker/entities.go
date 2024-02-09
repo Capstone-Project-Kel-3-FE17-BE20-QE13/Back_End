@@ -44,6 +44,7 @@ type JobseekerServiceInterface interface {
 	UpdateProfile(seekerID uint, data JobseekerCore) error
 	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
+	ReadCV(seekerID uint) (CVCore, error)
 	// AddCareer(input CareerCore) error
 }
 
@@ -54,5 +55,6 @@ type JobseekerDataInterface interface {
 	UpdateProfile(seekerID uint, data JobseekerCore) error
 	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
+	ReadCV(seekerID uint) (CVCore, error)
 	// AddCareer(input CareerCore) error
 }
