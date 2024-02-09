@@ -51,6 +51,12 @@ func (service *JobseekerService) Login(email string, password string) (jobseeker
 	return resLogin, token, nil
 }
 
+func (service *JobseekerService) UpdateProfile(userID uint, data jobseeker.JobseekerCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateProfile(userID, data)
+	return err
+}
+
 // func (service *UserService) AddCareer(input user.CareerCore) error {
 // 	// logic validation
 // 	err := service.userData.AddCareer(input)

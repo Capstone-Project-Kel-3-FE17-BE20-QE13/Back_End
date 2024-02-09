@@ -48,6 +48,17 @@ func (repo *JobseekerQuery) Login(email string) (jobseeker.JobseekerCore, error)
 	return userCore, nil
 }
 
+func (repo *JobseekerQuery) UpdateProfile(userID uint, data jobseeker.JobseekerCore) error {
+	newUpdateGorm := CoreJobseekerToModel(data)
+
+	txUpdates := repo.db.Model(&database.Jobseeker{}).Where("id = ?", userID).Updates(newUpdateGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
 // func (repo *UserQuery) AddCareer(input user.CareerCore) error {
 // 	// simpan ke DB
 // 	newCareerGorm := CoreCareerToModel(input)
