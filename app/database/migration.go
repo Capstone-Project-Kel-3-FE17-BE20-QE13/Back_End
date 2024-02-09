@@ -7,11 +7,5 @@ import (
 func InitialMigration(db *gorm.DB) {
 	db.AutoMigrate(&Jobseeker{})
 	db.AutoMigrate(&Career{})
-	// db.AutoMigrate(&Store{})
-	// db.AutoMigrate(&ShoppingCart{})
-	// db.AutoMigrate(&ShoppingCartItem{})
-	// db.AutoMigrate(&Order{})
-	// db.AutoMigrate(&OrderItem{})
-	// db.AutoMigrate(&Admin{})
-	// db.AutoMigrate(&Payment{})
+	db.AutoMigrate(&Company{})
 }
