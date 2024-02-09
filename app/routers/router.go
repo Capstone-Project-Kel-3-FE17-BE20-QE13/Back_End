@@ -1,6 +1,9 @@
 package router
 
 import (
+	_companyData "JobHuntz/features/company/data"
+	_companyHandler "JobHuntz/features/company/handler"
+	_companyService "JobHuntz/features/company/service"
 	_jobseekerData "JobHuntz/features/jobseeker/data"
 	_jobseekerHandler "JobHuntz/features/jobseeker/handler"
 	_jobseekerService "JobHuntz/features/jobseeker/service"
@@ -14,38 +17,16 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	jobseekerService := _jobseekerService.New(jobseekerData)
 	jobseekerHandlerAPI := _jobseekerHandler.New(jobseekerService)
 
-	// productData := _dataProduct.New(db)
-	// productService := _productService.New(productData)
-	// productHandlerAPI := _productHandler.New(productService)
-
-	// StoreRepo := _StoreRepo.New(db)
-	// StoreService := _StoreService.New(StoreRepo)
-	// StoreHandler := _StoreHandler.New(StoreService)
-
-	// cartData := _CartData.New(db)
-	// cartService := _CartService.New(cartData)
-	// cartHandlerAPI := _CartHandler.New(cartService)
-
-	// itemData := _ItemData.New(db)
-	// itemService := _ItemService.New(itemData)
-	// itemHandlerAPI := _ItemHandler.New(itemService)
-
-	// orderData := _OrderData.New(db)
-	// orderService := _OrderService.New(orderData)
-	// orderHandlerAPI := _OrderHandler.New(orderService)
-
-	// adminRepo := _adminRepo.New(db)
-	// adminService := _adminService.New(adminRepo)
-	// adminHandlerAPI := _adminHandler.New(adminService)
-
-	// paymentData := _paymentdata.New(db)
-	// validate := validator.New()
-	// paymentService := _paymentservice.New(paymentData, validate)
-	// paymentHandler := _paymenthandler.New(paymentService)
+	company := _companyData.New(db)
+	companyService := _companyService.New(company)
+	companyHandlerAPI := _companyHandler.New(companyService)
 
 	// user
 	e.POST("/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
 	e.POST("/jobseekers/login", jobseekerHandlerAPI.LoginJobseeker)
+
+	// company
+	e.POST("/company", companyHandlerAPI.RegisterCompany)
 	//e.POST("/jobseeker/career", userHandlerAPI.CreateCareer, middlewares.JWTMiddleware())
 	// e.GET("/users", userHandlerAPI.GetUserById, middlewares.JWTMiddleware())
 	// e.PUT("/users", userHandlerAPI.UpdateUserById, middlewares.JWTMiddleware())
