@@ -18,6 +18,11 @@ type JobseekerRequest struct {
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
 }
 
+type CVRequest struct {
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	CV_file     string `json:"cv_file" form:"cv_file"`
+}
+
 type CareerRequest struct {
 	JobseekerID  uint      `json:"jobseeker_id" form:"jobseeker_id"`
 	Position     string    `json:"position" form:"position"`
@@ -38,6 +43,13 @@ func RequestJobseekerToCore(input JobseekerRequest) jobseeker.JobseekerCore {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		Status_Verification: input.Status_Verification,
+	}
+}
+
+func RequestCVToCore(input CVRequest) jobseeker.CVCore {
+	return jobseeker.CVCore{
+		JobseekerID: input.JobseekerID,
+		CV_file:     input.CV_file,
 	}
 }
 

@@ -20,6 +20,13 @@ func CoreJobseekerToModel(input jobseeker.JobseekerCore) database.Jobseeker {
 	}
 }
 
+func CoreCVToModel(input jobseeker.CVCore) database.CV {
+	return database.CV{
+		JobseekerID: input.JobseekerID,
+		CV_file:     input.CV_file,
+	}
+}
+
 // func CoreCareerToModel(input user.CareerCore) database.Career {
 // 	return database.Career{
 // 		JobseekerID:  input.JobseekerID,
