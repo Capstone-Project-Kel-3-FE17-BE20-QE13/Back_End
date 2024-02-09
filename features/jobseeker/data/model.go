@@ -52,3 +52,10 @@ func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 		Status_Verification: input.Status_Verification,
 	}
 }
+
+func ModelCVToCore(input database.CV) jobseeker.CVCore {
+	return jobseeker.CVCore{
+		JobseekerID: input.JobseekerID,
+		CV_file:     input.CV_file,
+	}
+}

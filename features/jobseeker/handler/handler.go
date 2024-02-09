@@ -118,6 +118,17 @@ func (handler *JobseekerHandler) CreateCV(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully upload cv", nil))
 }
 
+func (handler *JobseekerHandler) GetCV(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	result, errFirst := handler.jobseekerService.ReadCV(seekerID)
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get cv", result))
+}
+
 // func (handler *UserHandler) CreateCareer(c echo.Context) error {
 // 	seekerID := 1
 
