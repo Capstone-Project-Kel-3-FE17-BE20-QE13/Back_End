@@ -35,7 +35,7 @@ func (handler *JobseekerHandler) RegisterJobseeker(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully registered", nil))
 }
 
-func (handler *JobseekerHandler) Login(c echo.Context) error {
+func (handler *JobseekerHandler) LoginJobseeker(c echo.Context) error {
 	newLogin := JobseekerRequest{}
 	errBind := c.Bind(&newLogin)
 	if errBind != nil {
