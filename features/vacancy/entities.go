@@ -1,16 +1,11 @@
 package vacancy
 
-import (
-	"JobHuntz/features/category"
-)
-
 type Core struct {
 	ID          uint `json:"id"`
 	Name        string
 	TypeJob     string
 	Salary      string
-	CategoryId  int
-	Category    category.Core
+	Category    string
 	JobDesc     string
 	Requirement string
 	CreatedBy   uint

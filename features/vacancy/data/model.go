@@ -15,8 +15,7 @@ func CoreToModel(input vacancy.Core) database.Job {
 		Requirement: input.Requirement,
 		CreatedBy:   input.CreatedBy,
 		CompanyId:   input.CompanyId,
-		// CategoryId:  input.CategoryId,
-		// Category:    input.Category,
+		Category:    input.Category,
 		// Company:      input.Company.ToDomain(),
 		// Applications: applications.ListToCore(job.Applications),
 	}
@@ -34,8 +33,7 @@ func CoretoModelGorm(data []vacancy.Core) []database.Job {
 			Requirement: input.Requirement,
 			CreatedBy:   input.CreatedBy,
 			CompanyId:   input.CompanyId,
-			// CategoryId:  input.CategoryId,
-			// Category:    input.Category,
+			Category:    input.Category,
 			// Company:      input.Company.ToDomain(),
 			// Applications: applications.ListToCore(job.Applications),
 
@@ -56,8 +54,7 @@ func ModelToCore(input database.Job) vacancy.Core {
 		Requirement: input.Requirement,
 		CreatedBy:   input.CreatedBy,
 		CompanyId:   input.CompanyId,
-		// CategoryId:  input.CategoryId,
-		// Category:    input.Category,
+		Category:    input.Category,
 		// Company:      input.Company.ToDomain(),
 		// Applications: applications.ListToCore(job.Applications),
 
@@ -76,8 +73,7 @@ func ModelGormToCore(data []database.Job) []vacancy.Core {
 			Requirement: input.Requirement,
 			CreatedBy:   input.CreatedBy,
 			CompanyId:   input.CompanyId,
-			// CategoryId:  input.CategoryId,
-			// Category:    input.Category,
+			Category:    input.Category,
 			// Company:      input.Company.ToDomain(),
 			// Applications: applications.ListToCore(job.Applications),
 

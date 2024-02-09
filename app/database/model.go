@@ -58,16 +58,11 @@ type Job struct {
 	Name        string
 	TypeJob     string
 	Salary      string
-	CategoryId  int
+	Category    string
 	JobDesc     string
 	Requirement string
 	CreatedBy   uint
 	CompanyId   uint
 	// Company      companies.Domain
 	// Applications []applications.Domain
-}
-
-type Categories struct {
-	Id       int    `gorm:"primaryKey"`
-	Category string `gorm:"unique"`
 }
