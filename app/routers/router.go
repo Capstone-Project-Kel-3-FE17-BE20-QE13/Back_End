@@ -1,9 +1,13 @@
 package router
 
 import (
+
 	_companyData "JobHuntz/features/company/data"
 	_companyHandler "JobHuntz/features/company/handler"
 	_companyService "JobHuntz/features/company/service"
+
+	"JobHuntz/app/middlewares"
+
 	_jobseekerData "JobHuntz/features/jobseeker/data"
 	_jobseekerHandler "JobHuntz/features/jobseeker/handler"
 	_jobseekerService "JobHuntz/features/jobseeker/service"
@@ -21,9 +25,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	companyService := _companyService.New(company)
 	companyHandlerAPI := _companyHandler.New(companyService)
 
-	// user
-	e.POST("/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
-	e.POST("/jobseekers/login", jobseekerHandlerAPI.LoginJobseeker)
 
 	// company
 	e.POST("/company", companyHandlerAPI.RegisterCompany)
@@ -67,4 +68,12 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// // payment
 	// e.POST("/payments", paymentHandler.Payment(), middlewares.JWTMiddleware())
 	// e.POST("/payments/callback", paymentHandler.Notification())
+  
+	// authentication
+	e.POST("/register/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
+	e.POST("/login/jobseekers", jobseekerHandlerAPI.LoginJobseeker)
+
+	// jobseekers
+	e.PUT("/jobseekers", jobseekerHandlerAPI.UpdateJobseeker, middlewares.JWTMiddleware())
+
 }

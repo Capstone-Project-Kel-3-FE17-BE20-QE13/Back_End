@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"JobHuntz/app/middlewares"
 	"JobHuntz/features/jobseeker"
 	"JobHuntz/utils/responses"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -50,6 +53,37 @@ func (handler *JobseekerHandler) LoginJobseeker(c echo.Context) error {
 	loginResponse := CoreJobseekerToResponseLogin(resLogin, token)
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully login", loginResponse))
+}
+
+func (handler *JobseekerHandler) UpdateJobseeker(c echo.Context) error {
+	userID := middlewares.ExtractTokenUserId(c)
+
+	newUpdate := JobseekerRequest{}
+
+	birthDateString := c.FormValue("birth_date")
+	if birthDateString != "" {
+		birthDate, err := time.Parse("2006-01-02", birthDateString)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
+		}
+		newUpdate.Birth_date = birthDate
+	}
+
+	errBind := c.Bind(&newUpdate)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	fmt.Println(newUpdate)
+
+	newUpdateCore := RequestJobseekerToCore(newUpdate)
+
+	err := handler.jobseekerService.UpdateProfile(userID, newUpdateCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, err.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully update profile", nil))
 }
 
 // func (handler *UserHandler) CreateCareer(c echo.Context) error {
