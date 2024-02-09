@@ -4,8 +4,12 @@ import (
 	"JobHuntz/app/database"
 	"JobHuntz/features/jobseeker"
 	"JobHuntz/utils/responses"
+	"context"
 	"errors"
+	"mime/multipart"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"gorm.io/gorm"
 )
 
@@ -48,12 +52,41 @@ func (repo *JobseekerQuery) Login(email string) (jobseeker.JobseekerCore, error)
 	return userCore, nil
 }
 
-func (repo *JobseekerQuery) UpdateProfile(userID uint, data jobseeker.JobseekerCore) error {
+func (repo *JobseekerQuery) UpdateProfile(seekerID uint, data jobseeker.JobseekerCore) error {
 	newUpdateGorm := CoreJobseekerToModel(data)
 
-	txUpdates := repo.db.Model(&database.Jobseeker{}).Where("id = ?", userID).Updates(newUpdateGorm)
+	txUpdates := repo.db.Model(&database.Jobseeker{}).Where("id = ?", seekerID).Updates(newUpdateGorm)
 	if txUpdates.Error != nil {
 		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) CV(fileHeader *multipart.FileHeader) (*uploader.UploadResult, error) {
+	urlCloudinary := "cloudinary://377166738273893:ga3Zq7Ts84gJ-Ltn-gyMkTgHd40@dltcy9ghn"
+
+	file, errHeader := fileHeader.Open()
+	if errHeader != nil {
+		return nil, errors.New(errHeader.Error() + "cannot open fileHeader")
+	}
+
+	ctx := context.Background()
+	cldService, _ := cloudinary.NewFromURL(urlCloudinary)
+	resp, errUpload := cldService.Upload.Upload(ctx, file, uploader.UploadParams{})
+	if errUpload != nil {
+		return nil, errors.New(errUpload.Error() + "cannot upload file")
+	}
+
+	return resp, nil
+}
+
+func (repo *JobseekerQuery) AddCV(input jobseeker.CVCore) error {
+	newCV := CoreCVToModel(input)
+
+	tx := repo.db.Create(&newCV) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
 	}
 
 	return nil

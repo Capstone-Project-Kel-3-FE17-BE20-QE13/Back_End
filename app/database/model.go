@@ -18,6 +18,13 @@ type Jobseeker struct {
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	CV                  CV
+}
+
+type CV struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	CV_file     string `json:"cv_file" form:"cv_file"`
 }
 
 type Career struct {
