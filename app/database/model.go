@@ -52,3 +52,17 @@ type Company struct {
 	Status_Verification string `json:"status_verification" form:"status_verification"`
 	Banners             string `json:"banners" form:"banners"`
 }
+
+type Job struct {
+	gorm.Model
+	Name        string
+	TypeJob     string
+	Salary      string
+	Category    string
+	JobDesc     string
+	Requirement string
+	CreatedBy   uint
+	CompanyId   uint
+	// Company      companies.Domain
+	// Applications []applications.Domain
+}

@@ -13,6 +13,10 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
+
+	_vacancyData "JobHuntz/features/vacancy/data"
+	_vacancyHandler "JobHuntz/features/vacancy/handler"
+	_vacancyService "JobHuntz/features/vacancy/service"
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
@@ -23,6 +27,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	company := _companyData.New(db)
 	companyService := _companyService.New(company)
 	companyHandlerAPI := _companyHandler.New(companyService)
+
+	vacancy := _vacancyData.NewJob(db)
+	vacancyService := _vacancyService.NewJob(vacancy)
+	vacancyHandlerAPI := _vacancyHandler.NewJob(vacancyService)
 
 	// company
 	e.POST("/company", companyHandlerAPI.RegisterCompany)
@@ -37,4 +45,9 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// curriculum vitae
 	e.POST("/cv", jobseekerHandlerAPI.CreateCV, middlewares.JWTMiddleware())
 	e.GET("/cv", jobseekerHandlerAPI.GetCV, middlewares.JWTMiddleware())
+
+	e.GET("/vacancy", vacancyHandlerAPI.GetAllJob)
+	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())
+	e.DELETE("vacancy/jobs_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
+
 }
