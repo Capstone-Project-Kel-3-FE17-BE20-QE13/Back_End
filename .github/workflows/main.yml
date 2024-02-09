@@ -38,4 +38,4 @@ jobs:
             docker stop appsku
             docker rm appsku
             docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.IMAGE_NAME }}:latest
-            docker run --name appsku -d -p 80:8070 --link mysqlku -e DBHOST=mysqlku -e DBUSER=root -e DBPASS=toor -e DBPORT=3306 -e DBNAME=dbku zidan70/be20
+            docker run --name appsku -d -p 80:8070 --link mysqlku -e DBHOST=mysqlku -e DBUSER=root -e DBPASS=toor -e DBPORT=3306 -e DBNAME=db_ku zidan70/be20
