@@ -33,6 +33,7 @@ type CareerCore struct {
 type JobseekerServiceInterface interface {
 	Register(input JobseekerCore) error
 	Login(email string, password string) (JobseekerCore, string, error)
+	UpdateProfile(user_id uint, data JobseekerCore) error
 	// AddCareer(input CareerCore) error
 }
 
@@ -40,5 +41,6 @@ type JobseekerServiceInterface interface {
 type JobseekerDataInterface interface {
 	Register(input JobseekerCore) error
 	Login(email string) (JobseekerCore, error)
+	UpdateProfile(user_id uint, data JobseekerCore) error
 	// AddCareer(input CareerCore) error
 }
