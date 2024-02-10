@@ -45,7 +45,13 @@ type JobseekerServiceInterface interface {
 	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
 	ReadCV(seekerID uint) (CVCore, error)
-	// AddCareer(input CareerCore) error
+	UpdateCV(input CVCore) error
+	RemoveCV(seekerID uint) error
+	AddCareer(input CareerCore) error
+	GetCareerByID(career_id uint) (CareerCore, error)
+	GetCareerList(seekerID uint) ([]CareerCore, error)
+	UpdateCareer(careerID_int uint, input CareerCore) error
+	RemoveCareer(career_id uint) error
 }
 
 // interface untuk Data Layer
@@ -56,5 +62,11 @@ type JobseekerDataInterface interface {
 	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
 	ReadCV(seekerID uint) (CVCore, error)
-	// AddCareer(input CareerCore) error
+	UpdateCV(input CVCore) error
+	RemoveCV(seekerID uint) error
+	AddCareer(input CareerCore) error
+	GetCareerByID(career_id uint) (CareerCore, error)
+	GetCareerList(seekerID uint) ([]CareerCore, error)
+	UpdateCareer(careerID_int uint, input CareerCore) error
+	RemoveCareer(career_id uint) error
 }

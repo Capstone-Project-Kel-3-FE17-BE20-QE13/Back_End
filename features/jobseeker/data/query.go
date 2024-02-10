@@ -6,7 +6,9 @@ import (
 	"JobHuntz/utils/responses"
 	"context"
 	"errors"
+	"fmt"
 	"mime/multipart"
+	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -26,6 +28,7 @@ func New(db *gorm.DB) jobseeker.JobseekerDataInterface {
 func (repo *JobseekerQuery) Register(input jobseeker.JobseekerCore) error {
 	newSeekerGorm := CoreJobseekerToModel(input)
 	newSeekerGorm.Password = responses.HashPassword(input.Password)
+	newSeekerGorm.Birth_date = time.Date(1700, 1, 1, 0, 0, 0, 0, time.UTC)
 	newSeekerGorm.Status_Verification = "Unverified"
 
 	tx := repo.db.Create(&newSeekerGorm) // proses query insert
@@ -104,14 +107,85 @@ func (repo *JobseekerQuery) ReadCV(seekerID uint) (jobseeker.CVCore, error) {
 	return singleCVCore, nil
 }
 
-// func (repo *UserQuery) AddCareer(input user.CareerCore) error {
-// 	// simpan ke DB
-// 	newCareerGorm := CoreCareerToModel(input)
+func (repo *JobseekerQuery) UpdateCV(input jobseeker.CVCore) error {
+	newCVGorm := CoreCVToModel(input)
 
-// 	tx := repo.db.Create(&newCareerGorm) // proses query insert
-// 	if tx.Error != nil {
-// 		return tx.Error
-// 	}
+	txUpdates := repo.db.Model(&database.CV{}).Where("jobseeker_id = ?", newCVGorm.JobseekerID).Updates(newCVGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
 
-// 	return nil
-// }
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveCV(input uint) error {
+	result := repo.db.Where("jobseeker_id = ?", input).Delete(&database.CV{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete cv")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}
+
+func (repo *JobseekerQuery) AddCareer(input jobseeker.CareerCore) error {
+	// simpan ke DB
+	newCareerGorm := CoreCareerToModel(input)
+
+	tx := repo.db.Create(&newCareerGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) GetCareerByID(input uint) (jobseeker.CareerCore, error) {
+	var singleCareerGorm database.Career
+	tx := repo.db.First(&singleCareerGorm, input)
+	if tx.Error != nil {
+		return jobseeker.CareerCore{}, tx.Error
+	}
+
+	singleCareerCore := ModelCareerToCore(singleCareerGorm)
+
+	return singleCareerCore, nil
+}
+
+func (repo *JobseekerQuery) GetCareerList(input uint) ([]jobseeker.CareerCore, error) {
+	var careersDataGorm []database.Career
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&careersDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allCareersCore := ModelCareersToCore(careersDataGorm)
+
+	return allCareersCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateCareer(career_id uint, input jobseeker.CareerCore) error {
+	newCareerGorm := CoreCareerToModel(input)
+
+	txUpdates := repo.db.Model(&database.Career{}).Where("id = ?", career_id).Updates(newCareerGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveCareer(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.Career{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete career")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}

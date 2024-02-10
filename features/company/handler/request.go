@@ -12,6 +12,11 @@ type CompanyRequest struct {
 	Website      string
 }
 
+type CompanyRequestLogin struct {
+	Email    string
+	Password string
+}
+
 func RequestCompanyToCore(input CompanyRequest) company.CompanyCore {
 	return company.CompanyCore{
 		Company_name: input.Company_name,

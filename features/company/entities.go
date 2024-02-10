@@ -1,6 +1,7 @@
 package company
 
 type CompanyCore struct {
+	ID                  uint `json:"id" form:"id"`
 	Company_name        string
 	Full_name           string
 	Email               string
@@ -17,8 +18,10 @@ type CompanyCore struct {
 
 type CompanyServiceInterface interface {
 	RegisterCompany(input CompanyCore) error
+	LoginCompany(email, password string) (CompanyCore, string, error)
 }
 
 type CompanyDataInterface interface {
 	RegisterCompany(input CompanyCore) error
+	LoginCompany(email string) (CompanyCore, error)
 }

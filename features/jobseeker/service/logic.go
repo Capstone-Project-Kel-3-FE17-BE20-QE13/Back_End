@@ -78,8 +78,44 @@ func (service *JobseekerService) ReadCV(seekerID uint) (jobseeker.CVCore, error)
 	return res, err
 }
 
-// func (service *UserService) AddCareer(input user.CareerCore) error {
-// 	// logic validation
-// 	err := service.userData.AddCareer(input)
-// 	return err
-// }
+func (service *JobseekerService) UpdateCV(input jobseeker.CVCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateCV(input)
+	return err
+}
+
+func (service *JobseekerService) RemoveCV(input uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveCV(input)
+	return err
+}
+
+func (service *JobseekerService) AddCareer(input jobseeker.CareerCore) error {
+	// logic validation
+	err := service.jobseekerData.AddCareer(input)
+	return err
+}
+
+func (service *JobseekerService) GetCareerByID(input uint) (jobseeker.CareerCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetCareerByID(input)
+	return res, err
+}
+
+func (service *JobseekerService) GetCareerList(input uint) ([]jobseeker.CareerCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetCareerList(input)
+	return res, err
+}
+
+func (service *JobseekerService) UpdateCareer(career_id uint, input jobseeker.CareerCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateCareer(career_id, input)
+	return err
+}
+
+func (service *JobseekerService) RemoveCareer(career_id uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveCareer(career_id)
+	return err
+}
