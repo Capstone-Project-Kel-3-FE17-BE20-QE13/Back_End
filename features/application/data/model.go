@@ -5,22 +5,22 @@ import (
 	"JobHuntz/features/application"
 )
 
-func CoreToModel(input application.Core) database.Apply {
-	return database.Apply{
+func CoreToModel(input application.Core) database.Application {
+	return database.Application{
 		// ID:          input.Id,
-		JobseekerID: input.JobseekerID,
-		JobId:       input.JobId,
-		Status:      input.Status,
+		JobseekerID:        input.JobseekerID,
+		VacancyID:          input.VacancyID,
+		Status_application: input.Status_application,
 	}
 }
 
-func CoretoModelGorm(data []application.Core) []database.Apply {
-	var productsDataGorm []database.Apply
+func CoretoModelGorm(data []application.Core) []database.Application {
+	var productsDataGorm []database.Application
 	for _, input := range data {
-		var productGorm = database.Apply{
-			JobseekerID: input.JobseekerID,
-			JobId:       input.JobId,
-			Status:      input.Status,
+		var productGorm = database.Application{
+			JobseekerID:        input.JobseekerID,
+			VacancyID:          input.VacancyID,
+			Status_application: input.Status_application,
 		}
 		productsDataGorm = append(productsDataGorm, productGorm)
 	}
@@ -28,21 +28,22 @@ func CoretoModelGorm(data []application.Core) []database.Apply {
 	return productsDataGorm
 }
 
-func ModelToCore(input database.Apply) application.Core {
+func ModelToCore(input database.Application) application.Core {
 	return application.Core{
-		JobseekerID: input.JobseekerID,
-		JobId:       input.JobId,
-		Status:      input.Status,
+		ID:                 input.ID,
+		JobseekerID:        input.JobseekerID,
+		VacancyID:          input.VacancyID,
+		Status_application: input.Status_application,
 	}
 }
 
-func ModelGormToCore(data []database.Apply) []application.Core {
+func ModelGormToCore(data []database.Application) []application.Core {
 	var productsData []application.Core
 	for _, input := range data {
 		var productInput = application.Core{
-			JobseekerID: input.JobseekerID,
-			JobId:       input.JobId,
-			Status:      input.Status,
+			JobseekerID:        input.JobseekerID,
+			VacancyID:          input.VacancyID,
+			Status_application: input.Status_application,
 		}
 		productsData = append(productsData, productInput)
 	}

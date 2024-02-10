@@ -5,16 +5,17 @@ import (
 )
 
 type ApplyResponse struct {
-	JobseekerID uint
-	JobId       uint
-	Status      string
+	ID                 uint   `json:"id" form:"id"`
+	JobseekerID        uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	VacancyID          uint   `json:"vacancy_id" form:"vacancy_id"`
+	Status_application string `json:"stat_app" form:"stat_app"`
 }
 
 // Mapping CorePrject to TaskResponsee
-func MapCoreApplyToApplyRes(core application.Core) ApplyResponse {
+func MapCoreApplyToApplyRes(input application.Core) ApplyResponse {
 	return ApplyResponse{
-		JobseekerID: core.JobseekerID,
-		JobId:       core.JobId,
-		Status:      core.Status,
+		JobseekerID:        input.JobseekerID,
+		VacancyID:          input.VacancyID,
+		Status_application: input.Status_application,
 	}
 }
