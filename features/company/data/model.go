@@ -16,3 +16,10 @@ func CoreCompannyToModel(input company.CompanyCore) database.Company {
 		Website:      input.Website,
 	}
 }
+
+func CoreLoginCompanyToModel(input database.Company) company.CompanyCore {
+	return company.CompanyCore{
+		Email:    input.Email,
+		Password: input.Password,
+	}
+}
