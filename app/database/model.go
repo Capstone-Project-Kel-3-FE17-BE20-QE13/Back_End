@@ -63,6 +63,4 @@ type Job struct {
 	Requirement string
 	CreatedBy   uint
 	CompanyId   uint
-	// Company      companies.Domain
-	// Applications []applications.Domain
 }

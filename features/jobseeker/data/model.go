@@ -27,15 +27,15 @@ func CoreCVToModel(input jobseeker.CVCore) database.CV {
 	}
 }
 
-// func CoreCareerToModel(input user.CareerCore) database.Career {
-// 	return database.Career{
-// 		JobseekerID:  input.JobseekerID,
-// 		Position:     input.Position,
-// 		Company_name: input.Company_name,
-// 		Date_start:   input.Date_start,
-// 		Date_end:     input.Date_end,
-// 	}
-// }
+func CoreCareerToModel(input jobseeker.CareerCore) database.Career {
+	return database.Career{
+		JobseekerID:  input.JobseekerID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
+		Date_start:   input.Date_start,
+		Date_end:     input.Date_end,
+	}
+}
 
 func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 	return jobseeker.JobseekerCore{
@@ -58,4 +58,32 @@ func ModelCVToCore(input database.CV) jobseeker.CVCore {
 		JobseekerID: input.JobseekerID,
 		CV_file:     input.CV_file,
 	}
+}
+
+func ModelCareerToCore(input database.Career) jobseeker.CareerCore {
+	return jobseeker.CareerCore{
+		ID:           input.ID,
+		JobseekerID:  input.JobseekerID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
+		Date_start:   input.Date_start,
+		Date_end:     input.Date_end,
+	}
+}
+
+func ModelCareersToCore(data []database.Career) []jobseeker.CareerCore {
+	var careersData []jobseeker.CareerCore
+	for _, input := range data {
+		var careerInput = jobseeker.CareerCore{
+			ID:           input.ID,
+			JobseekerID:  input.JobseekerID,
+			Position:     input.Position,
+			Company_name: input.Company_name,
+			Date_start:   input.Date_start,
+			Date_end:     input.Date_end,
+		}
+		careersData = append(careersData, careerInput)
+	}
+
+	return careersData
 }

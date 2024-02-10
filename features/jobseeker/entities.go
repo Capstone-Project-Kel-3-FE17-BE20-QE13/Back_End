@@ -47,7 +47,11 @@ type JobseekerServiceInterface interface {
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error
 	RemoveCV(seekerID uint) error
-	// AddCareer(input CareerCore) error
+	AddCareer(input CareerCore) error
+	GetCareerByID(career_id uint) (CareerCore, error)
+	GetCareerList(seekerID uint) ([]CareerCore, error)
+	UpdateCareer(careerID_int uint, input CareerCore) error
+	RemoveCareer(career_id uint) error
 }
 
 // interface untuk Data Layer
@@ -60,5 +64,9 @@ type JobseekerDataInterface interface {
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error
 	RemoveCV(seekerID uint) error
-	// AddCareer(input CareerCore) error
+	AddCareer(input CareerCore) error
+	GetCareerByID(career_id uint) (CareerCore, error)
+	GetCareerList(seekerID uint) ([]CareerCore, error)
+	UpdateCareer(careerID_int uint, input CareerCore) error
+	RemoveCareer(career_id uint) error
 }
