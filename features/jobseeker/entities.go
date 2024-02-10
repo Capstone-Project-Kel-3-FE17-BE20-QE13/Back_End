@@ -46,6 +46,7 @@ type JobseekerServiceInterface interface {
 	AddCV(input CVCore) error
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error
+	RemoveCV(seekerID uint) error
 	// AddCareer(input CareerCore) error
 }
 
@@ -58,5 +59,6 @@ type JobseekerDataInterface interface {
 	AddCV(input CVCore) error
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error
+	RemoveCV(seekerID uint) error
 	// AddCareer(input CareerCore) error
 }

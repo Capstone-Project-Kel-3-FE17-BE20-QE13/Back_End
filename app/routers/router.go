@@ -46,6 +46,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/cv", jobseekerHandlerAPI.CreateCV, middlewares.JWTMiddleware())
 	e.GET("/cv", jobseekerHandlerAPI.GetCV, middlewares.JWTMiddleware())
 	e.PUT("/cv", jobseekerHandlerAPI.UpdateCV, middlewares.JWTMiddleware())
+	e.DELETE("/cv", jobseekerHandlerAPI.DeleteCV, middlewares.JWTMiddleware())
 
 	e.GET("/vacancy", vacancyHandlerAPI.GetAllJob)
 	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())

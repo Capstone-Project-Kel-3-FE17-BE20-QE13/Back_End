@@ -6,6 +6,7 @@ import (
 	"JobHuntz/utils/responses"
 	"context"
 	"errors"
+	"fmt"
 	"mime/multipart"
 	"time"
 
@@ -113,6 +114,18 @@ func (repo *JobseekerQuery) UpdateCV(input jobseeker.CVCore) error {
 	if txUpdates.Error != nil {
 		return txUpdates.Error
 	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveCV(input uint) error {
+	result := repo.db.Where("jobseeker_id = ?", input).Delete(&database.CV{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete cv")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
 
 	return nil
 }
