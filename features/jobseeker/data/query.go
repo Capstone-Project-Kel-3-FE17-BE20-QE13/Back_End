@@ -189,3 +189,63 @@ func (repo *JobseekerQuery) RemoveCareer(input uint) error {
 
 	return nil
 }
+
+func (repo *JobseekerQuery) AddEducation(input jobseeker.EducationCore) error {
+	// simpan ke DB
+	newEduGorm := CoreEducationToModel(input)
+
+	tx := repo.db.Create(&newEduGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) GetEduByID(input uint) (jobseeker.EducationCore, error) {
+	var singleEduGorm database.Education
+	tx := repo.db.First(&singleEduGorm, input)
+	if tx.Error != nil {
+		return jobseeker.EducationCore{}, tx.Error
+	}
+
+	singleEduCore := ModelEduToCore(singleEduGorm)
+
+	return singleEduCore, nil
+}
+
+func (repo *JobseekerQuery) GetEduList(input uint) ([]jobseeker.EducationCore, error) {
+	var edusDataGorm []database.Education
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&edusDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allEdusCore := ModelEdusToCore(edusDataGorm)
+
+	return allEdusCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateEducation(eduID uint, input jobseeker.EducationCore) error {
+	newEduGorm := CoreEducationToModel(input)
+
+	txUpdates := repo.db.Model(&database.Education{}).Where("id = ?", eduID).Updates(newEduGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveEducation(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.Education{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete education")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}

@@ -54,6 +54,13 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.PUT("/career/:career_id", jobseekerHandlerAPI.UpdateCareer, middlewares.JWTMiddleware())
 	e.DELETE("/career/:career_id", jobseekerHandlerAPI.DeleteCareer, middlewares.JWTMiddleware())
 
+	// education
+	e.POST("/education", jobseekerHandlerAPI.CreateEducation, middlewares.JWTMiddleware())
+	e.GET("/education/:education_id", jobseekerHandlerAPI.GetSingleEducation, middlewares.JWTMiddleware())
+	e.GET("/all-educations", jobseekerHandlerAPI.GetAllEducations, middlewares.JWTMiddleware())
+	e.PUT("/education/:education_id", jobseekerHandlerAPI.UpdateEducation, middlewares.JWTMiddleware())
+	e.DELETE("/education/:education_id", jobseekerHandlerAPI.DeleteEducation, middlewares.JWTMiddleware())
+
 	// vacancy
 	e.GET("/vacancy", vacancyHandlerAPI.GetAllJob)
 	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())

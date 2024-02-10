@@ -37,6 +37,15 @@ type Career struct {
 	Jobseeker    Jobseeker
 }
 
+type Education struct {
+	gorm.Model
+	JobseekerID     uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	Education_level string    `json:"ed_level" form:"ed_level"`
+	Major           string    `json:"major" form:"major"`
+	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+	Jobseeker       Jobseeker
+}
+
 type Company struct {
 	gorm.Model
 	Company_name        string `gorm:"not null" json:"company_name" form:"company_name"`
@@ -55,6 +64,7 @@ type Company struct {
 
 type Job struct {
 	gorm.Model
+	CompanyID   uint
 	Name        string
 	TypeJob     string
 	Salary      string
@@ -63,4 +73,5 @@ type Job struct {
 	Requirement string
 	CreatedBy   uint
 	CompanyId   uint
+	Company     Company
 }

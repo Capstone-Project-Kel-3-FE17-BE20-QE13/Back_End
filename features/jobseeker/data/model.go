@@ -37,6 +37,15 @@ func CoreCareerToModel(input jobseeker.CareerCore) database.Career {
 	}
 }
 
+func CoreEducationToModel(input jobseeker.EducationCore) database.Education {
+	return database.Education{
+		JobseekerID:     input.JobseekerID,
+		Education_level: input.Education_level,
+		Major:           input.Major,
+		Graduation_date: input.Graduation_date,
+	}
+}
+
 func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 	return jobseeker.JobseekerCore{
 		ID:                  input.ID,
@@ -86,4 +95,30 @@ func ModelCareersToCore(data []database.Career) []jobseeker.CareerCore {
 	}
 
 	return careersData
+}
+
+func ModelEduToCore(input database.Education) jobseeker.EducationCore {
+	return jobseeker.EducationCore{
+		ID:              input.ID,
+		JobseekerID:     input.JobseekerID,
+		Education_level: input.Education_level,
+		Major:           input.Major,
+		Graduation_date: input.Graduation_date,
+	}
+}
+
+func ModelEdusToCore(data []database.Education) []jobseeker.EducationCore {
+	var edusData []jobseeker.EducationCore
+	for _, input := range data {
+		var eduInput = jobseeker.EducationCore{
+			ID:              input.ID,
+			JobseekerID:     input.JobseekerID,
+			Education_level: input.Education_level,
+			Major:           input.Major,
+			Graduation_date: input.Graduation_date,
+		}
+		edusData = append(edusData, eduInput)
+	}
+
+	return edusData
 }

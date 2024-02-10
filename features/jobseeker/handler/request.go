@@ -31,6 +31,13 @@ type CareerRequest struct {
 	Date_end     time.Time `json:"date_end" form:"date_end"`
 }
 
+type EducationRequest struct {
+	JobseekerID     uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	Education_level string    `json:"ed_level" form:"ed_level"`
+	Major           string    `json:"major" form:"major"`
+	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+}
+
 func RequestJobseekerToCore(input JobseekerRequest) jobseeker.JobseekerCore {
 	return jobseeker.JobseekerCore{
 		Full_name:           input.Full_name,
@@ -60,5 +67,14 @@ func RequestCareerToCore(input CareerRequest) jobseeker.CareerCore {
 		Company_name: input.Company_name,
 		Date_start:   input.Date_start,
 		Date_end:     input.Date_end,
+	}
+}
+
+func RequestEduToCareer(input EducationRequest) jobseeker.EducationCore {
+	return jobseeker.EducationCore{
+		JobseekerID:     input.JobseekerID,
+		Education_level: input.Education_level,
+		Major:           input.Major,
+		Graduation_date: input.Graduation_date,
 	}
 }

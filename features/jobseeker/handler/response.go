@@ -35,6 +35,14 @@ type CareerResponse struct {
 	Date_end     time.Time `json:"date_end" form:"date_end"`
 }
 
+type EducationResponse struct {
+	ID              uint      `json:"id" form:"id"`
+	JobseekerID     uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	Education_level string    `json:"ed_level" form:"ed_level"`
+	Major           string    `json:"major" form:"major"`
+	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+}
+
 func CoreJobseekerToResponse(input jobseeker.JobseekerCore) JobseekerResponse {
 	return JobseekerResponse{
 		ID:                  input.ID,
@@ -86,4 +94,30 @@ func CoreCareersToResponse(input []jobseeker.CareerCore) []CareerResponse {
 	}
 
 	return careerResponses
+}
+
+func CoreEducationToResponse(input jobseeker.EducationCore) EducationResponse {
+	return EducationResponse{
+		ID:              input.ID,
+		JobseekerID:     input.JobseekerID,
+		Education_level: input.Education_level,
+		Major:           input.Major,
+		Graduation_date: input.Graduation_date,
+	}
+}
+
+func CoreEdusToResponse(input []jobseeker.EducationCore) []EducationResponse {
+	var eduResponses []EducationResponse
+	for _, input := range input {
+		var eduInput = EducationResponse{
+			ID:              input.ID,
+			JobseekerID:     input.JobseekerID,
+			Education_level: input.Education_level,
+			Major:           input.Major,
+			Graduation_date: input.Graduation_date,
+		}
+		eduResponses = append(eduResponses, eduInput)
+	}
+
+	return eduResponses
 }

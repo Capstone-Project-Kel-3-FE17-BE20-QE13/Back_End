@@ -286,3 +286,109 @@ func (handler *JobseekerHandler) DeleteCareer(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully delete career", nil))
 }
+
+func (handler *JobseekerHandler) CreateEducation(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	newEdu := EducationRequest{}
+	newEdu.JobseekerID = uint(seekerID)
+
+	errBind := c.Bind(&newEdu)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	eduCore := RequestEduToCareer(newEdu)
+
+	errCreate := handler.jobseekerService.AddEducation(eduCore)
+	if errCreate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
+	}
+
+	eduResponse := CoreEducationToResponse(eduCore)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully create education", eduResponse))
+}
+
+func (handler *JobseekerHandler) GetSingleEducation(c echo.Context) error {
+	eduID := c.Param("education_id")
+
+	eduID_int, errConv := strconv.Atoi(eduID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	result, errFirst := handler.jobseekerService.GetEduByID(uint(eduID_int))
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	}
+
+	eduResponse := CoreEducationToResponse(result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get detail education", eduResponse))
+}
+
+func (handler *JobseekerHandler) GetAllEducations(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	result, errAll := handler.jobseekerService.GetEduList(seekerID)
+	if errAll != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errAll.Error(), nil))
+	}
+
+	edusResponse := CoreEdusToResponse(result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get all educations", edusResponse))
+}
+
+func (handler *JobseekerHandler) UpdateEducation(c echo.Context) error {
+	eduID := c.Param("education_id")
+
+	eduID_int, errConv := strconv.Atoi(eduID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	newUpdate := EducationRequest{}
+
+	oldGradString := c.FormValue("grad_date")
+	if oldGradString != "" {
+		oldStart, err := time.Parse("2006-01-02", oldGradString)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
+		}
+		newUpdate.Graduation_date = oldStart
+	}
+
+	errBind := c.Bind(&newUpdate)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	fmt.Println("data update: ", newUpdate)
+
+	newUpdateCore := RequestEduToCareer(newUpdate)
+
+	errUpdate := handler.jobseekerService.UpdateEducation(uint(eduID_int), newUpdateCore)
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully update education", nil))
+}
+
+func (handler *JobseekerHandler) DeleteEducation(c echo.Context) error {
+	eduID := c.Param("education_id")
+
+	eduID_int, errConv := strconv.Atoi(eduID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	errDel := handler.jobseekerService.RemoveEducation(uint(eduID_int))
+	if errDel != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error update data "+errDel.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully delete education", nil))
+}
