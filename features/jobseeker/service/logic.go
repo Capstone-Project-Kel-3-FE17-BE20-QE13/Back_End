@@ -78,6 +78,12 @@ func (service *JobseekerService) ReadCV(seekerID uint) (jobseeker.CVCore, error)
 	return res, err
 }
 
+func (service *JobseekerService) UpdateCV(input jobseeker.CVCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateCV(input)
+	return err
+}
+
 // func (service *UserService) AddCareer(input user.CareerCore) error {
 // 	// logic validation
 // 	err := service.userData.AddCareer(input)
