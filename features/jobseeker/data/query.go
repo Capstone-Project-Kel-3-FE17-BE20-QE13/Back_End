@@ -106,6 +106,17 @@ func (repo *JobseekerQuery) ReadCV(seekerID uint) (jobseeker.CVCore, error) {
 	return singleCVCore, nil
 }
 
+func (repo *JobseekerQuery) UpdateCV(input jobseeker.CVCore) error {
+	newCVGorm := CoreCVToModel(input)
+
+	txUpdates := repo.db.Model(&database.CV{}).Where("jobseeker_id = ?", newCVGorm.JobseekerID).Updates(newCVGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
 // func (repo *UserQuery) AddCareer(input user.CareerCore) error {
 // 	// simpan ke DB
 // 	newCareerGorm := CoreCareerToModel(input)

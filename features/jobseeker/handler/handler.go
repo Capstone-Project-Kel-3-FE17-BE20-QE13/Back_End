@@ -129,6 +129,37 @@ func (handler *JobseekerHandler) GetCV(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get cv", result))
 }
 
+func (handler *JobseekerHandler) UpdateCV(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	newCV := CVRequest{}
+	newCV.JobseekerID = seekerID
+	oldCV, _ := c.FormFile("cv_file")
+	if oldCV != nil {
+		responURL, errResp := handler.jobseekerService.CV(oldCV)
+		if errResp != nil {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error get resp "+errResp.Error(), nil))
+		}
+		newCV.CV_file = responURL.SecureURL
+	}
+
+	errBind := c.Bind(&newCV)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	newCVCore := RequestCVToCore(newCV)
+
+	fmt.Println("isi update: ", newCVCore)
+
+	errUpdate := handler.jobseekerService.UpdateCV(newCVCore)
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error update data "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully update cv", nil))
+}
+
 // func (handler *UserHandler) CreateCareer(c echo.Context) error {
 // 	seekerID := 1
 
