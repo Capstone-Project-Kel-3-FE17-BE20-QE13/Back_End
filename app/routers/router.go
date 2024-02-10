@@ -13,6 +13,10 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
+
+	_vacancyData "JobHuntz/features/vacancy/data"
+	_vacancyHandler "JobHuntz/features/vacancy/handler"
+	_vacancyService "JobHuntz/features/vacancy/service"
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
@@ -69,11 +73,24 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// e.POST("/payments", paymentHandler.Payment(), middlewares.JWTMiddleware())
 	// e.POST("/payments/callback", paymentHandler.Notification())
 
+	vacancy := _vacancyData.NewJob(db)
+	vacancyService := _vacancyService.NewJob(vacancy)
+	vacancyHandlerAPI := _vacancyHandler.NewJob(vacancyService)
+
 	// authentication
 	e.POST("/register/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
 	e.POST("/login/jobseekers", jobseekerHandlerAPI.LoginJobseeker)
 
 	// jobseekers
 	e.PUT("/jobseekers", jobseekerHandlerAPI.UpdateJobseeker, middlewares.JWTMiddleware())
+
+	// curriculum vitae
+	e.POST("/cv", jobseekerHandlerAPI.CreateCV, middlewares.JWTMiddleware())
+	e.GET("/cv", jobseekerHandlerAPI.GetCV, middlewares.JWTMiddleware())
+	e.PUT("/cv", jobseekerHandlerAPI.UpdateCV, middlewares.JWTMiddleware())
+
+	e.GET("/vacancy", vacancyHandlerAPI.GetAllJob)
+	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())
+	e.DELETE("vacancy/jobs_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
 
 }

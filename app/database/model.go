@@ -18,6 +18,13 @@ type Jobseeker struct {
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	CV                  CV
+}
+
+type CV struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	CV_file     string `json:"cv_file" form:"cv_file"`
 }
 
 type Career struct {
@@ -44,4 +51,18 @@ type Company struct {
 	Description         string `json:"description" form:"description"`
 	Status_Verification string `json:"status_verification" form:"status_verification"`
 	Banners             string `json:"banners" form:"banners"`
+}
+
+type Job struct {
+	gorm.Model
+	Name        string
+	TypeJob     string
+	Salary      string
+	Category    string
+	JobDesc     string
+	Requirement string
+	CreatedBy   uint
+	CompanyId   uint
+	// Company      companies.Domain
+	// Applications []applications.Domain
 }

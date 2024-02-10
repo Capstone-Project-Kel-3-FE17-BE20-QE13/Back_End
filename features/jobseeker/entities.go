@@ -1,7 +1,10 @@
 package jobseeker
 
 import (
+	"mime/multipart"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
 type JobseekerCore struct {
@@ -16,6 +19,11 @@ type JobseekerCore struct {
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+}
+
+type CVCore struct {
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	CV_file     string `json:"cv_file" form:"cv_file"`
 }
 
 type CareerCore struct {
@@ -33,7 +41,11 @@ type CareerCore struct {
 type JobseekerServiceInterface interface {
 	Register(input JobseekerCore) error
 	Login(email string, password string) (JobseekerCore, string, error)
-	UpdateProfile(user_id uint, data JobseekerCore) error
+	UpdateProfile(seekerID uint, data JobseekerCore) error
+	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
+	AddCV(input CVCore) error
+	ReadCV(seekerID uint) (CVCore, error)
+	UpdateCV(input CVCore) error
 	// AddCareer(input CareerCore) error
 }
 
@@ -41,6 +53,10 @@ type JobseekerServiceInterface interface {
 type JobseekerDataInterface interface {
 	Register(input JobseekerCore) error
 	Login(email string) (JobseekerCore, error)
-	UpdateProfile(user_id uint, data JobseekerCore) error
+	UpdateProfile(seekerID uint, data JobseekerCore) error
+	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
+	AddCV(input CVCore) error
+	ReadCV(seekerID uint) (CVCore, error)
+	UpdateCV(input CVCore) error
 	// AddCareer(input CareerCore) error
 }

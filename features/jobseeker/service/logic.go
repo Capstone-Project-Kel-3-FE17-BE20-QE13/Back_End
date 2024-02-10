@@ -5,6 +5,9 @@ import (
 	"JobHuntz/features/jobseeker"
 	"JobHuntz/utils/responses"
 	"errors"
+	"mime/multipart"
+
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
 type JobseekerService struct {
@@ -51,9 +54,33 @@ func (service *JobseekerService) Login(email string, password string) (jobseeker
 	return resLogin, token, nil
 }
 
-func (service *JobseekerService) UpdateProfile(userID uint, data jobseeker.JobseekerCore) error {
+func (service *JobseekerService) UpdateProfile(seekerID uint, data jobseeker.JobseekerCore) error {
 	// logic validation
-	err := service.jobseekerData.UpdateProfile(userID, data)
+	err := service.jobseekerData.UpdateProfile(seekerID, data)
+	return err
+}
+
+func (service *JobseekerService) CV(input *multipart.FileHeader) (*uploader.UploadResult, error) {
+	// logic validation
+	res, err := service.jobseekerData.CV(input)
+	return res, err
+}
+
+func (service *JobseekerService) AddCV(input jobseeker.CVCore) error {
+	// logic validation
+	err := service.jobseekerData.AddCV(input)
+	return err
+}
+
+func (service *JobseekerService) ReadCV(seekerID uint) (jobseeker.CVCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.ReadCV(seekerID)
+	return res, err
+}
+
+func (service *JobseekerService) UpdateCV(input jobseeker.CVCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateCV(input)
 	return err
 }
 
