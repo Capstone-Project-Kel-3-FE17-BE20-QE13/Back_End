@@ -119,3 +119,33 @@ func (service *JobseekerService) RemoveCareer(career_id uint) error {
 	err := service.jobseekerData.RemoveCareer(career_id)
 	return err
 }
+
+func (service *JobseekerService) AddEducation(input jobseeker.EducationCore) error {
+	// logic validation
+	err := service.jobseekerData.AddEducation(input)
+	return err
+}
+
+func (service *JobseekerService) GetEduByID(input uint) (jobseeker.EducationCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetEduByID(input)
+	return res, err
+}
+
+func (service *JobseekerService) GetEduList(input uint) ([]jobseeker.EducationCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetEduList(input)
+	return res, err
+}
+
+func (service *JobseekerService) UpdateEducation(eduID uint, input jobseeker.EducationCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateEducation(eduID, input)
+	return err
+}
+
+func (service *JobseekerService) RemoveEducation(eduID uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveEducation(eduID)
+	return err
+}

@@ -37,6 +37,14 @@ type CareerCore struct {
 	UpdatedAt    time.Time `json:"updated_at" form:"updated_at"`
 }
 
+type EducationCore struct {
+	ID              uint      `json:"id" form:"id"`
+	JobseekerID     uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	Education_level string    `json:"ed_level" form:"ed_level"`
+	Major           string    `json:"major" form:"major"`
+	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+}
+
 // interface untuk Service Layer
 type JobseekerServiceInterface interface {
 	Register(input JobseekerCore) error
@@ -52,6 +60,11 @@ type JobseekerServiceInterface interface {
 	GetCareerList(seekerID uint) ([]CareerCore, error)
 	UpdateCareer(careerID_int uint, input CareerCore) error
 	RemoveCareer(career_id uint) error
+	AddEducation(input EducationCore) error
+	GetEduByID(eduID uint) (EducationCore, error)
+	GetEduList(seekerID uint) ([]EducationCore, error)
+	UpdateEducation(eduID uint, data EducationCore) error
+	RemoveEducation(eduID uint) error
 }
 
 // interface untuk Data Layer
@@ -69,4 +82,9 @@ type JobseekerDataInterface interface {
 	GetCareerList(seekerID uint) ([]CareerCore, error)
 	UpdateCareer(careerID_int uint, input CareerCore) error
 	RemoveCareer(career_id uint) error
+	AddEducation(input EducationCore) error
+	GetEduByID(eduID uint) (EducationCore, error)
+	GetEduList(seekerID uint) ([]EducationCore, error)
+	UpdateEducation(eduID uint, data EducationCore) error
+	RemoveEducation(eduID uint) error
 }
