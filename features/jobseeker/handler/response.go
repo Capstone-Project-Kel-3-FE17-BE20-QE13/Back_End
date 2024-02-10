@@ -60,13 +60,30 @@ func CoreJobseekerToResponseLogin(input jobseeker.JobseekerCore, token string) L
 	}
 }
 
-// func CoreCareerToResponse(input user.CareerCore) CareerResponse {
-// 	return CareerResponse{
-// 		ID:           input.ID,
-// 		JobseekerID:  input.JobseekerID,
-// 		Position:     input.Position,
-// 		Company_name: input.Company_name,
-// 		Date_start:   input.Date_start,
-// 		Date_end:     input.Date_end,
-// 	}
-// }
+func CoreCareerToResponse(input jobseeker.CareerCore) CareerResponse {
+	return CareerResponse{
+		ID:           input.ID,
+		JobseekerID:  input.JobseekerID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
+		Date_start:   input.Date_start,
+		Date_end:     input.Date_end,
+	}
+}
+
+func CoreCareersToResponse(input []jobseeker.CareerCore) []CareerResponse {
+	var careerResponses []CareerResponse
+	for _, v := range input {
+		var careerInput = CareerResponse{
+			ID:           v.ID,
+			JobseekerID:  v.JobseekerID,
+			Position:     v.Position,
+			Company_name: v.Company_name,
+			Date_start:   v.Date_start,
+			Date_end:     v.Date_end,
+		}
+		careerResponses = append(careerResponses, careerInput)
+	}
+
+	return careerResponses
+}

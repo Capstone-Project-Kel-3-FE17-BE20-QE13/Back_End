@@ -130,14 +130,62 @@ func (repo *JobseekerQuery) RemoveCV(input uint) error {
 	return nil
 }
 
-// func (repo *UserQuery) AddCareer(input user.CareerCore) error {
-// 	// simpan ke DB
-// 	newCareerGorm := CoreCareerToModel(input)
+func (repo *JobseekerQuery) AddCareer(input jobseeker.CareerCore) error {
+	// simpan ke DB
+	newCareerGorm := CoreCareerToModel(input)
 
-// 	tx := repo.db.Create(&newCareerGorm) // proses query insert
-// 	if tx.Error != nil {
-// 		return tx.Error
-// 	}
+	tx := repo.db.Create(&newCareerGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
 
-// 	return nil
-// }
+	return nil
+}
+
+func (repo *JobseekerQuery) GetCareerByID(input uint) (jobseeker.CareerCore, error) {
+	var singleCareerGorm database.Career
+	tx := repo.db.First(&singleCareerGorm, input)
+	if tx.Error != nil {
+		return jobseeker.CareerCore{}, tx.Error
+	}
+
+	singleCareerCore := ModelCareerToCore(singleCareerGorm)
+
+	return singleCareerCore, nil
+}
+
+func (repo *JobseekerQuery) GetCareerList(input uint) ([]jobseeker.CareerCore, error) {
+	var careersDataGorm []database.Career
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&careersDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allCareersCore := ModelCareersToCore(careersDataGorm)
+
+	return allCareersCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateCareer(career_id uint, input jobseeker.CareerCore) error {
+	newCareerGorm := CoreCareerToModel(input)
+
+	txUpdates := repo.db.Model(&database.Career{}).Where("id = ?", career_id).Updates(newCareerGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveCareer(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.Career{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete career")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}
