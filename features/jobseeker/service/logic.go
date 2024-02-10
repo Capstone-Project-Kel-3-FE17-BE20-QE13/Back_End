@@ -84,6 +84,12 @@ func (service *JobseekerService) UpdateCV(input jobseeker.CVCore) error {
 	return err
 }
 
+func (service *JobseekerService) RemoveCV(input uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveCV(input)
+	return err
+}
+
 // func (service *UserService) AddCareer(input user.CareerCore) error {
 // 	// logic validation
 // 	err := service.userData.AddCareer(input)

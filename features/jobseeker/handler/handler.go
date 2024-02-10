@@ -160,6 +160,17 @@ func (handler *JobseekerHandler) UpdateCV(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully update cv", nil))
 }
 
+func (handler *JobseekerHandler) DeleteCV(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	errUpdate := handler.jobseekerService.RemoveCV(seekerID)
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error update data "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully delete cv", nil))
+}
+
 // func (handler *UserHandler) CreateCareer(c echo.Context) error {
 // 	seekerID := 1
 
