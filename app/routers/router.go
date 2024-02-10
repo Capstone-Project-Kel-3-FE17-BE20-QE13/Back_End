@@ -17,6 +17,10 @@ import (
 	_vacancyData "JobHuntz/features/vacancy/data"
 	_vacancyHandler "JobHuntz/features/vacancy/handler"
 	_vacancyService "JobHuntz/features/vacancy/service"
+
+	_applyData "JobHuntz/features/application/data"
+	_applyHandler "JobHuntz/features/application/handler"
+	_applyService "JobHuntz/features/application/service"
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
@@ -31,6 +35,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	vacancy := _vacancyData.NewJob(db)
 	vacancyService := _vacancyService.NewJob(vacancy)
 	vacancyHandlerAPI := _vacancyHandler.NewJob(vacancyService)
+
+	application := _applyData.New(db)
+	applicationService := _applyService.New(application)
+	applicationHandlerAPI := _applyHandler.New(applicationService)
 
 	// authentication
 	e.POST("/register/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
@@ -58,5 +66,9 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/vacancy", vacancyHandlerAPI.GetAllJob)
 	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())
 	e.DELETE("vacancy/jobs_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
+
+	// application
+	e.POST("/application", applicationHandlerAPI.CreateApply, middlewares.JWTMiddleware())
+	e.GET("/applications/:userID", applicationHandlerAPI.GetAllApplications, middlewares.JWTMiddleware())
 
 }

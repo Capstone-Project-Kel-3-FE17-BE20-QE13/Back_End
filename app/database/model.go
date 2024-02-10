@@ -64,3 +64,10 @@ type Job struct {
 	CreatedBy   uint
 	CompanyId   uint
 }
+
+type Apply struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id"`
+	JobId       uint   `json:"job_id"`
+	Status      string `json:"status"`
+}
