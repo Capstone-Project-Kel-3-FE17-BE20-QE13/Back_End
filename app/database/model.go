@@ -66,3 +66,10 @@ type Job struct {
 	// Company      companies.Domain
 	// Applications []applications.Domain
 }
+
+type Apply struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id"`
+	JobId       uint   `json:"job_id"`
+	Status      string `json:"status"`
+}
