@@ -37,7 +37,7 @@ func (repo *jobQuery) CreateJob(input vacancy.Core) error {
 }
 
 func (repo *jobQuery) GetAllJobs() ([]vacancy.Core, error) {
-	var jobDataGorm []database.Job
+	var jobDataGorm []database.Vacancy
 	tx := repo.db.Find(&jobDataGorm) // select * from users;
 	if tx.Error != nil {
 		return nil, tx.Error
@@ -50,7 +50,7 @@ func (repo *jobQuery) GetAllJobs() ([]vacancy.Core, error) {
 }
 
 func (repo *jobQuery) GetJobById(id int) (vacancy.Core, error) {
-	var singleJobGorm database.Job
+	var singleJobGorm database.Vacancy
 	tx := repo.db.First(&singleJobGorm, id)
 	if tx.Error != nil {
 		return vacancy.Core{}, tx.Error

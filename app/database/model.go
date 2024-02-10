@@ -62,23 +62,24 @@ type Company struct {
 	Banners             string `json:"banners" form:"banners"`
 }
 
-type Job struct {
+type Vacancy struct {
 	gorm.Model
-	CompanyID   uint
-	Name        string
-	TypeJob     string
-	Salary      string
-	Category    string
-	JobDesc     string
-	Requirement string
-	CreatedBy   uint
-	CompanyId   uint
-	Company     Company
+	CompanyID       uint   `json:"company_id" form:"company_id"`
+	Name            string `json:"name" form:"name"`
+	Job_type        string `json:"job_type" form:"job_type"`
+	Salary_range    string `json:"salary_range" form:"salary_range"`
+	Category        string `json:"category" form:"category"`
+	Job_description string `json:"job_desc" form:"job_desc"`
+	Job_requirement string `json:"job_req" form:"job_req"`
+	Created_by      uint   `json:"created_by" form:"created_by"`
+	Company         Company
 }
 
-type Apply struct {
+type Application struct {
 	gorm.Model
-	JobseekerID uint   `json:"jobseeker_id"`
-	JobId       uint   `json:"job_id"`
-	Status      string `json:"status"`
+	JobseekerID        uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	VacancyID          uint   `json:"vacancy_id" form:"vacancy_id"`
+	Status_application string `json:"stat_app" form:"stat_app"`
+	Jobseeker          Jobseeker
+	Vacancy            Vacancy
 }

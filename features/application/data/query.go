@@ -30,7 +30,7 @@ func (repo *ApplyQuery) CreateApplication(input application.Core) (uint, error) 
 }
 
 func (repo *ApplyQuery) GetAllApplications(jobseekerID uint) ([]application.Core, error) {
-	var productsDataGorm []database.Apply
+	var productsDataGorm []database.Application
 	tx := repo.db.Find(&productsDataGorm) // select * from users;
 	if tx.Error != nil {
 		return nil, tx.Error

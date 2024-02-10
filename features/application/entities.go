@@ -1,9 +1,10 @@
 package application
 
 type Core struct {
-	JobseekerID uint
-	JobId       uint
-	Status      string
+	ID                 uint   `json:"id" form:"id"`
+	JobseekerID        uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	VacancyID          uint   `json:"vacancy_id" form:"vacancy_id"`
+	Status_application string `json:"stat_app" form:"stat_app"`
 }
 
 type ApplyDataInterface interface {
