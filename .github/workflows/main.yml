@@ -27,3 +27,15 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.IMAGE_NAME }}:latest
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker stop appsku
+            docker rm appsku
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.IMAGE_NAME }}:latest
+            docker run --name appsku -d -p 80:8070 --link mysqlku -e DBHOST=${{secrets.DBHOST}} -e DBUSER=${{secrets.DBUSER}} -e DBPASS=${{secrets.DBPASS}} -e DBPORT=${{secrets.DBPORT}} -e DBNAME=${{secrets.DBNAME}} -e CLOUDINARY_KEY=845761574421658 -e CLOUDINARY_SECRET=fAz482TvPlDfkVYz3Q0yM7l_bs4 -e  CLOUDINARY_CLOUD_NAME=dfuahvohn zidan70/be20
