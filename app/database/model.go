@@ -73,6 +73,14 @@ type Company struct {
 	Vacancys            []Vacancy `gorm:"foreignKey:CompanyID"`
 }
 
+type Skill struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Skill       string `json:"skill" form:"skill"`
+	Description string `json:"description" form:"description"`
+	Jobseeker   Jobseeker
+}
+
 type Vacancy struct {
 	gorm.Model
 	Name            string `json:"name" form:"name"`
