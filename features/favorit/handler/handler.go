@@ -1,9 +1,12 @@
 package handler
 
 import (
+	config "JobHuntz/app/configs"
+	"JobHuntz/app/database"
 	"JobHuntz/app/middlewares"
 	"JobHuntz/features/favorit"
 	"JobHuntz/utils/responses"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -21,22 +24,43 @@ func New(service favorit.FavServiceInterface) *FavHandler {
 }
 
 func (h *FavHandler) CreateFavorit(c echo.Context) error {
-	newApply := new(FavRequest)
-	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
-	newApply.JobId = middlewares.ExtractTokenUserId(c)
-	//mendapatkan data yang dikirim oleh FE melalui request
-	err := c.Bind(&newApply)
+	vacancyID := c.QueryParam("vacancy_id")
+
+	vacancyID_int, err := strconv.Atoi(vacancyID)
 	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert data", nil))
+	}
+
+	cfg := config.InitConfig()
+	dbRaw := database.InitRawSql(cfg)
+
+	result, errGet := h.favService.GetDataCompany(dbRaw, uint(vacancyID_int))
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error get data company", nil))
+	}
+
+	fmt.Println("isi data company: ", result)
+
+	newFavor := new(FavRequest)
+	newFavor.JobseekerID = middlewares.ExtractTokenUserId(c)
+	newFavor.VacancyID = uint(vacancyID_int)
+	newFavor.Position = result.Position
+	newFavor.Company_name = result.Company_name
+
+	errFavor := c.Bind(&newFavor)
+	if errFavor != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data", nil))
 	}
 
-	//mapping dari request to CoreProject
-	input := MapApplyReqToCoreApply(*newApply)
+	fmt.Println("isi new favor: ", newFavor)
+
+	//mapping dari request to Core
+	input := MapApplyReqToCoreApply(*newFavor)
 	_, err = h.favService.CreateFavorit(input)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data, "+err.Error(), nil))
 	}
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusCreated, "success create project", nil))
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusCreated, "success create favourite", nil))
 }
 
 // func (h *FavHandler) GetAllFavorit(c echo.Context) error {

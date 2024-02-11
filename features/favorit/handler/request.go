@@ -3,16 +3,18 @@ package handler
 import "JobHuntz/features/favorit"
 
 type FavRequest struct {
-	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
-	JobId       uint   `json:"job_id" form:"job_id"`
-	Name        string `json:"name" form:"name"`
+	JobseekerID  uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	VacancyID    uint   `json:"vacancy_id" form:"vacancy_id"`
+	Position     string `json:"position" form:"position"`
+	Company_name string `json:"company_name" form:"company_name"`
 }
 
 // Mapping dari struct TaskRequest To struct Core Task
-func MapApplyReqToCoreApply(req FavRequest) favorit.Core {
+func MapApplyReqToCoreApply(input FavRequest) favorit.Core {
 	return favorit.Core{
-		JobseekerID: req.JobseekerID,
-		JobId:       req.JobId,
-		Name:        req.Name,
+		JobseekerID:  input.JobseekerID,
+		VacancyID:    input.VacancyID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
 	}
 }

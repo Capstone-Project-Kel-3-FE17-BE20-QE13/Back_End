@@ -5,22 +5,24 @@ import (
 	"JobHuntz/features/favorit"
 )
 
-func CoreToModel(input favorit.Core) database.Favorites {
-	return database.Favorites{
+func CoreToModel(input favorit.Core) database.Favourite {
+	return database.Favourite{
 		// ID:          input.Id,
-		JobseekerID: input.JobseekerID,
-		JobId:       input.JobId,
-		Name:        input.Name,
+		JobseekerID:  input.JobseekerID,
+		VacancyID:    input.VacancyID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
 	}
 }
 
-func CoretoModelGorm(data []favorit.Core) []database.Favorites {
-	var productsDataGorm []database.Favorites
+func CoretoModelGorm(data []favorit.Core) []database.Favourite {
+	var productsDataGorm []database.Favourite
 	for _, input := range data {
-		var productGorm = database.Favorites{
-			JobseekerID: input.JobseekerID,
-			JobId:       input.JobId,
-			Name:        input.Name,
+		var productGorm = database.Favourite{
+			JobseekerID:  input.JobseekerID,
+			VacancyID:    input.VacancyID,
+			Position:     input.Position,
+			Company_name: input.Company_name,
 		}
 		productsDataGorm = append(productsDataGorm, productGorm)
 	}
@@ -28,21 +30,25 @@ func CoretoModelGorm(data []favorit.Core) []database.Favorites {
 	return productsDataGorm
 }
 
-func ModelToCore(input database.Favorites) favorit.Core {
+func ModelToCore(input database.Favourite) favorit.Core {
 	return favorit.Core{
-		JobseekerID: input.JobseekerID,
-		JobId:       input.JobId,
-		Name:        input.Name,
+		ID:           input.ID,
+		JobseekerID:  input.JobseekerID,
+		VacancyID:    input.VacancyID,
+		Position:     input.Position,
+		Company_name: input.Company_name,
 	}
 }
 
-func ModelGormToCore(data []database.Favorites) []favorit.Core {
+func ModelGormToCore(data []database.Favourite) []favorit.Core {
 	var productsData []favorit.Core
 	for _, input := range data {
 		var productInput = favorit.Core{
-			JobseekerID: input.JobseekerID,
-			JobId:       input.JobId,
-			Name:        input.Name,
+			ID:           input.ID,
+			JobseekerID:  input.JobseekerID,
+			VacancyID:    input.VacancyID,
+			Position:     input.Position,
+			Company_name: input.Company_name,
 		}
 		productsData = append(productsData, productInput)
 	}
