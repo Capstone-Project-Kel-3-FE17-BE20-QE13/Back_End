@@ -38,6 +38,14 @@ type EducationRequest struct {
 	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
 }
 
+type LicenseRequest struct {
+	JobseekerID    uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	License_name   string    `json:"license_name" form:"license_name"`
+	Published_date time.Time `json:"pub_date" form:"pub_date"`
+	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
+	License_file   string    `json:"license" form:"license"`
+}
+
 func RequestJobseekerToCore(input JobseekerRequest) jobseeker.JobseekerCore {
 	return jobseeker.JobseekerCore{
 		Full_name:           input.Full_name,
@@ -70,11 +78,21 @@ func RequestCareerToCore(input CareerRequest) jobseeker.CareerCore {
 	}
 }
 
-func RequestEduToCareer(input EducationRequest) jobseeker.EducationCore {
+func RequestEduToCore(input EducationRequest) jobseeker.EducationCore {
 	return jobseeker.EducationCore{
 		JobseekerID:     input.JobseekerID,
 		Education_level: input.Education_level,
 		Major:           input.Major,
 		Graduation_date: input.Graduation_date,
+	}
+}
+
+func RequestLicenseToCore(input LicenseRequest) jobseeker.LicenseCore {
+	return jobseeker.LicenseCore{
+		JobseekerID:    input.JobseekerID,
+		License_name:   input.License_name,
+		Published_date: input.Published_date,
+		Expiry_date:    input.Expiry_date,
+		License_file:   input.License_file,
 	}
 }

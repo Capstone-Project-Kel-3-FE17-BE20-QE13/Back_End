@@ -46,6 +46,16 @@ type Education struct {
 	Jobseeker       Jobseeker
 }
 
+type License struct {
+	gorm.Model
+	JobseekerID    uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	License_name   string    `json:"license_name" form:"license_name"`
+	Published_date time.Time `json:"pub_date" form:"pub_date"`
+	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
+	License_file   string    `json:"license" form:"license"`
+	Jobseeker      Jobseeker
+}
+
 type Company struct {
 	gorm.Model
 	Company_name        string `gorm:"not null" json:"company_name" form:"company_name"`

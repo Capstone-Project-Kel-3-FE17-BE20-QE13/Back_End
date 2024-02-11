@@ -43,6 +43,15 @@ type EducationResponse struct {
 	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
 }
 
+type LicenseResponse struct {
+	ID             uint      `json:"id" form:"id"`
+	JobseekerID    uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	License_name   string    `json:"license_name" form:"license_name"`
+	Published_date time.Time `json:"pub_date" form:"pub_date"`
+	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
+	License_file   string    `json:"license" form:"license"`
+}
+
 func CoreJobseekerToResponse(input jobseeker.JobseekerCore) JobseekerResponse {
 	return JobseekerResponse{
 		ID:                  input.ID,
@@ -120,4 +129,32 @@ func CoreEdusToResponse(input []jobseeker.EducationCore) []EducationResponse {
 	}
 
 	return eduResponses
+}
+
+func CoreLicenseToResponse(input jobseeker.LicenseCore) LicenseResponse {
+	return LicenseResponse{
+		ID:             input.ID,
+		JobseekerID:    input.JobseekerID,
+		License_name:   input.License_name,
+		Published_date: input.Published_date,
+		Expiry_date:    input.Expiry_date,
+		License_file:   input.License_file,
+	}
+}
+
+func CoreLicensesToResponse(input []jobseeker.LicenseCore) []LicenseResponse {
+	var licenseResponses []LicenseResponse
+	for _, input := range input {
+		var licenseInput = LicenseResponse{
+			ID:             input.ID,
+			JobseekerID:    input.JobseekerID,
+			License_name:   input.License_name,
+			Published_date: input.Published_date,
+			Expiry_date:    input.Expiry_date,
+			License_file:   input.License_file,
+		}
+		licenseResponses = append(licenseResponses, licenseInput)
+	}
+
+	return licenseResponses
 }

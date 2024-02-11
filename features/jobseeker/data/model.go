@@ -46,6 +46,16 @@ func CoreEducationToModel(input jobseeker.EducationCore) database.Education {
 	}
 }
 
+func CoreLicenseToModel(input jobseeker.LicenseCore) database.License {
+	return database.License{
+		JobseekerID:    input.JobseekerID,
+		License_name:   input.License_name,
+		Published_date: input.Published_date,
+		Expiry_date:    input.Expiry_date,
+		License_file:   input.License_file,
+	}
+}
+
 func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 	return jobseeker.JobseekerCore{
 		ID:                  input.ID,
@@ -121,4 +131,32 @@ func ModelEdusToCore(data []database.Education) []jobseeker.EducationCore {
 	}
 
 	return edusData
+}
+
+func ModelLicenseToCore(input database.License) jobseeker.LicenseCore {
+	return jobseeker.LicenseCore{
+		ID:             input.ID,
+		JobseekerID:    input.JobseekerID,
+		License_name:   input.License_name,
+		Published_date: input.Published_date,
+		Expiry_date:    input.Expiry_date,
+		License_file:   input.License_file,
+	}
+}
+
+func ModelLicensesToCore(data []database.License) []jobseeker.LicenseCore {
+	var licensesData []jobseeker.LicenseCore
+	for _, input := range data {
+		var licenseInput = jobseeker.LicenseCore{
+			ID:             input.ID,
+			JobseekerID:    input.JobseekerID,
+			License_name:   input.License_name,
+			Published_date: input.Published_date,
+			Expiry_date:    input.Expiry_date,
+			License_file:   input.License_file,
+		}
+		licensesData = append(licensesData, licenseInput)
+	}
+
+	return licensesData
 }

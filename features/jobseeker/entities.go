@@ -45,6 +45,15 @@ type EducationCore struct {
 	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
 }
 
+type LicenseCore struct {
+	ID             uint      `json:"id" form:"id"`
+	JobseekerID    uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	License_name   string    `json:"license_name" form:"license_name"`
+	Published_date time.Time `json:"pub_date" form:"pub_date"`
+	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
+	License_file   string    `json:"license" form:"license"`
+}
+
 // interface untuk Service Layer
 type JobseekerServiceInterface interface {
 	Register(input JobseekerCore) error
@@ -65,6 +74,11 @@ type JobseekerServiceInterface interface {
 	GetEduList(seekerID uint) ([]EducationCore, error)
 	UpdateEducation(eduID uint, data EducationCore) error
 	RemoveEducation(eduID uint) error
+	AddLicense(input LicenseCore) error
+	GetLicenseByID(licenseID uint) (LicenseCore, error)
+	GetLicenseList(seekerID uint) ([]LicenseCore, error)
+	UpdateLicense(licenseID uint, data LicenseCore) error
+	RemoveLicense(licenseID uint) error
 }
 
 // interface untuk Data Layer
@@ -87,4 +101,9 @@ type JobseekerDataInterface interface {
 	GetEduList(seekerID uint) ([]EducationCore, error)
 	UpdateEducation(eduID uint, data EducationCore) error
 	RemoveEducation(eduID uint) error
+	AddLicense(input LicenseCore) error
+	GetLicenseByID(licenseID uint) (LicenseCore, error)
+	GetLicenseList(seekerID uint) ([]LicenseCore, error)
+	UpdateLicense(licenseID uint, data LicenseCore) error
+	RemoveLicense(licenseID uint) error
 }

@@ -249,3 +249,63 @@ func (repo *JobseekerQuery) RemoveEducation(input uint) error {
 
 	return nil
 }
+
+func (repo *JobseekerQuery) AddLicense(input jobseeker.LicenseCore) error {
+	// simpan ke DB
+	newLicenseGorm := CoreLicenseToModel(input)
+
+	tx := repo.db.Create(&newLicenseGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) GetLicenseByID(input uint) (jobseeker.LicenseCore, error) {
+	var singleLicenseGorm database.License
+	tx := repo.db.First(&singleLicenseGorm, input)
+	if tx.Error != nil {
+		return jobseeker.LicenseCore{}, tx.Error
+	}
+
+	singleLicenseCore := ModelLicenseToCore(singleLicenseGorm)
+
+	return singleLicenseCore, nil
+}
+
+func (repo *JobseekerQuery) GetLicenseList(input uint) ([]jobseeker.LicenseCore, error) {
+	var licensesDataGorm []database.License
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&licensesDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allLicensesCore := ModelLicensesToCore(licensesDataGorm)
+
+	return allLicensesCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateLicense(licenseID uint, input jobseeker.LicenseCore) error {
+	newLicenseGorm := CoreLicenseToModel(input)
+
+	txUpdates := repo.db.Model(&database.License{}).Where("id = ?", licenseID).Updates(newLicenseGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveLicense(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.License{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete license")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}
