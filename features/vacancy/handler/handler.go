@@ -72,3 +72,19 @@ func (handler *JobHandler) GetAllJob(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
 }
+
+func (handler *JobHandler) GetJobById(c echo.Context) error {
+	jobId := c.Param("job_id")
+
+	jobId_int, errConv := strconv.Atoi(jobId)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	result, errFirst := handler.jobService.GetJobById(jobId_int)
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
+}
