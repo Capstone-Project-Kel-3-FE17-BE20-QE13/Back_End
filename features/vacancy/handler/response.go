@@ -5,28 +5,30 @@ import (
 )
 
 type JobResponse struct {
-	ID          uint   `json:"id"`
-	Name        string `json:"Name"`
-	TypeJob     string `json:"type"`
-	Salary      string `json:"Salary"`
-	Category    string `json:"category"`
-	JobDesc     string `json:"jobDesc"`
-	Requirement string `json:"requirement"`
-	CompanyId   uint   `json:"companyId"`
+	ID              uint   `json:"id" form:"id"`
+	CompanyID       uint   `json:"company_id" form:"company_id"`
+	Name            string `json:"name" form:"name"`
+	Job_type        string `json:"job_type" form:"job_type"`
+	Salary_range    string `json:"salary_range" form:"salary_range"`
+	Category        string `json:"category" form:"category"`
+	Job_description string `json:"job_desc" form:"job_desc"`
+	Job_requirement string `json:"job_req" form:"job_req"`
+	Created_by      uint   `json:"created_by" form:"created_by"`
 	// Applications []_appResponses.ApplicationResponse `json:"applications"`
 
 }
 
-func FromCore(domain vacancy.Core) JobResponse {
+func FromCore(input vacancy.Core) JobResponse {
 	return JobResponse{
-		ID:          domain.ID,
-		Name:        domain.Name,
-		TypeJob:     domain.TypeJob,
-		Salary:      domain.Salary,
-		Category:    domain.Category,
-		JobDesc:     domain.JobDesc,
-		Requirement: domain.Requirement,
-		CompanyId:   domain.CompanyId,
+		ID:              input.ID,
+		CompanyID:       input.CompanyID,
+		Name:            input.Name,
+		Job_type:        input.Job_type,
+		Salary_range:    input.Salary_range,
+		Category:        input.Category,
+		Job_description: input.Job_description,
+		Job_requirement: input.Job_requirement,
+		Created_by:      input.Created_by,
 		// Applications: _appResponses.ListFromDomain(domain.Applications),
 
 	}

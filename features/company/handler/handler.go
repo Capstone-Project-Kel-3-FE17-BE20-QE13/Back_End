@@ -120,4 +120,5 @@ func (handler *CompanyHandler) UpdateCompany(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success.", nil))
+
 }

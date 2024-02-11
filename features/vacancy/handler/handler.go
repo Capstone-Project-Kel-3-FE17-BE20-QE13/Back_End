@@ -24,7 +24,7 @@ func NewJob(jobService jobs.JobServiceInterface) *JobHandler {
 func (handler *JobHandler) CreateJobs(c echo.Context) error {
 	newJob := new(JobRequest)
 	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
-	newJob.CompanyId = middlewares.ExtractTokenUserId(c)
+	newJob.CompanyID = middlewares.ExtractTokenUserId(c)
 
 	errBind := c.Bind(&newJob)
 	if errBind != nil {

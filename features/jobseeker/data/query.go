@@ -6,6 +6,7 @@ import (
 	"JobHuntz/utils/responses"
 	"context"
 	"errors"
+	"fmt"
 	"mime/multipart"
 	"time"
 
@@ -117,14 +118,194 @@ func (repo *JobseekerQuery) UpdateCV(input jobseeker.CVCore) error {
 	return nil
 }
 
-// func (repo *UserQuery) AddCareer(input user.CareerCore) error {
-// 	// simpan ke DB
-// 	newCareerGorm := CoreCareerToModel(input)
+func (repo *JobseekerQuery) RemoveCV(input uint) error {
+	result := repo.db.Where("jobseeker_id = ?", input).Delete(&database.CV{})
 
-// 	tx := repo.db.Create(&newCareerGorm) // proses query insert
-// 	if tx.Error != nil {
-// 		return tx.Error
-// 	}
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete cv")
+	}
 
-// 	return nil
-// }
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}
+
+func (repo *JobseekerQuery) AddCareer(input jobseeker.CareerCore) error {
+	// simpan ke DB
+	newCareerGorm := CoreCareerToModel(input)
+
+	tx := repo.db.Create(&newCareerGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) GetCareerByID(input uint) (jobseeker.CareerCore, error) {
+	var singleCareerGorm database.Career
+	tx := repo.db.First(&singleCareerGorm, input)
+	if tx.Error != nil {
+		return jobseeker.CareerCore{}, tx.Error
+	}
+
+	singleCareerCore := ModelCareerToCore(singleCareerGorm)
+
+	return singleCareerCore, nil
+}
+
+func (repo *JobseekerQuery) GetCareerList(input uint) ([]jobseeker.CareerCore, error) {
+	var careersDataGorm []database.Career
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&careersDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allCareersCore := ModelCareersToCore(careersDataGorm)
+
+	return allCareersCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateCareer(career_id uint, input jobseeker.CareerCore) error {
+	newCareerGorm := CoreCareerToModel(input)
+
+	txUpdates := repo.db.Model(&database.Career{}).Where("id = ?", career_id).Updates(newCareerGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveCareer(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.Career{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete career")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}
+
+func (repo *JobseekerQuery) AddEducation(input jobseeker.EducationCore) error {
+	// simpan ke DB
+	newEduGorm := CoreEducationToModel(input)
+
+	tx := repo.db.Create(&newEduGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) GetEduByID(input uint) (jobseeker.EducationCore, error) {
+	var singleEduGorm database.Education
+	tx := repo.db.First(&singleEduGorm, input)
+	if tx.Error != nil {
+		return jobseeker.EducationCore{}, tx.Error
+	}
+
+	singleEduCore := ModelEduToCore(singleEduGorm)
+
+	return singleEduCore, nil
+}
+
+func (repo *JobseekerQuery) GetEduList(input uint) ([]jobseeker.EducationCore, error) {
+	var edusDataGorm []database.Education
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&edusDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allEdusCore := ModelEdusToCore(edusDataGorm)
+
+	return allEdusCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateEducation(eduID uint, input jobseeker.EducationCore) error {
+	newEduGorm := CoreEducationToModel(input)
+
+	txUpdates := repo.db.Model(&database.Education{}).Where("id = ?", eduID).Updates(newEduGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveEducation(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.Education{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete education")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}
+
+func (repo *JobseekerQuery) AddLicense(input jobseeker.LicenseCore) error {
+	// simpan ke DB
+	newLicenseGorm := CoreLicenseToModel(input)
+
+	tx := repo.db.Create(&newLicenseGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) GetLicenseByID(input uint) (jobseeker.LicenseCore, error) {
+	var singleLicenseGorm database.License
+	tx := repo.db.First(&singleLicenseGorm, input)
+	if tx.Error != nil {
+		return jobseeker.LicenseCore{}, tx.Error
+	}
+
+	singleLicenseCore := ModelLicenseToCore(singleLicenseGorm)
+
+	return singleLicenseCore, nil
+}
+
+func (repo *JobseekerQuery) GetLicenseList(input uint) ([]jobseeker.LicenseCore, error) {
+	var licensesDataGorm []database.License
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&licensesDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allLicensesCore := ModelLicensesToCore(licensesDataGorm)
+
+	return allLicensesCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateLicense(licenseID uint, input jobseeker.LicenseCore) error {
+	newLicenseGorm := CoreLicenseToModel(input)
+
+	txUpdates := repo.db.Model(&database.License{}).Where("id = ?", licenseID).Updates(newLicenseGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveLicense(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.License{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete license")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}

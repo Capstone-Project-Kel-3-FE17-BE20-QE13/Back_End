@@ -37,6 +37,25 @@ type Career struct {
 	Jobseeker    Jobseeker
 }
 
+type Education struct {
+	gorm.Model
+	JobseekerID     uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	Education_level string    `json:"ed_level" form:"ed_level"`
+	Major           string    `json:"major" form:"major"`
+	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+	Jobseeker       Jobseeker
+}
+
+type License struct {
+	gorm.Model
+	JobseekerID    uint      `json:"jobseeker_id" form:"jobseeker_id"`
+	License_name   string    `json:"license_name" form:"license_name"`
+	Published_date time.Time `json:"pub_date" form:"pub_date"`
+	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
+	License_file   string    `json:"license" form:"license"`
+	Jobseeker      Jobseeker
+}
+
 type Company struct {
 	gorm.Model
 	Company_name        string `gorm:"not null" json:"company_name" form:"company_name"`
@@ -53,16 +72,31 @@ type Company struct {
 	Banners             string `json:"banners" form:"banners"`
 }
 
-type Job struct {
+type Vacancy struct {
 	gorm.Model
-	Name        string
-	TypeJob     string
-	Salary      string
-	Category    string
-	JobDesc     string
-	Requirement string
-	CreatedBy   uint
-	CompanyId   uint
-	// Company      companies.Domain
-	// Applications []applications.Domain
+	CompanyID       uint   `json:"company_id" form:"company_id"`
+	Name            string `json:"name" form:"name"`
+	Job_type        string `json:"job_type" form:"job_type"`
+	Salary_range    string `json:"salary_range" form:"salary_range"`
+	Category        string `json:"category" form:"category"`
+	Job_description string `json:"job_desc" form:"job_desc"`
+	Job_requirement string `json:"job_req" form:"job_req"`
+	Created_by      uint   `json:"created_by" form:"created_by"`
+	Company         Company
+}
+
+type Application struct {
+	gorm.Model
+	JobseekerID        uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	VacancyID          uint   `json:"vacancy_id" form:"vacancy_id"`
+	Status_application string `json:"stat_app" form:"stat_app"`
+	Jobseeker          Jobseeker
+	Vacancy            Vacancy
+}
+
+type Favorites struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id"`
+	JobId       uint   `json:"job_id"`
+	Name        string `json:"name"`
 }

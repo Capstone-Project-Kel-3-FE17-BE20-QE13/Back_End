@@ -84,8 +84,98 @@ func (service *JobseekerService) UpdateCV(input jobseeker.CVCore) error {
 	return err
 }
 
-// func (service *UserService) AddCareer(input user.CareerCore) error {
-// 	// logic validation
-// 	err := service.userData.AddCareer(input)
-// 	return err
-// }
+func (service *JobseekerService) RemoveCV(input uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveCV(input)
+	return err
+}
+
+func (service *JobseekerService) AddCareer(input jobseeker.CareerCore) error {
+	// logic validation
+	err := service.jobseekerData.AddCareer(input)
+	return err
+}
+
+func (service *JobseekerService) GetCareerByID(input uint) (jobseeker.CareerCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetCareerByID(input)
+	return res, err
+}
+
+func (service *JobseekerService) GetCareerList(input uint) ([]jobseeker.CareerCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetCareerList(input)
+	return res, err
+}
+
+func (service *JobseekerService) UpdateCareer(career_id uint, input jobseeker.CareerCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateCareer(career_id, input)
+	return err
+}
+
+func (service *JobseekerService) RemoveCareer(career_id uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveCareer(career_id)
+	return err
+}
+
+func (service *JobseekerService) AddEducation(input jobseeker.EducationCore) error {
+	// logic validation
+	err := service.jobseekerData.AddEducation(input)
+	return err
+}
+
+func (service *JobseekerService) GetEduByID(input uint) (jobseeker.EducationCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetEduByID(input)
+	return res, err
+}
+
+func (service *JobseekerService) GetEduList(input uint) ([]jobseeker.EducationCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetEduList(input)
+	return res, err
+}
+
+func (service *JobseekerService) UpdateEducation(eduID uint, input jobseeker.EducationCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateEducation(eduID, input)
+	return err
+}
+
+func (service *JobseekerService) RemoveEducation(eduID uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveEducation(eduID)
+	return err
+}
+
+func (service *JobseekerService) AddLicense(input jobseeker.LicenseCore) error {
+	// logic validation
+	err := service.jobseekerData.AddLicense(input)
+	return err
+}
+
+func (service *JobseekerService) GetLicenseByID(input uint) (jobseeker.LicenseCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetLicenseByID(input)
+	return res, err
+}
+
+func (service *JobseekerService) GetLicenseList(input uint) ([]jobseeker.LicenseCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetLicenseList(input)
+	return res, err
+}
+
+func (service *JobseekerService) UpdateLicense(licenseID uint, input jobseeker.LicenseCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateLicense(licenseID, input)
+	return err
+}
+
+func (service *JobseekerService) RemoveLicense(licenseID uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveLicense(licenseID)
+	return err
+}
