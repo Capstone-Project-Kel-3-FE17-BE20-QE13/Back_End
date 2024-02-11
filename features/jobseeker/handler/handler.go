@@ -516,3 +516,97 @@ func (handler *JobseekerHandler) DeleteLicense(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully delete license", nil))
 }
+
+func (handler *JobseekerHandler) CreateSkill(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	newSkill := SkillRequest{}
+	newSkill.JobseekerID = seekerID
+
+	errBind := c.Bind(&newSkill)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	skillCore := RequestSkillToCore(newSkill)
+
+	errCreate := handler.jobseekerService.AddSkill(skillCore)
+	if errCreate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully create skill", nil))
+}
+
+func (handler *JobseekerHandler) GetSingleSkill(c echo.Context) error {
+	skillID := c.Param("skill_id")
+
+	skillID_int, errConv := strconv.Atoi(skillID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	result, errFirst := handler.jobseekerService.GetSkillByID(uint(skillID_int))
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	}
+
+	skillResponse := CoreSkillToResponse(result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get detail skill", skillResponse))
+}
+
+func (handler *JobseekerHandler) GetAllSkills(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	result, errAll := handler.jobseekerService.GetSkillList(seekerID)
+	if errAll != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errAll.Error(), nil))
+	}
+
+	skillsResponse := CoreSkillsToResponse(result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get all skills", skillsResponse))
+}
+
+func (handler *JobseekerHandler) UpdateSkill(c echo.Context) error {
+	skillID := c.Param("skill_id")
+
+	skillID_int, errConv := strconv.Atoi(skillID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	newUpdate := SkillRequest{}
+	errBind := c.Bind(&newUpdate)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	fmt.Println("data update: ", newUpdate)
+
+	newUpdateCore := RequestSkillToCore(newUpdate)
+
+	errUpdate := handler.jobseekerService.UpdateSkill(uint(skillID_int), newUpdateCore)
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error update data. "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully update skill", nil))
+}
+
+func (handler *JobseekerHandler) DeleteSkill(c echo.Context) error {
+	skillID := c.Param("skill_id")
+
+	skillID_int, errConv := strconv.Atoi(skillID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	errDel := handler.jobseekerService.RemoveSkill(uint(skillID_int))
+	if errDel != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error delete data "+errDel.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully delete skill", nil))
+}

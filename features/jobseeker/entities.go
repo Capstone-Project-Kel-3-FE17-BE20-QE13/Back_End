@@ -54,6 +54,13 @@ type LicenseCore struct {
 	License_file   string    `json:"license" form:"license"`
 }
 
+type SkillCore struct {
+	ID          uint   `json:"id" form:"id"`
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Skill       string `json:"skill" form:"skill"`
+	Description string `json:"description" form:"description"`
+}
+
 // interface untuk Service Layer
 type JobseekerServiceInterface interface {
 	Register(input JobseekerCore) error
@@ -79,6 +86,11 @@ type JobseekerServiceInterface interface {
 	GetLicenseList(seekerID uint) ([]LicenseCore, error)
 	UpdateLicense(licenseID uint, data LicenseCore) error
 	RemoveLicense(licenseID uint) error
+	AddSkill(input SkillCore) error
+	GetSkillByID(skillID uint) (SkillCore, error)
+	GetSkillList(seekerID uint) ([]SkillCore, error)
+	UpdateSkill(skillID uint, data SkillCore) error
+	RemoveSkill(skillID uint) error
 }
 
 // interface untuk Data Layer
@@ -106,4 +118,9 @@ type JobseekerDataInterface interface {
 	GetLicenseList(seekerID uint) ([]LicenseCore, error)
 	UpdateLicense(licenseID uint, data LicenseCore) error
 	RemoveLicense(licenseID uint) error
+	AddSkill(input SkillCore) error
+	GetSkillByID(skillID uint) (SkillCore, error)
+	GetSkillList(seekerID uint) ([]SkillCore, error)
+	UpdateSkill(skillID uint, data SkillCore) error
+	RemoveSkill(skillID uint) error
 }

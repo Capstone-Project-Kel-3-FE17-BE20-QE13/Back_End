@@ -56,6 +56,14 @@ func CoreLicenseToModel(input jobseeker.LicenseCore) database.License {
 	}
 }
 
+func CoreSkillToModel(input jobseeker.SkillCore) database.Skill {
+	return database.Skill{
+		JobseekerID: input.JobseekerID,
+		Skill:       input.Skill,
+		Description: input.Description,
+	}
+}
+
 func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 	return jobseeker.JobseekerCore{
 		ID:                  input.ID,
@@ -159,4 +167,27 @@ func ModelLicensesToCore(data []database.License) []jobseeker.LicenseCore {
 	}
 
 	return licensesData
+}
+
+func ModelSkillToCore(input database.Skill) jobseeker.SkillCore {
+	return jobseeker.SkillCore{
+		ID:          input.ID,
+		JobseekerID: input.JobseekerID,
+		Skill:       input.Skill,
+		Description: input.Description,
+	}
+}
+
+func ModelSkillsToCore(data []database.Skill) []jobseeker.SkillCore {
+	var skillsData []jobseeker.SkillCore
+	for _, input := range data {
+		var skillInput = jobseeker.SkillCore{
+			ID:          input.ID,
+			JobseekerID: input.JobseekerID,
+			Skill:       input.Skill,
+			Description: input.Description,
+		}
+		skillsData = append(skillsData, skillInput)
+	}
+	return skillsData
 }
