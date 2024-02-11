@@ -83,12 +83,14 @@ type Skill struct {
 
 type Vacancy struct {
 	gorm.Model
+	CompanyID       string `json:"company_id" form:"company_id"`
 	Name            string `json:"name" form:"name"`
 	Job_type        string `json:"job_type" form:"job_type"`
 	Salary_range    string `json:"salary_range" form:"salary_range"`
 	Category        string `json:"category" form:"category"`
 	Job_description string `json:"job_desc" form:"job_desc"`
 	Job_requirement string `json:"job_req" form:"job_req"`
+	Status          string `json:"status" form:"status"`
 	Company         Company
 	Favourite       Favourite
 }
