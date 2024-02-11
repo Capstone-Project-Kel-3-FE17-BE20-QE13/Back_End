@@ -7,7 +7,6 @@ import (
 
 func CoreToModel(input vacancy.Core) database.Vacancy {
 	return database.Vacancy{
-		// ID:          job.ID,
 		CompanyID:       input.CompanyID,
 		Name:            input.Name,
 		Job_type:        input.Job_type,
@@ -15,9 +14,7 @@ func CoreToModel(input vacancy.Core) database.Vacancy {
 		Category:        input.Category,
 		Job_description: input.Job_description,
 		Job_requirement: input.Job_requirement,
-		Created_by:      input.Created_by,
-		// Company:      input.Company.ToDomain(),
-		// Applications: applications.ListToCore(job.Applications),
+		Status:          input.Status,
 	}
 }
 
@@ -25,7 +22,6 @@ func CoretoModelGorm(data []vacancy.Core) []database.Vacancy {
 	var jobDataGorm []database.Vacancy
 	for _, input := range data {
 		var jobGorm = database.Vacancy{
-			// ID:          job.ID,
 			CompanyID:       input.CompanyID,
 			Name:            input.Name,
 			Job_type:        input.Job_type,
@@ -33,7 +29,7 @@ func CoretoModelGorm(data []vacancy.Core) []database.Vacancy {
 			Category:        input.Category,
 			Job_description: input.Job_description,
 			Job_requirement: input.Job_requirement,
-			Created_by:      input.Created_by,
+			Status:          input.Status,
 		}
 		jobDataGorm = append(jobDataGorm, jobGorm)
 	}
@@ -51,10 +47,7 @@ func ModelToCore(input database.Vacancy) vacancy.Core {
 		Category:        input.Category,
 		Job_description: input.Job_description,
 		Job_requirement: input.Job_requirement,
-		Created_by:      input.Created_by,
-		// Company:      input.Company.ToDomain(),
-		// Applications: applications.ListToCore(job.Applications),
-
+		Status:          input.Status,
 	}
 }
 
@@ -70,10 +63,7 @@ func ModelGormToCore(data []database.Vacancy) []vacancy.Core {
 			Category:        input.Category,
 			Job_description: input.Job_description,
 			Job_requirement: input.Job_requirement,
-			Created_by:      input.Created_by,
-			// Company:      input.Company.ToDomain(),
-			// Applications: applications.ListToCore(job.Applications),
-
+			Status:          input.Status,
 		}
 		jobData = append(jobData, jobInput)
 	}

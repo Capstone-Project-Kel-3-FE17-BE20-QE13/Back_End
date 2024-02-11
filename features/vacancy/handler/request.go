@@ -10,7 +10,7 @@ type JobRequest struct {
 	Category        string `json:"category" form:"category"`
 	Job_description string `json:"job_desc" form:"job_desc"`
 	Job_requirement string `json:"job_req" form:"job_req"`
-	Created_by      uint   `json:"created_by" form:"created_by"`
+	Status          string `json:"status" form:"status"`
 }
 
 func RequestToCore(input *JobRequest) vacancy.Core {
@@ -22,6 +22,6 @@ func RequestToCore(input *JobRequest) vacancy.Core {
 		Category:        input.Category,
 		Job_description: input.Job_description,
 		Job_requirement: input.Job_requirement,
-		Created_by:      input.Created_by,
+		Status:          input.Status,
 	}
 }
