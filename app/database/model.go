@@ -71,3 +71,10 @@ type Apply struct {
 	JobId       uint   `json:"job_id"`
 	Status      string `json:"status"`
 }
+
+type Favorites struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id"`
+	JobId       uint   `json:"job_id"`
+	Name        string `json:"name"`
+}

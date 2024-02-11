@@ -21,6 +21,10 @@ import (
 	_applyData "JobHuntz/features/application/data"
 	_applyHandler "JobHuntz/features/application/handler"
 	_applyService "JobHuntz/features/application/service"
+
+	_favoritData "JobHuntz/features/favorit/data"
+	_favoritHandler "JobHuntz/features/favorit/handler"
+	_favoritService "JobHuntz/features/favorit/service"
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
@@ -39,6 +43,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	application := _applyData.New(db)
 	applicationService := _applyService.New(application)
 	applicationHandlerAPI := _applyHandler.New(applicationService)
+
+	favorit := _favoritData.New(db)
+	favoritService := _favoritService.New(favorit)
+	favoritHandlerAPI := _favoritHandler.New(favoritService)
 
 	// authentication
 	e.POST("/register/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
@@ -71,4 +79,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/application", applicationHandlerAPI.CreateApply, middlewares.JWTMiddleware())
 	e.GET("/applications/:userID", applicationHandlerAPI.GetAllApplications, middlewares.JWTMiddleware())
 
+	// favorit
+	e.POST("/favorit", favoritHandlerAPI.CreateFavorit, middlewares.JWTMiddleware())
+	e.GET("/favorit", favoritHandlerAPI.GetAllFavorit, middlewares.JWTMiddleware())
+	e.DELETE("/favorit/favoritID", favoritHandlerAPI.DeleteFavById, middlewares.JWTMiddleware())
 }
