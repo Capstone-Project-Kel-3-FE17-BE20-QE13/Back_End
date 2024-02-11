@@ -52,6 +52,13 @@ type LicenseResponse struct {
 	License_file   string    `json:"license" form:"license"`
 }
 
+type SkillResponse struct {
+	ID          uint   `json:"id" form:"id"`
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Skill       string `json:"skill" form:"skill"`
+	Description string `json:"description" form:"description"`
+}
+
 func CoreJobseekerToResponse(input jobseeker.JobseekerCore) JobseekerResponse {
 	return JobseekerResponse{
 		ID:                  input.ID,
@@ -157,4 +164,28 @@ func CoreLicensesToResponse(input []jobseeker.LicenseCore) []LicenseResponse {
 	}
 
 	return licenseResponses
+}
+
+func CoreSkillToResponse(input jobseeker.SkillCore) SkillResponse {
+	return SkillResponse{
+		ID:          input.ID,
+		JobseekerID: input.JobseekerID,
+		Skill:       input.Skill,
+		Description: input.Description,
+	}
+}
+
+func CoreSkillsToResponse(data []jobseeker.SkillCore) []SkillResponse {
+	var skillsResponse []SkillResponse
+	for _, input := range data {
+		var skillInput = SkillResponse{
+			ID:          input.ID,
+			JobseekerID: input.JobseekerID,
+			Skill:       input.Skill,
+			Description: input.Description,
+		}
+		skillsResponse = append(skillsResponse, skillInput)
+	}
+
+	return skillsResponse
 }

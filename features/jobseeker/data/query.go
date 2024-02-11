@@ -309,3 +309,63 @@ func (repo *JobseekerQuery) RemoveLicense(input uint) error {
 
 	return nil
 }
+
+func (repo *JobseekerQuery) AddSkill(input jobseeker.SkillCore) error {
+	// simpan ke DB
+	newSkillGorm := CoreSkillToModel(input)
+
+	tx := repo.db.Create(&newSkillGorm) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) GetSkillByID(input uint) (jobseeker.SkillCore, error) {
+	var singleSkillGorm database.Skill
+	tx := repo.db.First(&singleSkillGorm, input)
+	if tx.Error != nil {
+		return jobseeker.SkillCore{}, tx.Error
+	}
+
+	singleSkillCore := ModelSkillToCore(singleSkillGorm)
+
+	return singleSkillCore, nil
+}
+
+func (repo *JobseekerQuery) GetSkillList(input uint) ([]jobseeker.SkillCore, error) {
+	var skillsDataGorm []database.Skill
+	tx := repo.db.Where("jobseeker_id = ?", input).Find(&skillsDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allSkillsCore := ModelSkillsToCore(skillsDataGorm)
+
+	return allSkillsCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateSkill(skillID uint, input jobseeker.SkillCore) error {
+	newSkillGorm := CoreSkillToModel(input)
+
+	txUpdates := repo.db.Model(&database.Skill{}).Where("id = ?", skillID).Updates(newSkillGorm)
+	if txUpdates.Error != nil {
+		return txUpdates.Error
+	}
+
+	return nil
+}
+
+func (repo *JobseekerQuery) RemoveSkill(input uint) error {
+	result := repo.db.Where("id = ?", input).Delete(&database.Skill{})
+
+	if result.Error != nil {
+		return errors.New(result.Error.Error() + "cannot delete skill")
+	}
+
+	fmt.Println("row affected: ", result.RowsAffected)
+
+	return nil
+}

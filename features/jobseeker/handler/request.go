@@ -46,6 +46,12 @@ type LicenseRequest struct {
 	License_file   string    `json:"license" form:"license"`
 }
 
+type SkillRequest struct {
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Skill       string `json:"skill" form:"skill"`
+	Description string `json:"description" form:"description"`
+}
+
 func RequestJobseekerToCore(input JobseekerRequest) jobseeker.JobseekerCore {
 	return jobseeker.JobseekerCore{
 		Full_name:           input.Full_name,
@@ -94,5 +100,13 @@ func RequestLicenseToCore(input LicenseRequest) jobseeker.LicenseCore {
 		Published_date: input.Published_date,
 		Expiry_date:    input.Expiry_date,
 		License_file:   input.License_file,
+	}
+}
+
+func RequestSkillToCore(input SkillRequest) jobseeker.SkillCore {
+	return jobseeker.SkillCore{
+		JobseekerID: input.JobseekerID,
+		Skill:       input.Skill,
+		Description: input.Description,
 	}
 }
