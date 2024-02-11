@@ -58,7 +58,7 @@ type License struct {
 
 type Company struct {
 	gorm.Model
-	Company_name        uint    `gorm:"not null" json:"company_name" form:"company_name"`
+	Company_name        string    `gorm:"not null" json:"company_name" form:"company_name"`
 	Full_name           string    `json:"full_name" form:"full_name"`
 	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
 	Password            string    `gorm:"not null" json:"password" form:"password"`
@@ -83,7 +83,7 @@ type Skill struct {
 
 type Vacancy struct {
 	gorm.Model
-	CompanyID       string `json:"company_id" form:"company_id"`
+	CompanyID       uint   `json:"company_id" form:"company_id"`
 	Name            string `json:"name" form:"name"`
 	Job_type        string `json:"job_type" form:"job_type"`
 	Salary_range    string `json:"salary_range" form:"salary_range"`
