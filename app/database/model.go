@@ -83,3 +83,10 @@ type Application struct {
 	Jobseeker          Jobseeker
 	Vacancy            Vacancy
 }
+
+type Favorites struct {
+	gorm.Model
+	JobseekerID uint   `json:"jobseeker_id"`
+	JobId       uint   `json:"job_id"`
+	Name        string `json:"name"`
+}
