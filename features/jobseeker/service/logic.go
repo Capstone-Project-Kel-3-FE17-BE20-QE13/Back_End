@@ -149,3 +149,33 @@ func (service *JobseekerService) RemoveEducation(eduID uint) error {
 	err := service.jobseekerData.RemoveEducation(eduID)
 	return err
 }
+
+func (service *JobseekerService) AddLicense(input jobseeker.LicenseCore) error {
+	// logic validation
+	err := service.jobseekerData.AddLicense(input)
+	return err
+}
+
+func (service *JobseekerService) GetLicenseByID(input uint) (jobseeker.LicenseCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetLicenseByID(input)
+	return res, err
+}
+
+func (service *JobseekerService) GetLicenseList(input uint) ([]jobseeker.LicenseCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetLicenseList(input)
+	return res, err
+}
+
+func (service *JobseekerService) UpdateLicense(licenseID uint, input jobseeker.LicenseCore) error {
+	// logic validation
+	err := service.jobseekerData.UpdateLicense(licenseID, input)
+	return err
+}
+
+func (service *JobseekerService) RemoveLicense(licenseID uint) error {
+	// logic validation
+	err := service.jobseekerData.RemoveLicense(licenseID)
+	return err
+}

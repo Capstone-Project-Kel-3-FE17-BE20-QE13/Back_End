@@ -298,7 +298,7 @@ func (handler *JobseekerHandler) CreateEducation(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
 	}
 
-	eduCore := RequestEduToCareer(newEdu)
+	eduCore := RequestEduToCore(newEdu)
 
 	errCreate := handler.jobseekerService.AddEducation(eduCore)
 	if errCreate != nil {
@@ -367,7 +367,7 @@ func (handler *JobseekerHandler) UpdateEducation(c echo.Context) error {
 
 	fmt.Println("data update: ", newUpdate)
 
-	newUpdateCore := RequestEduToCareer(newUpdate)
+	newUpdateCore := RequestEduToCore(newUpdate)
 
 	errUpdate := handler.jobseekerService.UpdateEducation(uint(eduID_int), newUpdateCore)
 	if errUpdate != nil {
@@ -391,4 +391,128 @@ func (handler *JobseekerHandler) DeleteEducation(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully delete education", nil))
+}
+
+func (handler *JobseekerHandler) CreateLicense(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	inputLicense, errRead := c.FormFile("license")
+	if errRead != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot read file", nil))
+	}
+
+	responURL, errURL := handler.jobseekerService.CV(inputLicense)
+	if errURL != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot get resp", nil))
+	}
+
+	newLicense := LicenseRequest{}
+	newLicense.JobseekerID = uint(seekerID)
+	newLicense.License_file = responURL.SecureURL
+
+	errBind := c.Bind(&newLicense)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	licenseCore := RequestLicenseToCore(newLicense)
+
+	errCreate := handler.jobseekerService.AddLicense(licenseCore)
+	if errCreate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully create license", nil))
+}
+
+func (handler *JobseekerHandler) GetSingleLicense(c echo.Context) error {
+	licenseID := c.Param("license_id")
+
+	licenseID_int, errConv := strconv.Atoi(licenseID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	result, errFirst := handler.jobseekerService.GetLicenseByID(uint(licenseID_int))
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	}
+
+	licenseResponse := CoreLicenseToResponse(result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get detail license", licenseResponse))
+}
+
+func (handler *JobseekerHandler) GetAllLicenses(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	result, errAll := handler.jobseekerService.GetLicenseList(seekerID)
+	if errAll != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errAll.Error(), nil))
+	}
+
+	licensesResonse := CoreLicensesToResponse(result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get all licenses", licensesResonse))
+}
+
+func (handler *JobseekerHandler) UpdateLicense(c echo.Context) error {
+	licenseID := c.Param("license_id")
+
+	licenseID_int, errConv := strconv.Atoi(licenseID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	newUpdate := LicenseRequest{}
+
+	oldPubDateString := c.FormValue("pub_date")
+	if oldPubDateString != "" {
+		oldPubDate, err := time.Parse("2006-01-02T15:04:05Z", oldPubDateString)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
+		}
+		newUpdate.Published_date = oldPubDate
+	}
+
+	OldExpDateString := c.FormValue("exp_date")
+	if OldExpDateString != "" {
+		oldExpDate, err := time.Parse("2006-01-02T15:04:05Z", OldExpDateString)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
+		}
+		newUpdate.Expiry_date = oldExpDate
+	}
+
+	errBind := c.Bind(&newUpdate)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+	}
+
+	fmt.Println("data update: ", newUpdate)
+
+	newUpdateCore := RequestLicenseToCore(newUpdate)
+
+	errUpdate := handler.jobseekerService.UpdateLicense(uint(licenseID_int), newUpdateCore)
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error update data. "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully update license", nil))
+}
+
+func (handler *JobseekerHandler) DeleteLicense(c echo.Context) error {
+	licenseID := c.Param("license_id")
+
+	licenseID_int, errConv := strconv.Atoi(licenseID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	errDel := handler.jobseekerService.RemoveLicense(uint(licenseID_int))
+	if errDel != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error delete data "+errDel.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully delete license", nil))
 }
