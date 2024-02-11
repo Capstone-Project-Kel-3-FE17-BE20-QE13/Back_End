@@ -3,6 +3,7 @@ package data
 import (
 	"JobHuntz/app/database"
 	"JobHuntz/features/favorit"
+	"database/sql"
 	"errors"
 
 	"gorm.io/gorm"
@@ -16,6 +17,22 @@ func New(db *gorm.DB) favorit.FavDataInterface {
 	return &FavQuery{
 		db: db,
 	}
+}
+
+func (repo *FavQuery) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error) {
+	// simpan ke DB
+	var dataCompany favorit.DataCompanyCore
+
+	query := `SELECT vacancies.name, companies.company_name 
+	FROM companies JOIN vacancies ON companies.id = vacancies.company_id
+	WHERE vacancies.id = ?`
+
+	tx := dbRaw.QueryRow(query, vacancyID)
+	if err := tx.Scan(&dataCompany.Position, &dataCompany.Company_name); err != nil {
+		//
+	}
+
+	return dataCompany, nil
 }
 
 // ----------------------------------------------------------------------------------
@@ -32,7 +49,7 @@ func (repo *FavQuery) CreateFavorit(input favorit.Core) (uint, error) {
 }
 
 func (repo *FavQuery) GetAllFavorit() ([]favorit.Core, error) {
-	var productsDataGorm []database.Favorites
+	var productsDataGorm []database.Favourite
 	tx := repo.db.Find(&productsDataGorm) // select * from users;
 	if tx.Error != nil {
 		return nil, tx.Error

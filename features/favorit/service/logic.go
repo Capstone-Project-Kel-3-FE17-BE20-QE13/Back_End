@@ -2,6 +2,7 @@ package service
 
 import (
 	"JobHuntz/features/favorit"
+	"database/sql"
 )
 
 type FavService struct {
@@ -13,6 +14,17 @@ func New(Repo favorit.FavDataInterface) favorit.FavServiceInterface {
 		Repo: Repo,
 	}
 }
+
+func (uc *FavService) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error) {
+
+	result, err := uc.Repo.GetDataCompany(dbRaw, vacancyID)
+	if err != nil {
+		return favorit.DataCompanyCore{}, err
+	}
+
+	return result, nil
+}
+
 func (uc *FavService) CreateFavorit(input favorit.Core) (uint, error) {
 
 	application, err := uc.Repo.CreateFavorit(input)

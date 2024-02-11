@@ -89,8 +89,8 @@ type Vacancy struct {
 	Category        string `json:"category" form:"category"`
 	Job_description string `json:"job_desc" form:"job_desc"`
 	Job_requirement string `json:"job_req" form:"job_req"`
-	Status          string `json:"status" form:"status"`
-	CompanyID       uint
+	Company         Company
+	Favourite       Favourite
 }
 
 type Application struct {
@@ -102,9 +102,11 @@ type Application struct {
 	Vacancy            Vacancy
 }
 
-type Favorites struct {
+type Favourite struct {
 	gorm.Model
-	JobseekerID uint   `json:"jobseeker_id"`
-	JobId       uint   `json:"job_id"`
-	Name        string `json:"name"`
+	JobseekerID  uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	VacancyID    uint   `json:"vacancy_id" form:"vacancy_id"`
+	Position     string `json:"position" form:"position"`
+	Company_name string `json:"company_name" form:"company_name"`
+	Jobseeker    Jobseeker
 }
