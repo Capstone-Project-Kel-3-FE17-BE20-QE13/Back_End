@@ -2,6 +2,7 @@ package handler
 
 import (
 	"JobHuntz/app/middlewares"
+	"JobHuntz/features/vacancy"
 	jobs "JobHuntz/features/vacancy"
 	"JobHuntz/utils/responses"
 	"net/http"
@@ -22,18 +23,36 @@ func NewJob(jobService jobs.JobServiceInterface) *JobHandler {
 
 // insert product
 func (handler *JobHandler) CreateJobs(c echo.Context) error {
-	newJob := new(JobRequest)
-	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
-	newJob.CompanyID = middlewares.ExtractTokenUserId(c)
+	userId := middlewares.ExtractTokenUserId(c)
 
+	user, _ := handler.jobService.GetById(userId)
+	namaUser := user.Status_Verification
+
+	if namaUser == "Unverified" {
+		jobCount, _ := handler.jobService.CountJobsByUserID(userId)
+		if jobCount >= 3 {
+			return c.JSON(http.StatusForbidden, responses.WebResponse(http.StatusForbidden, "Unverified users can only create 3 jobs", nil))
+		}
+	}
+
+	newJob := JobRequest{}
 	errBind := c.Bind(&newJob)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
 	}
 
-	jobCore := RequestToCore(newJob)
+	jobCore := vacancy.Core{
+		CompanyID:       userId,
+		Name:            newJob.Name,
+		Job_type:        newJob.Job_type,
+		Salary_range:    newJob.Salary_range,
+		Category:        newJob.Category,
+		Job_description: newJob.Job_description,
+		Job_requirement: newJob.Job_requirement,
+		Status:          "Lowongan Terbuka",
+	}
 
-	errCreate := handler.jobService.CreateJob(jobCore) // CreateJob(jobCore)
+	errCreate := handler.jobService.CreateJob(jobCore)
 	if errCreate != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
 	}
