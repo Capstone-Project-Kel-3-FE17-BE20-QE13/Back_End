@@ -10,7 +10,7 @@ func InitialMigration(db *gorm.DB) {
 	db.AutoMigrate(&Career{})
 	db.AutoMigrate(&Education{})
 	db.AutoMigrate(&License{})
-	db.AutoMigrate(&Skill{})
+  db.AutoMigrate(&Skill{})
 	db.AutoMigrate(&Company{})
 	db.AutoMigrate(&Vacancy{})
 	db.AutoMigrate(&Favourite{})

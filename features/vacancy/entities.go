@@ -9,32 +9,40 @@ type Core struct {
 	Category        string `json:"category" form:"category"`
 	Job_description string `json:"job_desc" form:"job_desc"`
 	Job_requirement string `json:"job_req" form:"job_req"`
-	Created_by      uint   `json:"created_by" form:"created_by"`
-	// Company      companies.Domain
-	// Applications []applications.Domain
+	Status          string `json:"status" form:"status"`
+}
 
+type CompanyCore struct {
+	ID                  uint
+	Company_name        string `validate:"required"`
+	Full_name           string `validate:"required"`
+	Email               string `validate:"required"`
+	Password            string `validate:"required"`
+	Company_type        string `validate:"required"`
+	Company_size        string `validate:"required"`
+	Website             string `validate:"required"`
+	Description         string
+	Status_Verification string
+	Banners             string
+	Address             string
+	Phone               string
+	Token               string
 }
 
 type JobDataInterface interface {
-	//GetCompanyID(ID uint) (uint, error)
 	GetJobById(jobID int) (Core, error)
 	CreateJob(input Core) error
-	// DeleteAllJobs(ctx context.Context) error
 	DeleteJobById(input []Core, ID int) error
 	GetAllJobs() ([]Core, error)
-
-	//SearchJobs(Name string) ([]Core, error)
-	//FilterJobByCategory(ctx context.Context, categoryId int) ([]Core, error)
+	GetById(id uint) (*CompanyCore, error)
+	CountJobsByUserID(userID uint) (int, error)
 }
 
 type JobServiceInterface interface {
-	//GetCompanyID(ID uint) (uint, error)
 	GetJobById(jobID int) (Core, error)
 	CreateJob(input Core) error
-	// DeleteAllJobs(ctx context.Context) error
 	DeleteJobById(input []Core, ID int) error
 	GetAllJobs() ([]Core, error)
-
-	//SearchJobs(Name string) ([]Core, error)
-	//FilterJobByCategory(ctx context.Context, categoryId int) ([]Job, error)
+	GetById(id uint) (*CompanyCore, error)
+	CountJobsByUserID(userID uint) (int, error)
 }
