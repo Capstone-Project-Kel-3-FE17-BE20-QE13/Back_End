@@ -60,7 +60,7 @@ type Company struct {
 	gorm.Model
 	Company_name        string `gorm:"not null" json:"company_name" form:"company_name"`
 	Full_name           string `json:"full_name" form:"full_name"`
-	Email               string `gorm:"not null" json:"email" form:"email"`
+	Email               string `gorm:"not null;unique" json:"email" form:"email"`
 	Password            string `gorm:"not null" json:"password" form:"password"`
 	Address             string `json:"address" form:"address"`
 	Phone               string `json:"phone" form:"phone"`
