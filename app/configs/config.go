@@ -22,7 +22,10 @@ func InitConfig() *AppConfig {
 }
 
 var (
-	MIDTRANS_SERVERKEY string
+	MIDTRANS_SERVERKEY    string
+	CLOUDINARY_KEY        string
+	CLOUDINARY_SECRET     string
+	CLOUDINARY_CLOUD_NAME string
 )
 
 func ReadEnv() *AppConfig {
@@ -57,6 +60,18 @@ func ReadEnv() *AppConfig {
 		MIDTRANS_SERVERKEY = val
 		isRead = false
 	}
+	if val, found := os.LookupEnv("CLOUDINARY_KEY"); found {
+		CLOUDINARY_KEY = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("CLOUDINARY_SECRET"); found {
+		CLOUDINARY_SECRET = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("CLOUDINARY_CLOUD_NAME"); found {
+		CLOUDINARY_CLOUD_NAME = val
+		isRead = false
+	}
 	//akan membaca file local.env
 	if isRead {
 		viper.AddConfigPath(".")
@@ -75,6 +90,9 @@ func ReadEnv() *AppConfig {
 		app.DB_NAME = viper.Get("DBNAME").(string)
 		app.JWT_SECRET = viper.Get("JWTSECRET").(string)
 		MIDTRANS_SERVERKEY = viper.GetString("MIDTRANS_SERVERKEY")
+		CLOUDINARY_KEY = viper.Get("CLOUDINARY_KEY").(string)
+		CLOUDINARY_SECRET = viper.Get("CLOUDINARY_SECRET").(string)
+		CLOUDINARY_CLOUD_NAME = viper.Get("CLOUDINARY_CLOUD_NAME").(string)
 	}
 	return &app
 }

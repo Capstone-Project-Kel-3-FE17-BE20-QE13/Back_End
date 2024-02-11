@@ -3,45 +3,81 @@ package service
 import (
 	"JobHuntz/app/middlewares"
 	"JobHuntz/features/company"
-	"JobHuntz/utils/responses"
+	"JobHuntz/utils/encrypts"
 	"errors"
+	"mime/multipart"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type companyService struct {
 	companyData company.CompanyDataInterface
+	hashService encrypts.HashInterface
+	validate    *validator.Validate
 }
 
-func New(repo company.CompanyDataInterface) company.CompanyServiceInterface {
+func New(repo company.CompanyDataInterface, hash encrypts.HashInterface) company.CompanyServiceInterface {
 	return &companyService{
 		companyData: repo,
+		hashService: hash,
+		validate:    validator.New(),
 	}
 }
 
-func (service *companyService) RegisterCompany(input company.CompanyCore) error {
-	err := service.companyData.RegisterCompany(input)
+// RegisterCompany implements company.CompanyServiceInterface.
+func (service *companyService) RegisterCompany(input company.CompanyCore) (data *company.CompanyCore, token string, err error) {
+	errValidate := service.validate.Struct(input)
+	if errValidate != nil {
+		return nil, "", errValidate
+	}
+
+	if input.Password != "" {
+		hashedPass, errHash := service.hashService.HashPassword(input.Password)
+		if errHash != nil {
+			return nil, "", errors.New("rror hashing password")
+		}
+		input.Password = hashedPass
+	}
+
+	data, generatedToken, err := service.companyData.RegisterCompany(input)
+	return data, generatedToken, err
+}
+
+// LoginCompany implements company.CompanyServiceInterface.
+func (service *companyService) LoginCompany(email string, password string) (data *company.CompanyCore, token string, err error) {
+	if email == "" || password == "" {
+		return nil, "", errors.New("email dan password wajib diisi")
+	}
+
+	data, err = service.companyData.LoginCompany(email, password)
+	if err != nil {
+		return nil, "", errors.New("Email atau password salah")
+	}
+	isValid := service.hashService.CheckPasswordHash(data.Password, password)
+	if !isValid {
+		return nil, "", errors.New("password tidak sesuai.")
+	}
+
+	token, errJwt := middlewares.CreateToken(data.ID)
+	if errJwt != nil {
+		return nil, "", errJwt
+	}
+
+	return data, token, err
+}
+
+// GetById implements company.CompanyServiceInterface.
+func (service *companyService) GetById(id uint) (*company.CompanyCore, error) {
+	result, err := service.companyData.GetById(id)
+	return result, err
+}
+
+// UpdateCompany implements company.CompanyServiceInterface.
+func (service *companyService) UpdateCompany(id int, input company.CompanyCore, file multipart.File, nameFile string) error {
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.companyData.UpdateCompany(id, input, file, nameFile)
 	return err
-}
-
-func (service *companyService) LoginCompany(email string, password string) (company.CompanyCore, string, error) {
-	if email == "" {
-		return company.CompanyCore{}, "", errors.New("email is required")
-	} else if password == "" {
-		return company.CompanyCore{}, "", errors.New("password is required")
-	}
-
-	ressLogin, err := service.companyData.LoginCompany(email)
-	if err != nil {
-		return company.CompanyCore{}, "", errors.New(err.Error() + "login error, cannot retrieve data")
-	}
-
-	cekPass := responses.ComparePassword(password, ressLogin.Password)
-	if !cekPass {
-		return company.CompanyCore{}, "", errors.New("login failed, wrong password")
-	}
-
-	token, err := middlewares.CreateToken(ressLogin.ID)
-	if err != nil {
-		return company.CompanyCore{}, "", errors.New(err.Error() + "cannot create token")
-	}
-	return ressLogin, token, nil
 }

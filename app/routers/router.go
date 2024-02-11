@@ -4,6 +4,8 @@ import (
 	_companyData "JobHuntz/features/company/data"
 	_companyHandler "JobHuntz/features/company/handler"
 	_companyService "JobHuntz/features/company/service"
+	"JobHuntz/utils/encrypts"
+	"JobHuntz/utils/uploads"
 
 	"JobHuntz/app/middlewares"
 
@@ -20,17 +22,22 @@ import (
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
+	hashService := encrypts.NewHashService()
+	uploadService := uploads.NewCloudService()
+
 	jobseekerData := _jobseekerData.New(db)
 	jobseekerService := _jobseekerService.New(jobseekerData)
 	jobseekerHandlerAPI := _jobseekerHandler.New(jobseekerService)
 
-	company := _companyData.New(db)
-	companyService := _companyService.New(company)
+	company := _companyData.New(db, uploadService)
+	companyService := _companyService.New(company, hashService)
 	companyHandlerAPI := _companyHandler.New(companyService)
 
 	// company
 	e.POST("/register/company", companyHandlerAPI.RegisterCompany)
 	e.POST("/login/company", companyHandlerAPI.LoginCompany)
+	e.GET("/company", companyHandlerAPI.GetById, middlewares.JWTMiddleware())
+	e.PUT("/company", companyHandlerAPI.UpdateCompany, middlewares.JWTMiddleware())
 
 	//e.POST("/jobseeker/career", userHandlerAPI.CreateCareer, middlewares.JWTMiddleware())
 	// e.GET("/users", userHandlerAPI.GetUserById, middlewares.JWTMiddleware())
