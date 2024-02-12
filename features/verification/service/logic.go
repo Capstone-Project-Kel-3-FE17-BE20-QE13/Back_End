@@ -1,6 +1,8 @@
 package service
 
 import (
+	"JobHuntz/features/company"
+	"JobHuntz/features/jobseeker"
 	"JobHuntz/features/verification"
 )
 
@@ -15,14 +17,26 @@ func New(repo verification.VerificationDataInterface) verification.VerificationS
 	}
 }
 
-func (service *verificationService) AddOrderJobseeker(input verification.OrderJobseekerCore) error {
+func (service *verificationService) GetDataJobseeker(userID uint) (jobseeker.JobseekerCore, error) {
 	// logic validation
-	err := service.verificationData.AddOrderJobseeker(input)
+	res, err := service.verificationData.GetDataJobseeker(userID)
+	return res, err
+}
+
+func (service *verificationService) GetDataCompany(userID uint) (company.CompanyCore, error) {
+	// logic validation
+	res, err := service.verificationData.GetDataCompany(userID)
+	return res, err
+}
+
+func (service *verificationService) AddOrder(input verification.OrderCore) error {
+	// logic validation
+	err := service.verificationData.AddOrder(input)
 	return err
 }
 
-func (service *verificationService) AddOrderCompany(input verification.OrderCompanyCore) error {
-	// logic validation
-	err := service.verificationData.AddOrderCompany(input)
-	return err
-}
+// func (service *verificationService) AddOrderCompany(input verification.OrderCore) error {
+// 	// logic validation
+// 	err := service.verificationData.AddOrderCompany(input)
+// 	return err
+// }
