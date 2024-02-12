@@ -75,7 +75,7 @@ func (repo *ApplyQuery) GetAllApplications(jobseekerID uint) ([]application.Core
 
 func (repo *ApplyQuery) GetAllApplicationsCompany(vacancyID_int int) (application.Core, error) {
 	var applicationsDataGormCompany database.Application
-	tx := repo.db.First(&applicationsDataGormCompany, vacancyID_int)
+	tx := repo.db.Find(&applicationsDataGormCompany, vacancyID_int)
 	if tx.Error != nil {
 		return application.Core{}, tx.Error
 	}
