@@ -99,6 +99,8 @@ type Application struct {
 	gorm.Model
 	JobseekerID        uint   `json:"jobseeker_id" form:"jobseeker_id"`
 	VacancyID          uint   `json:"vacancy_id" form:"vacancy_id"`
+	Position           string `json:"position" form:"position"`
+	Company_name       string `json:"company_name" form:"company_name"`
 	Status_application string `json:"stat_app" form:"stat_app"`
 	Jobseeker          Jobseeker
 	Vacancy            Vacancy
