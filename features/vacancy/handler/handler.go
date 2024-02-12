@@ -62,7 +62,7 @@ func (handler *JobHandler) CreateJobs(c echo.Context) error {
 
 // delete product
 func (handler *JobHandler) Delete(c echo.Context) error {
-	jobID := c.Param("job_id")
+	jobID := c.Param("vacancy_id")
 
 	ID, errConv := strconv.Atoi(jobID)
 	if errConv != nil {
@@ -93,7 +93,7 @@ func (handler *JobHandler) GetAllJob(c echo.Context) error {
 }
 
 func (handler *JobHandler) GetJobById(c echo.Context) error {
-	jobId := c.Param("job_id")
+	jobId := c.Param("vacancy_id")
 
 	jobId_int, errConv := strconv.Atoi(jobId)
 	if errConv != nil {
