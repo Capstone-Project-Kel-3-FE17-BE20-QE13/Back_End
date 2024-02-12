@@ -18,12 +18,12 @@ type ApplyDataInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error)
 	CreateApplication(input Core) (uint, error)
 	GetAllApplications(JobseekerID uint) ([]Core, error)
-	GetAllApplicationsCompany(vacancyID uint) ([]Core, error)
+	GetAllApplicationsCompany(vacancyID_int int) (Core, error)
 }
 
 type ApplyServiceInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error)
 	CreateApplication(input Core) (uint, error)
 	GetAllApplications(JobseekerID uint) ([]Core, error)
-	GetAllApplicationsCompany(vacancyID uint) ([]Core, error)
+	GetAllApplicationsCompany(vacancyID_int int) (Core, error)
 }

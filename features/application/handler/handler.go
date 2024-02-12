@@ -76,16 +76,33 @@ func (h *ApplyHandler) GetApplicationsHistory(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
 }
 
-func (h *ApplyHandler) GetApplicationsHistoryCompany(c echo.Context) error {
-	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
-	vacancyID := middlewares.ExtractTokenUserId(c)
-	result, err := h.applyService.GetAllApplicationsCompany(vacancyID)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
+// func (h *ApplyHandler) GetApplicationsHistoryCompany(c echo.Context) error {
+// 	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
+// 	vacancyID := middlewares.ExtractTokenUserId(c)
+// 	result, err := h.applyService.GetAllApplicationsCompany(vacancyID)
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
+// 	}
+// 	var applyResponse []ApplyResponse
+// 	for _, v := range result {
+// 		applyResponse = append(applyResponse, MapCoreApplyToApplyRes(v))
+// 	}
+// 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
+// }
+// vacancyID := c.QueryParam("vacancy_id")
+
+func (handler *ApplyHandler) GetApplicationsHistoryCompany(c echo.Context) error {
+	// productID := c.Param("product_id")
+	vacancyID := c.QueryParam("vacancy_id")
+	vacancyID_int, errConv := strconv.Atoi(vacancyID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
 	}
-	var applyResponse []ApplyResponse
-	for _, v := range result {
-		applyResponse = append(applyResponse, MapCoreApplyToApplyRes(v))
+
+	result, errFirst := handler.applyService.GetAllApplicationsCompany(vacancyID_int)
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
 	}
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
 }
