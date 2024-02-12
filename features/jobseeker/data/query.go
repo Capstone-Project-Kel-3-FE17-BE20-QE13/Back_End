@@ -97,7 +97,7 @@ func (repo *JobseekerQuery) AddCV(input jobseeker.CVCore) error {
 
 func (repo *JobseekerQuery) ReadCV(seekerID uint) (jobseeker.CVCore, error) {
 	var singleCVGorm database.CV
-	tx := repo.db.First(&singleCVGorm, seekerID)
+	tx := repo.db.Where("jobseeker_id = ?", seekerID).First(&singleCVGorm)
 	if tx.Error != nil {
 		return jobseeker.CVCore{}, errors.New(tx.Error.Error() + "cannot get data of cv")
 	}
