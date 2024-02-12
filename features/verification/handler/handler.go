@@ -20,11 +20,11 @@ func New(service verification.VerificationServiceInterface) *VerificationHandler
 }
 
 // insert order
-func (handler *VerificationHandler) CreateOrder(c echo.Context) error {
+func (handler *VerificationHandler) CreateOrderJobseeker(c echo.Context) error {
 	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
 	seekerID := middlewares.ExtractTokenUserId(c)
 
-	newOrder := OrderRequest{}
+	newOrder := OrderJobseekerRequest{}
 	newOrder.JobseekerID = seekerID
 	newOrder.Price = 1000000
 	newOrder.Status_order = "On Going"
@@ -34,9 +34,33 @@ func (handler *VerificationHandler) CreateOrder(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", newOrder))
 	}
 
-	orderCore := RequestOrderToCore(newOrder)
+	orderCore := RequestOrderJobseekerToCore(newOrder)
 
-	errCreate := handler.verificationService.AddOrder(orderCore)
+	errCreate := handler.verificationService.AddOrderJobseeker(orderCore)
+	if errCreate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success create order", orderCore))
+}
+
+func (handler *VerificationHandler) CreateOrderCompany(c echo.Context) error {
+	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
+	companyID := middlewares.ExtractTokenUserId(c)
+
+	newOrder := OrderCompanyRequest{}
+	newOrder.CompanyID = companyID
+	newOrder.Price = 2000000
+	newOrder.Status_order = "On Going"
+
+	errBind := c.Bind(&newOrder)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", newOrder))
+	}
+
+	orderCore := RequestOrderCompanyToCore(newOrder)
+
+	errCreate := handler.verificationService.AddOrderCompany(orderCore)
 	if errCreate != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
 	}

@@ -16,4 +16,5 @@ func InitialMigration(db *gorm.DB) {
 	db.AutoMigrate(&Favourite{})
 	db.AutoMigrate(&Application{})
 	db.AutoMigrate(&OrderJobseeker{})
+	db.AutoMigrate(&OrderCompany{})
 }
