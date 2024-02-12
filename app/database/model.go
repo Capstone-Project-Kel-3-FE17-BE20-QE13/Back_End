@@ -23,6 +23,7 @@ type Jobseeker struct {
 	Cvs                 []CV
 	Licenses            []License
 	Skills              []Skill
+	OrderJobseeker      OrderJobseeker
 }
 
 type CV struct {
@@ -75,6 +76,7 @@ type Company struct {
 	Status_Verification string    `json:"status_verification" form:"status_verification"`
 	Banners             string    `json:"banners" form:"banners"`
 	Vacancys            []Vacancy `gorm:"foreignKey:CompanyID"`
+	OrderCompany        OrderCompany
 }
 
 type Skill struct {
@@ -122,6 +124,13 @@ type Favourite struct {
 type OrderJobseeker struct {
 	gorm.Model
 	JobseekerID  uint    `json:"jobseeker_id" form:"jobseeker_id"`
+	Price        float64 `json:"price" form:"price"`
+	Status_order string  `json:"stat_order" form:"stat_order"`
+}
+
+type OrderCompany struct {
+	gorm.Model
+	CompanyID    uint    `json:"company_id" form:"company_id"`
 	Price        float64 `json:"price" form:"price"`
 	Status_order string  `json:"stat_order" form:"stat_order"`
 }

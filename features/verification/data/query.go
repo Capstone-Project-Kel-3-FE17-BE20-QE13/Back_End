@@ -16,10 +16,21 @@ func New(db *gorm.DB) verification.VerificationDataInterface {
 	}
 }
 
-func (repo *VerificationQuery) AddOrder(input verification.OrderCore) error {
-	newHistory := HistoryToModel(input)
+func (repo *VerificationQuery) AddOrderJobseeker(input verification.OrderJobseekerCore) error {
+	newOrder := CoreJobseekerToModel(input)
 
-	tx := repo.db.Create(&newHistory) // proses query insert
+	tx := repo.db.Create(&newOrder) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}
+
+func (repo *VerificationQuery) AddOrderCompany(input verification.OrderCompanyCore) error {
+	newOrder := CoreCompanyToModel(input)
+
+	tx := repo.db.Create(&newOrder) // proses query insert
 	if tx.Error != nil {
 		return tx.Error
 	}
