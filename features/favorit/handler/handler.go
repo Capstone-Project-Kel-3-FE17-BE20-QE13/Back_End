@@ -83,10 +83,11 @@ func (h *FavHandler) GetAllFavorit(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFind.Error(), nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read all favourites", result))
 }
+
 func (h *FavHandler) DeleteFavById(c echo.Context) error {
-	favID := c.Param("fav_id")
+	favID := c.Param("favorit_id")
 
 	FavID_int, errConv := strconv.Atoi(favID)
 	if errConv != nil {
@@ -103,7 +104,7 @@ func (h *FavHandler) DeleteFavById(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error delete data. "+errDel.Error(), nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success delete data", nil))
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success delete favourite", nil))
 }
 
 // func (h *FavHandler) DeleteFavById(c echo.Context) error {
