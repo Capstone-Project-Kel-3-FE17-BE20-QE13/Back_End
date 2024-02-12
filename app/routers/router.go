@@ -28,6 +28,10 @@ import (
 	_favoritData "JobHuntz/features/favorit/data"
 	_favoritHandler "JobHuntz/features/favorit/handler"
 	_favoritService "JobHuntz/features/favorit/service"
+
+	_verifData "JobHuntz/features/verification/data"
+	_verifHandler "JobHuntz/features/verification/handler"
+	_verifService "JobHuntz/features/verification/service"
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
@@ -54,20 +58,21 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	favoritService := _favoritService.New(favorit)
 	favoritHandlerAPI := _favoritHandler.New(favoritService)
 
+	verif := _verifData.New(db)
+	verifService := _verifService.New(verif)
+	verifHandlerAPI := _verifHandler.New(verifService)
+
 	// company
 	e.POST("/register/company", companyHandlerAPI.RegisterCompany)
 	e.POST("/login/company", companyHandlerAPI.LoginCompany)
 	e.GET("/company", companyHandlerAPI.GetById, middlewares.JWTMiddleware())
 	e.PUT("/company", companyHandlerAPI.UpdateCompany, middlewares.JWTMiddleware())
 
-	// authentication
+	// jobseekers
 	e.POST("/register/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)
 	e.POST("/login/jobseekers", jobseekerHandlerAPI.LoginJobseeker)
-	e.POST("/register/company", companyHandlerAPI.RegisterCompany)
-	e.POST("/login/company", companyHandlerAPI.LoginCompany)
-
-	// jobseekers
 	e.PUT("/jobseekers", jobseekerHandlerAPI.UpdateJobseeker, middlewares.JWTMiddleware())
+	e.GET("/jobseekers", jobseekerHandlerAPI.GetByIdJobSeeker, middlewares.JWTMiddleware())
 
 	// curriculum vitae
 	e.POST("/cv", jobseekerHandlerAPI.CreateCV, middlewares.JWTMiddleware())
@@ -111,11 +116,15 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// application
 	e.POST("/application", applicationHandlerAPI.CreateApply, middlewares.JWTMiddleware())
-	e.GET("/all-applications", applicationHandlerAPI.GetApplicationsHistory, middlewares.JWTMiddleware())
 	e.GET("/all-applications-company", applicationHandlerAPI.GetApplicationsHistoryCompany, middlewares.JWTMiddleware())
+	e.GET("/application-history", applicationHandlerAPI.GetApplicationsHistory, middlewares.JWTMiddleware())
 
 	// favorit
 	e.POST("/favorit", favoritHandlerAPI.CreateFavorit, middlewares.JWTMiddleware())
 	e.GET("/favorit", favoritHandlerAPI.GetAllFavorit, middlewares.JWTMiddleware())
 	e.DELETE("/favorit/:favorit_id", favoritHandlerAPI.DeleteFavById, middlewares.JWTMiddleware())
+
+	// order
+	e.POST("/order-jobseeker", verifHandlerAPI.CreateOrderJobseeker, middlewares.JWTMiddleware())
+	e.POST("/order-company", verifHandlerAPI.CreateOrderCompany, middlewares.JWTMiddleware())
 }
