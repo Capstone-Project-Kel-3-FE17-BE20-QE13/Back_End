@@ -18,8 +18,11 @@ type Jobseeker struct {
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
-	CV                  CV
-	OrderJobseeker      OrderJobseeker
+	Careers             []Career
+	Educations          []Education
+	Cvs                 []CV
+	Licenses            []License
+	Skills              []Skill
 }
 
 type CV struct {

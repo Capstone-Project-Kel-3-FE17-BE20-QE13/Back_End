@@ -24,6 +24,31 @@ type JobseekerResponse struct {
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	Careers             []CareerResponse
+}
+
+type JobseekerResponseById struct {
+	ID                  uint      `json:"id" form:"id"`
+	Full_name           string    `gorm:"not null" json:"full_name" form:"full_name"`
+	Username            string    `gorm:"not null" json:"username" form:"username"`
+	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
+	Address             string    `json:"address" form:"address"`
+	Phone               string    `json:"phone" form:"phone"`
+	Birth_date          time.Time `json:"birth_date" form:"birth_date"`
+	Gender              string    `json:"gender" form:"gender"`
+	Resume              string    `json:"resume" form:"resume"`
+	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	Careers             []CareerResponse
+	Educations          []EducationResponse
+	Cvs                 []CvResponse
+	Licenses            []LicenseResponse
+	Skills              []SkillResponse
+}
+
+type CvResponse struct {
+	ID          uint   `json:"id" form:"id"`
+	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	CV_file     string `json:"cv_file" form:"cv_file"`
 }
 
 type CareerResponse struct {
@@ -57,6 +82,80 @@ type SkillResponse struct {
 	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
 	Skill       string `json:"skill" form:"skill"`
 	Description string `json:"description" form:"description"`
+}
+
+func CoreResponById(data jobseeker.JobseekerCore) JobseekerResponseById {
+	career := make([]CareerResponse, len(data.Careers))
+	educations := make([]EducationResponse, len(data.Educations))
+	cvs := make([]CvResponse, len(data.Cvs))
+	licenses := make([]LicenseResponse, len(data.Licenses))
+	skils := make([]SkillResponse, len(data.Skills))
+
+	for i, skil := range data.Skills {
+		skils[i] = SkillResponse{
+			ID:          skil.ID,
+			JobseekerID: skil.JobseekerID,
+			Skill:       skil.Skill,
+			Description: skil.Description,
+		}
+	}
+
+	for i, license := range data.Licenses {
+		licenses[i] = LicenseResponse{
+			ID:             license.ID,
+			JobseekerID:    license.JobseekerID,
+			License_name:   license.License_name,
+			Published_date: license.Published_date,
+			Expiry_date:    license.Expiry_date,
+			License_file:   license.License_file,
+		}
+	}
+
+	for i, cv := range data.Cvs {
+		cvs[i] = CvResponse{
+			JobseekerID: cv.JobseekerID,
+			CV_file:     cv.CV_file,
+		}
+	}
+
+	for i, education := range data.Educations {
+		educations[i] = EducationResponse{
+			ID:              education.ID,
+			JobseekerID:     education.JobseekerID,
+			Education_level: education.Education_level,
+			Major:           education.Major,
+			Graduation_date: education.Graduation_date,
+		}
+	}
+
+	for i, carer := range data.Careers {
+		career[i] = CareerResponse{
+			ID:           carer.ID,
+			JobseekerID:  carer.JobseekerID,
+			Position:     carer.Position,
+			Company_name: carer.Company_name,
+			Date_start:   carer.Date_start,
+			Date_end:     carer.Date_end,
+		}
+	}
+
+	return JobseekerResponseById{
+		ID:                  data.ID,
+		Full_name:           data.Full_name,
+		Username:            data.Username,
+		Email:               data.Email,
+		Address:             data.Address,
+		Phone:               data.Phone,
+		Birth_date:          data.Birth_date,
+		Gender:              data.Gender,
+		Resume:              data.Resume,
+		Status_Verification: data.Status_Verification,
+		Careers:             career,
+		Educations:          educations,
+		Cvs:                 cvs,
+		Licenses:            licenses,
+		Skills:              skils,
+	}
 }
 
 func CoreJobseekerToResponse(input jobseeker.JobseekerCore) JobseekerResponse {

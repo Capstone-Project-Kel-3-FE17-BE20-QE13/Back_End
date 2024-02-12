@@ -19,12 +19,18 @@ type JobseekerCore struct {
 	Gender              string    `json:"gender" form:"gender"`
 	Resume              string    `json:"resume" form:"resume"`
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	Careers             []CareerCore
+	Educations          []EducationCore
+	Cvs                 []CVCore
+	Licenses            []LicenseCore
+	Skills              []SkillCore
 }
 
 type CVCore struct {
 	ID          uint   `json:"id" form:"id"`
 	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
 	CV_file     string `json:"cv_file" form:"cv_file"`
+	Jobseeker   *JobseekerCore
 }
 
 type CareerCore struct {
@@ -36,6 +42,7 @@ type CareerCore struct {
 	Date_end     time.Time `json:"date_end" form:"date_end"`
 	CreatedAt    time.Time `json:"created_at" form:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at" form:"updated_at"`
+	Jobseeker    *JobseekerCore
 }
 
 type EducationCore struct {
@@ -44,6 +51,7 @@ type EducationCore struct {
 	Education_level string    `json:"ed_level" form:"ed_level"`
 	Major           string    `json:"major" form:"major"`
 	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+	Jobseeker       *JobseekerCore
 }
 
 type LicenseCore struct {
@@ -53,6 +61,7 @@ type LicenseCore struct {
 	Published_date time.Time `json:"pub_date" form:"pub_date"`
 	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
 	License_file   string    `json:"license" form:"license"`
+	Jobseeker      *JobseekerCore
 }
 
 type SkillCore struct {
@@ -60,6 +69,7 @@ type SkillCore struct {
 	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
 	Skill       string `json:"skill" form:"skill"`
 	Description string `json:"description" form:"description"`
+	Jobseeker   *JobseekerCore
 }
 
 // interface untuk Service Layer
@@ -92,6 +102,7 @@ type JobseekerServiceInterface interface {
 	GetSkillList(seekerID uint) ([]SkillCore, error)
 	UpdateSkill(skillID uint, data SkillCore) error
 	RemoveSkill(skillID uint) error
+	GetByIdJobSeeker(id uint) (*JobseekerCore, error)
 }
 
 // interface untuk Data Layer
@@ -124,4 +135,5 @@ type JobseekerDataInterface interface {
 	GetSkillList(seekerID uint) ([]SkillCore, error)
 	UpdateSkill(skillID uint, data SkillCore) error
 	RemoveSkill(skillID uint) error
+	GetByIdJobSeeker(id uint) (*JobseekerCore, error)
 }
