@@ -22,6 +22,18 @@ func New(service jobseeker.JobseekerServiceInterface) *JobseekerHandler {
 	}
 }
 
+func (handler *JobseekerHandler) GetByIdJobSeeker(c echo.Context) error {
+	seekerID := middlewares.ExtractTokenUserId(c)
+
+	result, errGetByID := handler.jobseekerService.GetByIdJobSeeker(seekerID)
+	if errGetByID != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errGetByID.Error(), nil))
+	}
+	resukt := CoreResponById(*result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully registered", resukt))
+}
+
 func (handler *JobseekerHandler) RegisterJobseeker(c echo.Context) error {
 	newSeeker := JobseekerRequest{}
 	errBind := c.Bind(&newSeeker)

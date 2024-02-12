@@ -48,7 +48,7 @@ func (handler *CompanyHandler) LoginCompany(c echo.Context) error {
 
 	result, token, err := handler.companyService.LoginCompany(reqData.Email, reqData.Password)
 	if err != nil {
-		return c.JSON(http.StatusUnauthorized, responses.WebResponse(http.StatusUnauthorized, "error ", nil))
+		return c.JSON(http.StatusForbidden, responses.WebResponse(http.StatusForbidden, "Email atau password tidak boleh kosong ", nil))
 	}
 
 	responData := map[string]any{
