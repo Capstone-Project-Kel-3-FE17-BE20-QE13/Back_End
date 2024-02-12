@@ -59,3 +59,16 @@ func (repo *ApplyQuery) GetAllApplications(jobseekerID uint) ([]application.Core
 
 	return allApplicationsCore, nil
 }
+
+func (repo *ApplyQuery) GetAllApplicationsCompany(vacancyID uint) ([]application.Core, error) {
+	var applicationsDataGormCompany []database.Application
+	tx := repo.db.Where("vacancy_id = ?", vacancyID).Find(&applicationsDataGormCompany)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	//mapping
+	allApplicationsCore := ModelGormToCore(applicationsDataGormCompany)
+
+	return allApplicationsCore, nil
+}

@@ -75,3 +75,17 @@ func (h *ApplyHandler) GetApplicationsHistory(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
 }
+
+func (h *ApplyHandler) GetApplicationsHistoryCompany(c echo.Context) error {
+	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
+	vacancyID := middlewares.ExtractTokenUserId(c)
+	result, err := h.applyService.GetAllApplicationsCompany(vacancyID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
+	}
+	var applyResponse []ApplyResponse
+	for _, v := range result {
+		applyResponse = append(applyResponse, MapCoreApplyToApplyRes(v))
+	}
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
+}
