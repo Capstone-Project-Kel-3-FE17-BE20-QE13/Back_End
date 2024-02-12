@@ -45,3 +45,18 @@ func (uc *ApplyService) GetAllApplications(JobseekerID uint) ([]application.Core
 	}
 	return result, nil
 }
+
+// func (uc *ApplyService) GetAllApplicationsCompany(vacancyID uint) ([]application.Core, error) {
+// 	result, err := uc.Repo.GetAllApplicationsCompany(vacancyID)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return result, nil
+// }
+
+func (uc *ApplyService) GetAllApplicationsCompany(vacancyID_int int) (application.Core, error) {
+	// logic
+	// memanggil func yg ada di data layer
+	results, err := uc.Repo.GetAllApplicationsCompany(vacancyID_int)
+	return results, err
+}
