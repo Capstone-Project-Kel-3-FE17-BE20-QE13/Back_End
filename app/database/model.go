@@ -19,6 +19,7 @@ type Jobseeker struct {
 	Resume              string    `json:"resume" form:"resume"`
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
 	CV                  CV
+	OrderJobseeker      OrderJobseeker
 }
 
 type CV struct {
@@ -113,4 +114,11 @@ type Favourite struct {
 	Position     string `json:"position" form:"position"`
 	Company_name string `json:"company_name" form:"company_name"`
 	Jobseeker    Jobseeker
+}
+
+type OrderJobseeker struct {
+	gorm.Model
+	JobseekerID  uint    `json:"jobseeker_id" form:"jobseeker_id"`
+	Price        float64 `json:"price" form:"price"`
+	Status_order string  `json:"stat_order" form:"stat_order"`
 }
