@@ -10,22 +10,26 @@ func CoreToModel(input application.Core) database.Application {
 		// ID:          input.Id,
 		JobseekerID:        input.JobseekerID,
 		VacancyID:          input.VacancyID,
+		Position:           input.Position,
+		Company_name:       input.Company_name,
 		Status_application: input.Status_application,
 	}
 }
 
 func CoretoModelGorm(data []application.Core) []database.Application {
-	var productsDataGorm []database.Application
+	var applicationsDataGorm []database.Application
 	for _, input := range data {
-		var productGorm = database.Application{
+		var applicationGorm = database.Application{
 			JobseekerID:        input.JobseekerID,
 			VacancyID:          input.VacancyID,
+			Position:           input.Position,
+			Company_name:       input.Company_name,
 			Status_application: input.Status_application,
 		}
-		productsDataGorm = append(productsDataGorm, productGorm)
+		applicationsDataGorm = append(applicationsDataGorm, applicationGorm)
 	}
 
-	return productsDataGorm
+	return applicationsDataGorm
 }
 
 func ModelToCore(input database.Application) application.Core {
@@ -33,20 +37,25 @@ func ModelToCore(input database.Application) application.Core {
 		ID:                 input.ID,
 		JobseekerID:        input.JobseekerID,
 		VacancyID:          input.VacancyID,
+		Position:           input.Position,
+		Company_name:       input.Company_name,
 		Status_application: input.Status_application,
 	}
 }
 
 func ModelGormToCore(data []database.Application) []application.Core {
-	var productsData []application.Core
+	var applicationsData []application.Core
 	for _, input := range data {
-		var productInput = application.Core{
+		var applicationInput = application.Core{
+			ID:                 input.ID,
 			JobseekerID:        input.JobseekerID,
 			VacancyID:          input.VacancyID,
+			Position:           input.Position,
+			Company_name:       input.Company_name,
 			Status_application: input.Status_application,
 		}
-		productsData = append(productsData, productInput)
+		applicationsData = append(applicationsData, applicationInput)
 	}
 
-	return productsData
+	return applicationsData
 }
