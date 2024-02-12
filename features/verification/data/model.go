@@ -5,8 +5,9 @@ import (
 	"JobHuntz/features/verification"
 )
 
-func CoreJobseekerToModel(input verification.OrderJobseekerCore) database.OrderJobseeker {
-	return database.OrderJobseeker{
+func CoreJobseekerToModel(input verification.OrderJobseekerCore) database.Order {
+	return database.Order{
+		ID:           input.ID,
 		JobseekerID:  input.JobseekerID,
 		Price:        input.Price,
 		Status_order: input.Status_order,

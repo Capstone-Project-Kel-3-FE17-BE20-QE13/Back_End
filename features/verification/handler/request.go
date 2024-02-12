@@ -2,9 +2,12 @@ package handler
 
 import (
 	"JobHuntz/features/verification"
+
+	"github.com/google/uuid"
 )
 
 type OrderJobseekerRequest struct {
+	ID           string  `gorm:"type:varchar(40);primary_key" json:"id" form:"id"`
 	JobseekerID  uint    `json:"jobseeker_id" form:"jobseeker_id"`
 	Price        float64 `json:"price" form:"price"`
 	Status_order string  `json:"stat_order" form:"stat_order"`
@@ -18,6 +21,7 @@ type OrderCompanyRequest struct {
 
 func RequestOrderJobseekerToCore(input OrderJobseekerRequest) verification.OrderJobseekerCore {
 	return verification.OrderJobseekerCore{
+		ID:           uuid.New().String(),
 		JobseekerID:  input.JobseekerID,
 		Price:        input.Price,
 		Status_order: input.Status_order,

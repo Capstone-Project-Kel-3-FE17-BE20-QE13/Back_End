@@ -23,7 +23,7 @@ type Jobseeker struct {
 	Cvs                 []CV
 	Licenses            []License
 	Skills              []Skill
-	OrderJobseeker      OrderJobseeker
+	Order               Order
 }
 
 type CV struct {
@@ -121,8 +121,8 @@ type Favourite struct {
 	Jobseeker    Jobseeker
 }
 
-type OrderJobseeker struct {
-	gorm.Model
+type Order struct {
+	ID           string  `gorm:"type:varchar(40);primary_key" json:"id" form:"id"`
 	JobseekerID  uint    `json:"jobseeker_id" form:"jobseeker_id"`
 	Price        float64 `json:"price" form:"price"`
 	Status_order string  `json:"stat_order" form:"stat_order"`
