@@ -76,7 +76,7 @@ type Company struct {
 	Status_Verification string    `json:"status_verification" form:"status_verification"`
 	Banners             string    `json:"banners" form:"banners"`
 	Vacancys            []Vacancy `gorm:"foreignKey:CompanyID"`
-	OrderCompany        OrderCompany
+	Order               Order
 }
 
 type Skill struct {
@@ -123,14 +123,8 @@ type Favourite struct {
 
 type Order struct {
 	ID           string  `gorm:"type:varchar(40);primary_key" json:"id" form:"id"`
-	JobseekerID  uint    `json:"jobseeker_id" form:"jobseeker_id"`
-	Price        float64 `json:"price" form:"price"`
-	Status_order string  `json:"stat_order" form:"stat_order"`
-}
-
-type OrderCompany struct {
-	gorm.Model
-	CompanyID    uint    `json:"company_id" form:"company_id"`
+	JobseekerID  *uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	CompanyID    *uint   `json:"company_id" form:"company_id"`
 	Price        float64 `json:"price" form:"price"`
 	Status_order string  `json:"stat_order" form:"stat_order"`
 }

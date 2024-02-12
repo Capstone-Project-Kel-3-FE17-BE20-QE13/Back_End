@@ -111,8 +111,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// vacancy
 	e.GET("/vacancy", vacancyHandlerAPI.GetAllJob)
 	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())
-	e.DELETE("vacancy/:jobs_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
-	e.GET("/vacancy/:jobs_id", vacancyHandlerAPI.GetJobById, middlewares.JWTMiddleware())
+	e.DELETE("vacancy/:vacancy_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
+	e.GET("/vacancy/:vacancy_id", vacancyHandlerAPI.GetJobById, middlewares.JWTMiddleware())
 
 	// application
 	e.POST("/application", applicationHandlerAPI.CreateApply, middlewares.JWTMiddleware())
@@ -125,6 +125,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.DELETE("/favorit/:favorit_id", favoritHandlerAPI.DeleteFavById, middlewares.JWTMiddleware())
 
 	// order
-	e.POST("/order-jobseeker", verifHandlerAPI.CreateOrderJobseeker, middlewares.JWTMiddleware())
-	e.POST("/order-company", verifHandlerAPI.CreateOrderCompany, middlewares.JWTMiddleware())
+	e.POST("/order", verifHandlerAPI.CreateOrder, middlewares.JWTMiddleware())
 }

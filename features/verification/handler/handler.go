@@ -4,6 +4,7 @@ import (
 	"JobHuntz/app/middlewares"
 	"JobHuntz/features/verification"
 	"JobHuntz/utils/responses"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -20,50 +21,56 @@ func New(service verification.VerificationServiceInterface) *VerificationHandler
 }
 
 // insert order
-func (handler *VerificationHandler) CreateOrderJobseeker(c echo.Context) error {
+func (handler *VerificationHandler) CreateOrder(c echo.Context) error {
 	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
-	seekerID := middlewares.ExtractTokenUserId(c)
+	userID := middlewares.ExtractTokenUserId(c)
 
-	newOrder := OrderJobseekerRequest{}
-	newOrder.JobseekerID = seekerID
-	newOrder.Price = 1000000
-	newOrder.Status_order = "On Going"
+	seekerData, _ := handler.verificationService.GetDataJobseeker(userID)
+	fmt.Println("isi seeker: ", seekerData)
 
-	errBind := c.Bind(&newOrder)
-	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", newOrder))
+	if seekerData.ID != 0 {
+		newOrder := OrderRequest{}
+		newOrder.JobseekerID = &userID
+
+		fmt.Println("isi pointer user id: ", &userID)
+
+		newOrder.CompanyID = nil
+		newOrder.Price = 1000000
+		newOrder.Status_order = "On Going"
+
+		errBind := c.Bind(&newOrder)
+		if errBind != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", newOrder))
+		}
+
+		orderCore := RequestOrderToCore(newOrder)
+
+		errCreate := handler.verificationService.AddOrder(orderCore)
+		if errCreate != nil {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
+		}
+	} else if seekerData.ID == 0 {
+		companyData, _ := handler.verificationService.GetDataCompany(userID)
+		if companyData.ID != 0 {
+			newOrder := OrderRequest{}
+			newOrder.JobseekerID = nil
+			newOrder.CompanyID = &userID
+			newOrder.Price = 2000000
+			newOrder.Status_order = "On Going"
+
+			errBind := c.Bind(&newOrder)
+			if errBind != nil {
+				return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", newOrder))
+			}
+
+			orderCore := RequestOrderToCore(newOrder)
+
+			errCreate := handler.verificationService.AddOrder(orderCore)
+			if errCreate != nil {
+				return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
+			}
+		}
 	}
 
-	orderCore := RequestOrderJobseekerToCore(newOrder)
-
-	errCreate := handler.verificationService.AddOrderJobseeker(orderCore)
-	if errCreate != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
-	}
-
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success create order", orderCore))
-}
-
-func (handler *VerificationHandler) CreateOrderCompany(c echo.Context) error {
-	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
-	companyID := middlewares.ExtractTokenUserId(c)
-
-	newOrder := OrderCompanyRequest{}
-	newOrder.CompanyID = companyID
-	newOrder.Price = 2000000
-	newOrder.Status_order = "On Going"
-
-	errBind := c.Bind(&newOrder)
-	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", newOrder))
-	}
-
-	orderCore := RequestOrderCompanyToCore(newOrder)
-
-	errCreate := handler.verificationService.AddOrderCompany(orderCore)
-	if errCreate != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
-	}
-
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success create order", orderCore))
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success create order", nil))
 }
