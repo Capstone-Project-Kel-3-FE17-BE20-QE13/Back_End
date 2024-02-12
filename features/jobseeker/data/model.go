@@ -82,6 +82,7 @@ func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 
 func ModelCVToCore(input database.CV) jobseeker.CVCore {
 	return jobseeker.CVCore{
+		ID:          input.ID,
 		JobseekerID: input.JobseekerID,
 		CV_file:     input.CV_file,
 	}

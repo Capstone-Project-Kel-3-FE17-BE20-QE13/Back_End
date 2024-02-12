@@ -22,6 +22,7 @@ type JobseekerCore struct {
 }
 
 type CVCore struct {
+	ID          uint   `json:"id" form:"id"`
 	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
 	CV_file     string `json:"cv_file" form:"cv_file"`
 }
