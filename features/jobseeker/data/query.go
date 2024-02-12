@@ -27,7 +27,7 @@ func New(db *gorm.DB) jobseeker.JobseekerDataInterface {
 
 func (repo *JobseekerQuery) GetByIdJobSeeker(id uint) (*jobseeker.JobseekerCore, error) {
 	var jobData database.Jobseeker
-	tx := repo.db.Preload("Careers").Preload("Cvs").Preload("Educations").First(&jobData, id)
+	tx := repo.db.Preload("Cvs").Preload("Careers").Preload("Educations").Preload("Licenses").Preload("Skills").First(&jobData, id)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
