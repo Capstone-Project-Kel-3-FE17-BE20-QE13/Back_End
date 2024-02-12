@@ -118,3 +118,10 @@ type Favourite struct {
 	Company_name string `json:"company_name" form:"company_name"`
 	Jobseeker    Jobseeker
 }
+
+type OrderJobseeker struct {
+	gorm.Model
+	JobseekerID  uint    `json:"jobseeker_id" form:"jobseeker_id"`
+	Price        float64 `json:"price" form:"price"`
+	Status_order string  `json:"stat_order" form:"stat_order"`
+}
