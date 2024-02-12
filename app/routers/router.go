@@ -116,5 +116,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// favorit
 	e.POST("/favorit", favoritHandlerAPI.CreateFavorit, middlewares.JWTMiddleware())
 	e.GET("/favorit", favoritHandlerAPI.GetAllFavorit, middlewares.JWTMiddleware())
-	e.DELETE("/favorit/:favoritID", favoritHandlerAPI.DeleteFavById, middlewares.JWTMiddleware())
+	e.DELETE("/favorit/:favorit_id", favoritHandlerAPI.DeleteFavById, middlewares.JWTMiddleware())
 }
