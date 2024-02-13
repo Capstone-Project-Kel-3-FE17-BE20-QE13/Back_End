@@ -128,3 +128,25 @@ type Order struct {
 	Price        float64 `json:"price" form:"price"`
 	Status_order string  `json:"stat_order" form:"stat_order"`
 }
+type OrderItem struct {
+	gorm.Model
+	OrderID     uint `gorm:"not null" json:"orderId" form:"orderId"`
+	JobseekerID uint `gorm:"not null" json:"jobseeker_id" form:"jobseeker_id"`
+	CompanyID   uint `gorm:"not null" json:"company_id" form:"company_id"`
+	Price       uint `gorm:"not null" json:"price" form:"price"`
+	// 	Username     string `json:"username" form:"username"`
+	// 	Company_name string `json:"company_name" form:"company_name"`
+}
+
+type Payment struct {
+	ID          string `json:"id" gorm:"primaryKey"`
+	OrderID     string `gorm:"type:varchar(50)" json:"order_id" form:"order_id"`
+	Amount      string
+	UserID      *uint          `json:"user_id" form:"user_id"`
+	BankAccount string         `gorm:"type:enum('bca', 'bri', 'bni'); default:'bca'"`
+	VANumber    string         `gorm:"type:varchar(50)"`
+	Status      string         `gorm:"type:varchar(50)"`
+	CreatedAt   time.Time      `gorm:"type:datetime"`
+	UpdatedAt   time.Time      `gorm:"type:datetime"`
+	DeletedAt   gorm.DeletedAt `gorm:"index"`
+}

@@ -6,6 +6,7 @@ import (
 
 	"JobHuntz/app/middlewares"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
@@ -32,6 +33,10 @@ import (
 	_verifData "JobHuntz/features/verification/data"
 	_verifHandler "JobHuntz/features/verification/handler"
 	_verifService "JobHuntz/features/verification/service"
+
+	_paymentdata "JobHuntz/features/payment/data"
+	_paymenthandler "JobHuntz/features/payment/handler"
+	_paymentservice "JobHuntz/features/payment/service"
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
@@ -61,6 +66,11 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	verif := _verifData.New(db)
 	verifService := _verifService.New(verif)
 	verifHandlerAPI := _verifHandler.New(verifService)
+
+	paymentData := _paymentdata.New(db)
+	validate := validator.New()
+	paymentService := _paymentservice.New(paymentData, validate)
+	paymentHandler := _paymenthandler.New(paymentService)
 
 	// company
 	e.POST("/register/company", companyHandlerAPI.RegisterCompany)
@@ -129,4 +139,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// order
 	e.POST("/order", verifHandlerAPI.CreateOrder, middlewares.JWTMiddleware())
+
+	// payment
+	e.POST("/payments", paymentHandler.Payment(), middlewares.JWTMiddleware())
+	e.POST("/payments/callback", paymentHandler.Notification())
 }
