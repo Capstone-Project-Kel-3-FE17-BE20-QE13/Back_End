@@ -18,6 +18,18 @@ type JobseekerRequest struct {
 	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
 }
 
+type JobseekerUpdateRequest struct {
+	Full_name  string    `gorm:"not null" json:"full_name" form:"full_name"`
+	Username   string    `gorm:"not null" json:"username" form:"username"`
+	Email      string    `gorm:"not null;unique" json:"email" form:"email"`
+	Password   string    `gorm:"not null" json:"password" form:"password"`
+	Address    string    `json:"address" form:"address"`
+	Phone      string    `json:"phone" form:"phone"`
+	Birth_date time.Time `json:"birth_date" form:"birth_date"`
+	Gender     string    `json:"gender" form:"gender"`
+	Resume     string    `json:"resume" form:"resume"`
+}
+
 type CVRequest struct {
 	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
 	CV_file     string `json:"cv_file" form:"cv_file"`
@@ -64,6 +76,20 @@ func RequestJobseekerToCore(input JobseekerRequest) jobseeker.JobseekerCore {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		Status_Verification: input.Status_Verification,
+	}
+}
+
+func RequestJobseekerUpdateToCore(input JobseekerUpdateRequest) jobseeker.JobseekerCore {
+	return jobseeker.JobseekerCore{
+		Full_name:  input.Full_name,
+		Username:   input.Username,
+		Email:      input.Email,
+		Password:   input.Password,
+		Address:    input.Address,
+		Phone:      input.Phone,
+		Birth_date: input.Birth_date,
+		Gender:     input.Gender,
+		Resume:     input.Resume,
 	}
 }
 

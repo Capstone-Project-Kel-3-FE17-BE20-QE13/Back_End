@@ -71,7 +71,7 @@ func (handler *JobseekerHandler) LoginJobseeker(c echo.Context) error {
 func (handler *JobseekerHandler) UpdateJobseeker(c echo.Context) error {
 	seekerID := middlewares.ExtractTokenUserId(c)
 
-	newUpdate := JobseekerRequest{}
+	newUpdate := JobseekerUpdateRequest{}
 
 	birthDateString := c.FormValue("birth_date")
 	if birthDateString != "" {
@@ -87,9 +87,9 @@ func (handler *JobseekerHandler) UpdateJobseeker(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
 	}
 
-	fmt.Println(newUpdate)
+	fmt.Println("isi newUpdate: ", newUpdate)
 
-	newUpdateCore := RequestJobseekerToCore(newUpdate)
+	newUpdateCore := RequestJobseekerUpdateToCore(newUpdate)
 
 	err := handler.jobseekerService.UpdateProfile(seekerID, newUpdateCore)
 	if err != nil {
