@@ -49,3 +49,8 @@ func (service *JobService) DeleteJobById(input []vacancy.Core, ID int) error {
 	err := service.Repo.DeleteJobById(input, ID)
 	return err
 }
+
+func (service *JobService) UpdateStatus(input vacancy.JobStatusCore, vacancyID uint) error {
+	err := service.Repo.UpdateStatus(input, vacancyID)
+	return err
+}
