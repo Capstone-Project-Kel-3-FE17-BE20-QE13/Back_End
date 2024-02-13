@@ -20,23 +20,6 @@ func New(db *gorm.DB) application.ApplyDataInterface {
 	}
 }
 
-func (repo *ApplyQuery) Edit(id uint, input application.Core) error {
-	dataApplication := database.Application{
-		Status_application: input.Status_application,
-	}
-
-	tx := repo.db.Model(&database.Application{}).Where("id = ?", id).Updates(&dataApplication)
-	if tx.Error != nil {
-		return tx.Error
-	}
-
-	if tx.RowsAffected == 0 {
-		return errors.New("edit failed, row affected = 0")
-	}
-
-	return nil
-}
-
 func (repo *ApplyQuery) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error) {
 	// simpan ke DB
 	var dataCompany favorit.DataCompanyCore
@@ -78,27 +61,44 @@ func (repo *ApplyQuery) GetAllApplications(jobseekerID uint) ([]application.Core
 	return allApplicationsCore, nil
 }
 
-// func (repo *ApplyQuery) GetAllApplicationsCompany(vacancyID uint) ([]application.Core, error) {
-// 	var applicationsDataGormCompany []database.Application
-// 	tx := repo.db.Where("vacancy_id = ?", vacancyID).Find(&applicationsDataGormCompany)
-// 	if tx.Error != nil {
-// 		return nil, tx.Error
-// 	}
+func (repo *ApplyQuery) GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]application.ListApplicantsCore, error) {
+	var listApplicants []application.ListApplicantsCore
 
-// 	//mapping
-// 	allApplicationsCore := ModelGormToCore(applicationsDataGormCompany)
+	query := `SELECT applications.id, applications.jobseeker_id, jobseekers.full_name, jobseekers.username, jobseekers.email, 
+	applications.vacancy_id, applications.position, applications.company_name, applications.status_application 
+	FROM applications 
+	JOIN jobseekers ON applications.jobseeker_id = jobseekers.id
+	WHERE applications.vacancy_id = ?`
 
-// 	return allApplicationsCore, nil
-// }
-
-func (repo *ApplyQuery) GetAllApplicationsCompany(vacancyID_int int) (application.Core, error) {
-	var applicationsDataGormCompany database.Application
-	tx := repo.db.Find(&applicationsDataGormCompany, vacancyID_int)
-	if tx.Error != nil {
-		return application.Core{}, tx.Error
+	rows, err := dbRaw.Query(query, vacancyID_int)
+	if err != nil {
+		return nil, errors.New("failed to read data applicants" + err.Error())
 	}
 
-	allApplicationsCore := ModelToCore(applicationsDataGormCompany)
+	for rows.Next() {
+		var dataApplicant application.ListApplicantsCore
+		if err := rows.Scan(&dataApplicant.ID, &dataApplicant.JobseekerID, &dataApplicant.Full_name, &dataApplicant.Username, &dataApplicant.Email, &dataApplicant.VacancyID, &dataApplicant.Position, &dataApplicant.Company_name, &dataApplicant.Status_application); err != nil {
+			return nil, errors.New("failed to read each data applicant" + err.Error())
+		}
+		listApplicants = append(listApplicants, dataApplicant)
+	}
 
-	return allApplicationsCore, nil
+	return listApplicants, nil
+}
+
+func (repo *ApplyQuery) Edit(id uint, input application.Core) error {
+	dataApplication := database.Application{
+		Status_application: input.Status_application,
+	}
+
+	tx := repo.db.Model(&database.Application{}).Where("id = ?", id).Updates(&dataApplication)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("edit failed, row affected = 0")
+	}
+
+	return nil
 }

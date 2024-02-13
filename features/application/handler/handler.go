@@ -23,28 +23,6 @@ func New(service application.ApplyServiceInterface) *ApplyHandler {
 	}
 }
 
-func (h *ApplyHandler) EditApplication(c echo.Context) error {
-	applicationId, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "invalid user ID", nil))
-	}
-
-	editApplication := ApplicationRequestStatus{}
-	errBind := c.Bind(&editApplication)
-	if errBind != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error bind data. data not valid"+errBind.Error(), nil))
-	}
-
-	applicationCore := RequestToCore(editApplication)
-
-	errEdit := h.applyService.EditApplication(uint(applicationId), applicationCore)
-	if errEdit != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error editing data"+errBind.Error(), nil))
-	}
-
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusCreated, "success create application", nil))
-}
-
 func (h *ApplyHandler) CreateApply(c echo.Context) error {
 	vacancyID := c.QueryParam("vacancy_id")
 
@@ -84,7 +62,7 @@ func (h *ApplyHandler) CreateApply(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusCreated, "success create application", nil))
 }
 
-func (h *ApplyHandler) GetApplicationsHistory(c echo.Context) error {
+func (h *ApplyHandler) AppHistoryJobseeker(c echo.Context) error {
 	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
 	userID := middlewares.ExtractTokenUserId(c)
 	result, err := h.applyService.GetAllApplications(userID)
@@ -98,33 +76,42 @@ func (h *ApplyHandler) GetApplicationsHistory(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
 }
 
-// func (h *ApplyHandler) GetApplicationsHistoryCompany(c echo.Context) error {
-// 	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
-// 	vacancyID := middlewares.ExtractTokenUserId(c)
-// 	result, err := h.applyService.GetAllApplicationsCompany(vacancyID)
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
-// 	}
-// 	var applyResponse []ApplyResponse
-// 	for _, v := range result {
-// 		applyResponse = append(applyResponse, MapCoreApplyToApplyRes(v))
-// 	}
-// 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
-// }
-// vacancyID := c.QueryParam("vacancy_id")
-
-func (handler *ApplyHandler) GetApplicationsHistoryCompany(c echo.Context) error {
-	// productID := c.Param("product_id")
+func (handler *ApplyHandler) AppHistoryCompany(c echo.Context) error {
 	vacancyID := c.QueryParam("vacancy_id")
 	vacancyID_int, errConv := strconv.Atoi(vacancyID)
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
 	}
 
-	result, errFirst := handler.applyService.GetAllApplicationsCompany(vacancyID_int)
+	cfg := config.InitConfig()
+	dbRaw := database.InitRawSql(cfg)
+
+	result, errFirst := handler.applyService.GetAllApplicationsCompany(dbRaw, vacancyID_int)
 	if errFirst != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data applicants", result))
+}
+
+func (h *ApplyHandler) EditApplication(c echo.Context) error {
+	applicationId, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "invalid user ID", nil))
+	}
+
+	editApplication := ApplicationRequestStatus{}
+	errBind := c.Bind(&editApplication)
+	if errBind != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error bind data. data not valid"+errBind.Error(), nil))
+	}
+
+	applicationCore := RequestToCore(editApplication)
+
+	errEdit := h.applyService.EditApplication(uint(applicationId), applicationCore)
+	if errEdit != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error editing data"+errBind.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusCreated, "success create application", nil))
 }
