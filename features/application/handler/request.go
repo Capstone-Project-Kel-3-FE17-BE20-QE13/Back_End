@@ -10,6 +10,16 @@ type ApplyRequest struct {
 	Status_application string `json:"stat_app" form:"stat_app"`
 }
 
+type ApplicationRequestStatus struct {
+	Status_application string `json:"stat_app" form:"stat_app"`
+}
+
+func RequestToCore(input ApplicationRequestStatus) application.Core {
+	return application.Core{
+		Status_application: input.Status_application,
+	}
+}
+
 // Mapping dari struct TaskRequest To struct Core Task
 func MapApplyReqToCoreApply(input ApplyRequest) application.Core {
 	return application.Core{

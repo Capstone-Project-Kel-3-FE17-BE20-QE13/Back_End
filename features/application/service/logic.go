@@ -4,6 +4,7 @@ import (
 	"JobHuntz/features/application"
 	"JobHuntz/features/favorit"
 	"database/sql"
+	"errors"
 )
 
 type ApplyService struct {
@@ -14,6 +15,15 @@ func New(repo application.ApplyDataInterface) application.ApplyServiceInterface 
 	return &ApplyService{
 		Repo: repo,
 	}
+}
+
+func (service *ApplyService) EditApplication(id uint, input application.Core) error {
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.Repo.Edit(id, input)
+	return err
 }
 
 func (uc *ApplyService) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error) {
