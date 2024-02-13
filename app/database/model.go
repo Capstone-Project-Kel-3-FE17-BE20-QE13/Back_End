@@ -1,23 +1,21 @@
 package database
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
 type Jobseeker struct {
 	gorm.Model
-	Full_name           string    `gorm:"not null" json:"full_name" form:"full_name"`
-	Username            string    `gorm:"not null" json:"username" form:"username"`
-	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
-	Password            string    `gorm:"not null" json:"password" form:"password"`
-	Address             string    `json:"address" form:"address"`
-	Phone               string    `json:"phone" form:"phone"`
-	Birth_date          time.Time `json:"birth_date" form:"birth_date"`
-	Gender              string    `json:"gender" form:"gender"`
-	Resume              string    `json:"resume" form:"resume"`
-	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	Full_name           string `gorm:"not null" json:"full_name" form:"full_name"`
+	Username            string `gorm:"not null" json:"username" form:"username"`
+	Email               string `gorm:"not null;unique" json:"email" form:"email"`
+	Password            string `gorm:"not null" json:"password" form:"password"`
+	Address             string `json:"address" form:"address"`
+	Phone               string `json:"phone" form:"phone"`
+	Birth_date          string `json:"birth_date" form:"birth_date"`
+	Gender              string `json:"gender" form:"gender"`
+	Resume              string `json:"resume" form:"resume"`
+	Status_Verification string `json:"stat_verif" form:"stat_verif"`
 	Careers             []Career
 	Educations          []Education
 	Cvs                 []CV
@@ -34,48 +32,47 @@ type CV struct {
 
 type Career struct {
 	gorm.Model
-	JobseekerID  uint      `json:"jobseeker_id" form:"jobseeker_id"`
-	Position     string    `json:"position" form:"position"`
-	Company_name string    `json:"company_name" form:"company_name"`
-	Date_start   time.Time `json:"date_start" form:"date_start"`
-	Date_end     time.Time `json:"date_end" form:"date_end"`
+	JobseekerID  uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Position     string `json:"position" form:"position"`
+	Company_name string `json:"company_name" form:"company_name"`
+	Date_start   string `json:"date_start" form:"date_start"`
+	Date_end     string `json:"date_end" form:"date_end"`
 	Jobseeker    Jobseeker
 }
 
 type Education struct {
 	gorm.Model
-	JobseekerID     uint      `json:"jobseeker_id" form:"jobseeker_id"`
-	Education_level string    `json:"ed_level" form:"ed_level"`
-	Major           string    `json:"major" form:"major"`
-	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+	JobseekerID     uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Education_level string `json:"ed_level" form:"ed_level"`
+	Major           string `json:"major" form:"major"`
+	Graduation_date string `json:"grad_date" form:"grad_date"`
 	Jobseeker       Jobseeker
 }
 
 type License struct {
 	gorm.Model
-	JobseekerID    uint      `json:"jobseeker_id" form:"jobseeker_id"`
-	License_name   string    `json:"license_name" form:"license_name"`
-	Published_date time.Time `json:"pub_date" form:"pub_date"`
-	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
-	License_file   string    `json:"license" form:"license"`
+	JobseekerID    uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	License_name   string `json:"license_name" form:"license_name"`
+	Published_date string `json:"pub_date" form:"pub_date"`
+	Expiry_date    string `json:"exp_date" form:"exp_date"`
+	License_file   string `json:"license" form:"license"`
 	Jobseeker      Jobseeker
 }
 
 type Company struct {
 	gorm.Model
-	Company_name        string    `gorm:"not null" json:"company_name" form:"company_name"`
-	Full_name           string    `json:"full_name" form:"full_name"`
-	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
-	Password            string    `gorm:"not null" json:"password" form:"password"`
-	Address             string    `json:"address" form:"address"`
-	Phone               string    `json:"phone" form:"phone"`
-	Company_type        string    `gorm:"not null" json:"company_type" form:"company_type"`
-	Company_size        string    `gorm:"not null" json:"company_size" form:"company_size"`
-	Website             string    `gorm:"not null" json:"website" form:"website"`
-	Description         string    `json:"description" form:"description"`
-	Status_Verification string    `json:"status_verification" form:"status_verification"`
-	Banners             string    `json:"banners" form:"banners"`
-	Vacancys            []Vacancy `gorm:"foreignKey:CompanyID"`
+	Company_name        string `gorm:"not null" json:"company_name" form:"company_name"`
+	Full_name           string `json:"full_name" form:"full_name"`
+	Email               string `gorm:"not null;unique" json:"email" form:"email"`
+	Password            string `gorm:"not null" json:"password" form:"password"`
+	Address             string `json:"address" form:"address"`
+	Phone               string `json:"phone" form:"phone"`
+	Company_type        string `gorm:"not null" json:"company_type" form:"company_type"`
+	Company_size        string `gorm:"not null" json:"company_size" form:"company_size"`
+	Website             string `gorm:"not null" json:"website" form:"website"`
+	Description         string `json:"description" form:"description"`
+	Status_Verification string `json:"status_verification" form:"status_verification"`
+	Banners             string `json:"banners" form:"banners"`
 	Order               Order
 }
 
