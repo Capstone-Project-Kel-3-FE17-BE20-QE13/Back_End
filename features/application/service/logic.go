@@ -17,15 +17,6 @@ func New(repo application.ApplyDataInterface) application.ApplyServiceInterface 
 	}
 }
 
-func (service *ApplyService) EditApplication(id uint, input application.Core) error {
-	if id <= 0 {
-		return errors.New("invalid id")
-	}
-
-	err := service.Repo.Edit(id, input)
-	return err
-}
-
 func (uc *ApplyService) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error) {
 
 	application, err := uc.Repo.GetDataCompany(dbRaw, vacancyID)
@@ -56,17 +47,16 @@ func (uc *ApplyService) GetAllApplications(JobseekerID uint) ([]application.Core
 	return result, nil
 }
 
-// func (uc *ApplyService) GetAllApplicationsCompany(vacancyID uint) ([]application.Core, error) {
-// 	result, err := uc.Repo.GetAllApplicationsCompany(vacancyID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return result, nil
-// }
-
-func (uc *ApplyService) GetAllApplicationsCompany(vacancyID_int int) (application.Core, error) {
-	// logic
-	// memanggil func yg ada di data layer
-	results, err := uc.Repo.GetAllApplicationsCompany(vacancyID_int)
+func (uc *ApplyService) GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]application.ListApplicantsCore, error) {
+	results, err := uc.Repo.GetAllApplicationsCompany(dbRaw, vacancyID_int)
 	return results, err
+}
+
+func (service *ApplyService) EditApplication(id uint, input application.Core) error {
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.Repo.Edit(id, input)
+	return err
 }
