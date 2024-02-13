@@ -23,6 +23,28 @@ func New(service application.ApplyServiceInterface) *ApplyHandler {
 	}
 }
 
+func (h *ApplyHandler) EditApplication(c echo.Context) error {
+	applicationId, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "invalid user ID", nil))
+	}
+
+	editApplication := ApplicationRequestStatus{}
+	errBind := c.Bind(&editApplication)
+	if errBind != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error bind data. data not valid"+errBind.Error(), nil))
+	}
+
+	applicationCore := RequestToCore(editApplication)
+
+	errEdit := h.applyService.EditApplication(uint(applicationId), applicationCore)
+	if errEdit != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error editing data"+errBind.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusCreated, "success create application", nil))
+}
+
 func (h *ApplyHandler) CreateApply(c echo.Context) error {
 	vacancyID := c.QueryParam("vacancy_id")
 

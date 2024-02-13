@@ -5,6 +5,7 @@ import (
 	"JobHuntz/features/application"
 	"JobHuntz/features/favorit"
 	"database/sql"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -17,6 +18,23 @@ func New(db *gorm.DB) application.ApplyDataInterface {
 	return &ApplyQuery{
 		db: db,
 	}
+}
+
+func (repo *ApplyQuery) Edit(id uint, input application.Core) error {
+	dataApplication := database.Application{
+		Status_application: input.Status_application,
+	}
+
+	tx := repo.db.Model(&database.Application{}).Where("id = ?", id).Updates(&dataApplication)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("edit failed, row affected = 0")
+	}
+
+	return nil
 }
 
 func (repo *ApplyQuery) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error) {

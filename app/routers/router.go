@@ -118,6 +118,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/application", applicationHandlerAPI.CreateApply, middlewares.JWTMiddleware())
 	e.GET("/all-applications-company", applicationHandlerAPI.GetApplicationsHistoryCompany, middlewares.JWTMiddleware())
 	e.GET("/application-history", applicationHandlerAPI.GetApplicationsHistory, middlewares.JWTMiddleware())
+	e.PUT("/application/:id", applicationHandlerAPI.EditApplication, middlewares.JWTMiddleware())
 
 	// favorit
 	e.POST("/favorit", favoritHandlerAPI.CreateFavorit, middlewares.JWTMiddleware())

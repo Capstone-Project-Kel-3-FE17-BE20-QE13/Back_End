@@ -19,6 +19,7 @@ type ApplyDataInterface interface {
 	CreateApplication(input Core) (uint, error)
 	GetAllApplications(JobseekerID uint) ([]Core, error)
 	GetAllApplicationsCompany(vacancyID_int int) (Core, error)
+	Edit(id uint, input Core) error
 }
 
 type ApplyServiceInterface interface {
@@ -26,4 +27,5 @@ type ApplyServiceInterface interface {
 	CreateApplication(input Core) (uint, error)
 	GetAllApplications(JobseekerID uint) ([]Core, error)
 	GetAllApplicationsCompany(vacancyID_int int) (Core, error)
+	EditApplication(id uint, input Core) error
 }
