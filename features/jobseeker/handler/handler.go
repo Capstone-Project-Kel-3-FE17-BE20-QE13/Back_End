@@ -107,14 +107,14 @@ func (handler *JobseekerHandler) CreateCV(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot read file", nil))
 	}
 
-	responURL, errURL := handler.jobseekerService.CV(inputCV)
+	responURL, errURL := handler.jobseekerService.PDF(inputCV)
 	if errURL != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot get resp", nil))
 	}
 
 	newCV := CVRequest{}
 	newCV.JobseekerID = seekerID
-	newCV.CV_file = responURL.SecureURL
+	newCV.CV_file = responURL.Location
 
 	errBind := c.Bind(&newCV)
 	if errBind != nil {
@@ -149,11 +149,11 @@ func (handler *JobseekerHandler) UpdateCV(c echo.Context) error {
 	newCV.JobseekerID = seekerID
 	oldCV, _ := c.FormFile("cv_file")
 	if oldCV != nil {
-		responURL, errResp := handler.jobseekerService.CV(oldCV)
+		responURL, errResp := handler.jobseekerService.PDF(oldCV)
 		if errResp != nil {
 			return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error get resp "+errResp.Error(), nil))
 		}
-		newCV.CV_file = responURL.SecureURL
+		newCV.CV_file = responURL.Location
 	}
 
 	errBind := c.Bind(&newCV)
@@ -413,14 +413,14 @@ func (handler *JobseekerHandler) CreateLicense(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot read file", nil))
 	}
 
-	responURL, errURL := handler.jobseekerService.CV(inputLicense)
+	responURL, errURL := handler.jobseekerService.PDF(inputLicense)
 	if errURL != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot get resp", nil))
 	}
 
 	newLicense := LicenseRequest{}
 	newLicense.JobseekerID = uint(seekerID)
-	newLicense.License_file = responURL.SecureURL
+	newLicense.License_file = responURL.Location
 
 	errBind := c.Bind(&newLicense)
 	if errBind != nil {
@@ -494,6 +494,15 @@ func (handler *JobseekerHandler) UpdateLicense(c echo.Context) error {
 			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
 		}
 		newUpdate.Expiry_date = oldExpDate
+	}
+
+	oldLicense, _ := c.FormFile("license")
+	if oldLicense != nil {
+		respURL, err := handler.jobseekerService.PDF(oldLicense)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
+		}
+		newUpdate.License_file = respURL.Location
 	}
 
 	errBind := c.Bind(&newUpdate)

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"mime/multipart"
 
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
@@ -66,9 +67,15 @@ func (service *JobseekerService) UpdateProfile(seekerID uint, data jobseeker.Job
 	return err
 }
 
-func (service *JobseekerService) CV(input *multipart.FileHeader) (*uploader.UploadResult, error) {
+func (service *JobseekerService) PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error) {
 	// logic validation
-	res, err := service.jobseekerData.CV(input)
+	res, err := service.jobseekerData.PDF(input)
+	return res, err
+}
+
+func (service *JobseekerService) Photo(input *multipart.FileHeader) (*uploader.UploadResult, error) {
+	// logic validation
+	res, err := service.jobseekerData.Photo(input)
 	return res, err
 }
 
