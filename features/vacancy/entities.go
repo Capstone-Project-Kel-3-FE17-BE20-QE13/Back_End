@@ -33,6 +33,7 @@ type JobDataInterface interface {
 	GetJobById(jobID int) (Core, error)
 	CreateJob(input Core) error
 	DeleteJobById(input []Core, ID int) error
+	MyCompanyVacancies(companyID uint) ([]Core, error)
 	GetAllJobs() ([]Core, error)
 	GetById(id uint) (*CompanyCore, error)
 	CountJobsByUserID(userID uint) (int, error)
@@ -42,6 +43,7 @@ type JobServiceInterface interface {
 	GetJobById(jobID int) (Core, error)
 	CreateJob(input Core) error
 	DeleteJobById(input []Core, ID int) error
+	MyCompanyVacancies(companyID uint) ([]Core, error)
 	GetAllJobs() ([]Core, error)
 	GetById(id uint) (*CompanyCore, error)
 	CountJobsByUserID(userID uint) (int, error)

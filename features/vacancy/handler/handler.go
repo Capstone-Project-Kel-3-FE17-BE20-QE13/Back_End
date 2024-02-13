@@ -21,7 +21,6 @@ func NewJob(jobService jobs.JobServiceInterface) *JobHandler {
 	}
 }
 
-// insert product
 func (handler *JobHandler) CreateJobs(c echo.Context) error {
 	userId := middlewares.ExtractTokenUserId(c)
 
@@ -49,7 +48,7 @@ func (handler *JobHandler) CreateJobs(c echo.Context) error {
 		Category:        newJob.Category,
 		Job_description: newJob.Job_description,
 		Job_requirement: newJob.Job_requirement,
-		Status:          "Lowongan Terbuka",
+		Status:          "Dibuka",
 	}
 
 	errCreate := handler.jobService.CreateJob(jobCore)
@@ -60,7 +59,17 @@ func (handler *JobHandler) CreateJobs(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success create job", nil))
 }
 
-// delete product
+func (handler *JobHandler) GetVacanciesMadeByCompany(c echo.Context) error {
+	companyID := middlewares.ExtractTokenUserId(c)
+
+	result, errFind := handler.jobService.MyCompanyVacancies(companyID)
+	if errFind != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFind.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
+}
+
 func (handler *JobHandler) Delete(c echo.Context) error {
 	jobID := c.Param("vacancy_id")
 
@@ -82,7 +91,6 @@ func (handler *JobHandler) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success delete data", nil))
 }
 
-// get all products
 func (handler *JobHandler) GetAllJob(c echo.Context) error {
 	result, errFind := handler.jobService.GetAllJobs()
 	if errFind != nil {

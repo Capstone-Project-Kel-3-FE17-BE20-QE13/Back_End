@@ -109,16 +109,17 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.DELETE("/skill/:skill_id", jobseekerHandlerAPI.DeleteSkill, middlewares.JWTMiddleware())
 
 	// vacancy
-	e.GET("/vacancy", vacancyHandlerAPI.GetAllJob)
-	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())
-	e.DELETE("vacancy/:vacancy_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
+	e.GET("/all-vacancies", vacancyHandlerAPI.GetAllJob)
 	e.GET("/vacancy/:vacancy_id", vacancyHandlerAPI.GetJobById, middlewares.JWTMiddleware())
+	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())
+	e.GET("/mycompany-vacancies", vacancyHandlerAPI.GetVacanciesMadeByCompany, middlewares.JWTMiddleware())
+	e.DELETE("vacancy/:vacancy_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
 
 	// application
 	e.POST("/application", applicationHandlerAPI.CreateApply, middlewares.JWTMiddleware())
 	e.GET("/applications-jobseeker", applicationHandlerAPI.AppHistoryJobseeker, middlewares.JWTMiddleware())
 	e.GET("/applications-company", applicationHandlerAPI.AppHistoryCompany, middlewares.JWTMiddleware())
-	e.PUT("/application/:id", applicationHandlerAPI.EditApplication, middlewares.JWTMiddleware())
+	e.PUT("/application/:id", applicationHandlerAPI.EditApplicationStatus, middlewares.JWTMiddleware())
 
 	// favorit
 	e.POST("/favorit", favoritHandlerAPI.CreateFavorit, middlewares.JWTMiddleware())

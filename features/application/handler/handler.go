@@ -94,7 +94,7 @@ func (handler *ApplyHandler) AppHistoryCompany(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data applicants", result))
 }
 
-func (h *ApplyHandler) EditApplication(c echo.Context) error {
+func (h *ApplyHandler) EditApplicationStatus(c echo.Context) error {
 	applicationId, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "invalid user ID", nil))

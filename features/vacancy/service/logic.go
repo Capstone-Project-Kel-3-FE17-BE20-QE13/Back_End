@@ -35,6 +35,11 @@ func (service *JobService) CreateJob(input vacancy.Core) error {
 	return err
 }
 
+func (service *JobService) MyCompanyVacancies(companyID uint) ([]vacancy.Core, error) {
+	results, err := service.Repo.MyCompanyVacancies(companyID)
+	return results, err
+}
+
 func (service *JobService) GetAllJobs() ([]vacancy.Core, error) {
 	results, err := service.Repo.GetAllJobs()
 	return results, err
