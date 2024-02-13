@@ -4,6 +4,7 @@ import (
 	"mime/multipart"
 	"time"
 
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
@@ -77,7 +78,8 @@ type JobseekerServiceInterface interface {
 	Register(input JobseekerCore) error
 	Login(email string, password string) (JobseekerCore, string, error)
 	UpdateProfile(seekerID uint, data JobseekerCore) error
-	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
+	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)
+	Photo(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error
@@ -110,7 +112,8 @@ type JobseekerDataInterface interface {
 	Register(input JobseekerCore) error
 	Login(email string) (JobseekerCore, error)
 	UpdateProfile(seekerID uint, data JobseekerCore) error
-	CV(input *multipart.FileHeader) (*uploader.UploadResult, error)
+	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)
+	Photo(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error

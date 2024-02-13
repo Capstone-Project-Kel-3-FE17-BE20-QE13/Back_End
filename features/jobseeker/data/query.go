@@ -4,12 +4,18 @@ import (
 	"JobHuntz/app/database"
 	"JobHuntz/features/jobseeker"
 	"JobHuntz/utils/responses"
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"gorm.io/gorm"
@@ -143,7 +149,45 @@ func (repo *JobseekerQuery) UpdateProfile(seekerID uint, data jobseeker.Jobseeke
 	return nil
 }
 
-func (repo *JobseekerQuery) CV(fileHeader *multipart.FileHeader) (*uploader.UploadResult, error) {
+func (repo *JobseekerQuery) PDF(fileHeader *multipart.FileHeader) (*s3manager.UploadOutput, error) {
+	src, errOpen := fileHeader.Open()
+	if errOpen != nil {
+		return nil, errors.New(errOpen.Error() + "cannot open file")
+
+	}
+	defer src.Close()
+
+	// Baca isi file ke dalam byte slice
+	fileContent, errRead := io.ReadAll(src)
+	if errRead != nil {
+		return nil, errors.New(errRead.Error() + "cannot read file")
+	}
+
+	s3Config := &aws.Config{
+		Region:      aws.String("us-east-1"),
+		Credentials: credentials.NewStaticCredentials("AKIAZI2LCMCTD7PSZZ4Q", "ZdZdTOFg/bT3RkkPFJDzA83Piqtv9MNxOgxll2Zo", ""),
+	}
+
+	s3Session, _ := session.NewSession(s3Config)
+
+	uploader := s3manager.NewUploader(s3Session)
+
+	input := &s3manager.UploadInput{
+		Bucket:      aws.String("jobhuntzbucket"),                // bucket's name
+		Key:         aws.String("static/" + fileHeader.Filename), // files destination location
+		Body:        bytes.NewReader(fileContent),                // content of the file
+		ContentType: aws.String("application/pdf"),               // content type
+	}
+
+	output, errUpload := uploader.UploadWithContext(context.Background(), input)
+	if errUpload != nil {
+		return nil, errors.New(errUpload.Error() + "cannot upload file")
+	}
+
+	return output, nil
+}
+
+func (repo *JobseekerQuery) Photo(fileHeader *multipart.FileHeader) (*uploader.UploadResult, error) {
 	urlCloudinary := "cloudinary://377166738273893:ga3Zq7Ts84gJ-Ltn-gyMkTgHd40@dltcy9ghn"
 
 	file, errHeader := fileHeader.Open()
