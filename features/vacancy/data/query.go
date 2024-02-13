@@ -63,17 +63,29 @@ func (repo *jobQuery) CreateJob(input vacancy.Core) error {
 	return nil
 }
 
+func (repo *jobQuery) MyCompanyVacancies(companyID uint) ([]vacancy.Core, error) {
+	var jobDataGorm []database.Vacancy
+	tx := repo.db.Where("company_id = ?", companyID).Find(&jobDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	allVacanciesCore := ModelGormToCore(jobDataGorm)
+
+	return allVacanciesCore, nil
+}
+
 func (repo *jobQuery) GetAllJobs() ([]vacancy.Core, error) {
 	var jobDataGorm []database.Vacancy
-	tx := repo.db.Find(&jobDataGorm) // select * from users;
+	tx := repo.db.Find(&jobDataGorm)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
 
 	//mapping
-	allProductCore := ModelGormToCore(jobDataGorm)
+	allVacanciesCore := ModelGormToCore(jobDataGorm)
 
-	return allProductCore, nil
+	return allVacanciesCore, nil
 }
 
 func (repo *jobQuery) GetJobById(id int) (vacancy.Core, error) {
@@ -83,15 +95,15 @@ func (repo *jobQuery) GetJobById(id int) (vacancy.Core, error) {
 		return vacancy.Core{}, tx.Error
 	}
 
-	singleProductCore := ModelToCore(singleJobGorm)
+	singleVacancyCore := ModelToCore(singleJobGorm)
 
-	return singleProductCore, nil
+	return singleVacancyCore, nil
 }
 
 func (repo *jobQuery) DeleteJobById(input []vacancy.Core, id int) error {
-	allProductGorm := CoretoModelGorm(input)
+	allVacanciesGorm := CoretoModelGorm(input)
 
-	txDel := repo.db.Delete(&allProductGorm, id)
+	txDel := repo.db.Delete(&allVacanciesGorm, id)
 	if txDel.Error != nil {
 		return txDel.Error
 	}
