@@ -114,3 +114,15 @@ func (repo *jobQuery) DeleteJobById(input []vacancy.Core, id int) error {
 
 	return nil
 }
+
+func (repo *jobQuery) UpdateStatus(input vacancy.JobStatusCore, vacancyID uint) error {
+	jobStatusGorm := CoreStatusToModel(input)
+
+	tx := repo.db.Model(&database.Vacancy{}).Where("id = ?", vacancyID).Updates(jobStatusGorm)
+
+	if tx.RowsAffected == 0 {
+		return errors.New("record not found")
+	}
+
+	return nil
+}

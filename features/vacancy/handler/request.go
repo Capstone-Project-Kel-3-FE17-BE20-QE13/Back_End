@@ -13,6 +13,10 @@ type JobRequest struct {
 	Status          string `json:"status" form:"status"`
 }
 
+type JobStatusRequest struct {
+	Status string `json:"status" form:"status"`
+}
+
 func RequestToCore(input *JobRequest) vacancy.Core {
 	return vacancy.Core{
 		CompanyID:       input.CompanyID,
@@ -23,5 +27,11 @@ func RequestToCore(input *JobRequest) vacancy.Core {
 		Job_description: input.Job_description,
 		Job_requirement: input.Job_requirement,
 		Status:          input.Status,
+	}
+}
+
+func RequestStatusToCore(input JobStatusRequest) vacancy.JobStatusCore {
+	return vacancy.JobStatusCore{
+		Status: input.Status,
 	}
 }

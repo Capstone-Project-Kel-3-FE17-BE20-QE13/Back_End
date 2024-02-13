@@ -29,6 +29,10 @@ type CompanyCore struct {
 	Token               string
 }
 
+type JobStatusCore struct {
+	Status string `json:"status" form:"status"`
+}
+
 type JobDataInterface interface {
 	GetJobById(jobID int) (Core, error)
 	CreateJob(input Core) error
@@ -37,6 +41,7 @@ type JobDataInterface interface {
 	GetAllJobs() ([]Core, error)
 	GetById(id uint) (*CompanyCore, error)
 	CountJobsByUserID(userID uint) (int, error)
+	UpdateStatus(input JobStatusCore, vacancyID uint) error
 }
 
 type JobServiceInterface interface {
@@ -47,4 +52,5 @@ type JobServiceInterface interface {
 	GetAllJobs() ([]Core, error)
 	GetById(id uint) (*CompanyCore, error)
 	CountJobsByUserID(userID uint) (int, error)
+	UpdateStatus(input JobStatusCore, vacancyID uint) error
 }

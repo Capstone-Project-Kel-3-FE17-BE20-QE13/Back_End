@@ -114,6 +114,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/vacancy", vacancyHandlerAPI.CreateJobs, middlewares.JWTMiddleware())
 	e.GET("/mycompany-vacancies", vacancyHandlerAPI.GetVacanciesMadeByCompany, middlewares.JWTMiddleware())
 	e.DELETE("vacancy/:vacancy_id", vacancyHandlerAPI.Delete, middlewares.JWTMiddleware())
+	e.PUT("/vacancy/:vacancy_id", vacancyHandlerAPI.UpdateVacancyStatus, middlewares.JWTMiddleware())
 
 	// application
 	e.POST("/application", applicationHandlerAPI.CreateApply, middlewares.JWTMiddleware())

@@ -18,6 +18,12 @@ func CoreToModel(input vacancy.Core) database.Vacancy {
 	}
 }
 
+func CoreStatusToModel(input vacancy.JobStatusCore) database.Vacancy {
+	return database.Vacancy{
+		Status: input.Status,
+	}
+}
+
 func CoretoModelGorm(data []vacancy.Core) []database.Vacancy {
 	var jobDataGorm []database.Vacancy
 	for _, input := range data {

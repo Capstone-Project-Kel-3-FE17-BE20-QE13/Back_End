@@ -21,6 +21,31 @@ func NewJob(jobService jobs.JobServiceInterface) *JobHandler {
 	}
 }
 
+func (handler *JobHandler) GetAllJob(c echo.Context) error {
+	result, errFind := handler.jobService.GetAllJobs()
+	if errFind != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFind.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
+}
+
+func (handler *JobHandler) GetJobById(c echo.Context) error {
+	jobId := c.Param("vacancy_id")
+
+	jobId_int, errConv := strconv.Atoi(jobId)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	result, errFirst := handler.jobService.GetJobById(jobId_int)
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
+}
+
 func (handler *JobHandler) CreateJobs(c echo.Context) error {
 	userId := middlewares.ExtractTokenUserId(c)
 
@@ -91,27 +116,26 @@ func (handler *JobHandler) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success delete data", nil))
 }
 
-func (handler *JobHandler) GetAllJob(c echo.Context) error {
-	result, errFind := handler.jobService.GetAllJobs()
-	if errFind != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFind.Error(), nil))
-	}
+func (handler *JobHandler) UpdateVacancyStatus(c echo.Context) error {
+	vacancyID := c.Param("vacancy_id")
 
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
-}
-
-func (handler *JobHandler) GetJobById(c echo.Context) error {
-	jobId := c.Param("vacancy_id")
-
-	jobId_int, errConv := strconv.Atoi(jobId)
+	vacancyID_int, errConv := strconv.Atoi(vacancyID)
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
 	}
 
-	result, errFirst := handler.jobService.GetJobById(jobId_int)
-	if errFirst != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	newStatus := JobStatusRequest{}
+	errBind := c.Bind(&newStatus)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data.", result))
+	newStatusCore := RequestStatusToCore(newStatus)
+
+	errUpdate := handler.jobService.UpdateStatus(newStatusCore, uint(vacancyID_int))
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error update data. "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success update status", nil))
 }
