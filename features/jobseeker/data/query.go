@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -111,7 +110,6 @@ func (repo *JobseekerQuery) GetByIdJobSeeker(id uint) (*jobseeker.JobseekerCore,
 func (repo *JobseekerQuery) Register(input jobseeker.JobseekerCore) error {
 	newSeekerGorm := CoreJobseekerToModel(input)
 	newSeekerGorm.Password = responses.HashPassword(input.Password)
-	newSeekerGorm.Birth_date = time.Date(1700, 1, 1, 0, 0, 0, 0, time.UTC)
 	newSeekerGorm.Status_Verification = "Unverified"
 
 	tx := repo.db.Create(&newSeekerGorm) // proses query insert

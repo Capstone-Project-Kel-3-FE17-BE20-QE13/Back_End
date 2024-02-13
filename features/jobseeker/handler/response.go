@@ -2,7 +2,6 @@ package handler
 
 import (
 	"JobHuntz/features/jobseeker"
-	"time"
 )
 
 type LoginResponse struct {
@@ -13,31 +12,31 @@ type LoginResponse struct {
 }
 
 type JobseekerResponse struct {
-	ID                  uint      `json:"id" form:"id"`
-	Full_name           string    `gorm:"not null" json:"full_name" form:"full_name"`
-	Username            string    `gorm:"not null" json:"username" form:"username"`
-	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
-	Password            string    `gorm:"not null" json:"password" form:"password"`
-	Address             string    `json:"address" form:"address"`
-	Phone               string    `json:"phone" form:"phone"`
-	Birth_date          time.Time `json:"birth_date" form:"birth_date"`
-	Gender              string    `json:"gender" form:"gender"`
-	Resume              string    `json:"resume" form:"resume"`
-	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	ID                  uint   `json:"id" form:"id"`
+	Full_name           string `gorm:"not null" json:"full_name" form:"full_name"`
+	Username            string `gorm:"not null" json:"username" form:"username"`
+	Email               string `gorm:"not null;unique" json:"email" form:"email"`
+	Password            string `gorm:"not null" json:"password" form:"password"`
+	Address             string `json:"address" form:"address"`
+	Phone               string `json:"phone" form:"phone"`
+	Birth_date          string `json:"birth_date" form:"birth_date"`
+	Gender              string `json:"gender" form:"gender"`
+	Resume              string `json:"resume" form:"resume"`
+	Status_Verification string `json:"stat_verif" form:"stat_verif"`
 	Careers             []CareerResponse
 }
 
 type JobseekerResponseById struct {
-	ID                  uint      `json:"id" form:"id"`
-	Full_name           string    `gorm:"not null" json:"full_name" form:"full_name"`
-	Username            string    `gorm:"not null" json:"username" form:"username"`
-	Email               string    `gorm:"not null;unique" json:"email" form:"email"`
-	Address             string    `json:"address" form:"address"`
-	Phone               string    `json:"phone" form:"phone"`
-	Birth_date          time.Time `json:"birth_date" form:"birth_date"`
-	Gender              string    `json:"gender" form:"gender"`
-	Resume              string    `json:"resume" form:"resume"`
-	Status_Verification string    `json:"stat_verif" form:"stat_verif"`
+	ID                  uint   `json:"id" form:"id"`
+	Full_name           string `gorm:"not null" json:"full_name" form:"full_name"`
+	Username            string `gorm:"not null" json:"username" form:"username"`
+	Email               string `gorm:"not null;unique" json:"email" form:"email"`
+	Address             string `json:"address" form:"address"`
+	Phone               string `json:"phone" form:"phone"`
+	Birth_date          string `json:"birth_date" form:"birth_date"`
+	Gender              string `json:"gender" form:"gender"`
+	Resume              string `json:"resume" form:"resume"`
+	Status_Verification string `json:"stat_verif" form:"stat_verif"`
 	Careers             []CareerResponse
 	Educations          []EducationResponse
 	Cvs                 []CvResponse
@@ -52,29 +51,29 @@ type CvResponse struct {
 }
 
 type CareerResponse struct {
-	ID           uint      `json:"id" form:"id"`
-	JobseekerID  uint      `json:"jobseeker_id" form:"jobseeker_id"`
-	Position     string    `json:"position" form:"position"`
-	Company_name string    `json:"company_name" form:"company_name"`
-	Date_start   time.Time `json:"date_start" form:"date_start"`
-	Date_end     time.Time `json:"date_end" form:"date_end"`
+	ID           uint   `json:"id" form:"id"`
+	JobseekerID  uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Position     string `json:"position" form:"position"`
+	Company_name string `json:"company_name" form:"company_name"`
+	Date_start   string `json:"date_start" form:"date_start"`
+	Date_end     string `json:"date_end" form:"date_end"`
 }
 
 type EducationResponse struct {
-	ID              uint      `json:"id" form:"id"`
-	JobseekerID     uint      `json:"jobseeker_id" form:"jobseeker_id"`
-	Education_level string    `json:"ed_level" form:"ed_level"`
-	Major           string    `json:"major" form:"major"`
-	Graduation_date time.Time `json:"grad_date" form:"grad_date"`
+	ID              uint   `json:"id" form:"id"`
+	JobseekerID     uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	Education_level string `json:"ed_level" form:"ed_level"`
+	Major           string `json:"major" form:"major"`
+	Graduation_date string `json:"grad_date" form:"grad_date"`
 }
 
 type LicenseResponse struct {
-	ID             uint      `json:"id" form:"id"`
-	JobseekerID    uint      `json:"jobseeker_id" form:"jobseeker_id"`
-	License_name   string    `json:"license_name" form:"license_name"`
-	Published_date time.Time `json:"pub_date" form:"pub_date"`
-	Expiry_date    time.Time `json:"exp_date" form:"exp_date"`
-	License_file   string    `json:"license" form:"license"`
+	ID             uint   `json:"id" form:"id"`
+	JobseekerID    uint   `json:"jobseeker_id" form:"jobseeker_id"`
+	License_name   string `json:"license_name" form:"license_name"`
+	Published_date string `json:"pub_date" form:"pub_date"`
+	Expiry_date    string `json:"exp_date" form:"exp_date"`
+	License_file   string `json:"license" form:"license"`
 }
 
 type SkillResponse struct {

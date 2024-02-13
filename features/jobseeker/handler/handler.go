@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -72,15 +71,6 @@ func (handler *JobseekerHandler) UpdateJobseeker(c echo.Context) error {
 	seekerID := middlewares.ExtractTokenUserId(c)
 
 	newUpdate := JobseekerUpdateRequest{}
-
-	birthDateString := c.FormValue("birth_date")
-	if birthDateString != "" {
-		birthDate, err := time.Parse("2006-01-02", birthDateString)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
-		}
-		newUpdate.Birth_date = birthDate
-	}
 
 	errBind := c.Bind(&newUpdate)
 	if errBind != nil {
@@ -248,24 +238,6 @@ func (handler *JobseekerHandler) UpdateCareer(c echo.Context) error {
 
 	newUpdate := CareerRequest{}
 
-	oldStartString := c.FormValue("start_date")
-	if oldStartString != "" {
-		oldStart, err := time.Parse("2006-01-02", oldStartString)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
-		}
-		newUpdate.Date_start = oldStart
-	}
-
-	oldEndString := c.FormValue("end_date")
-	if oldEndString != "" {
-		oldEnd, err := time.Parse("2006-01-02", oldEndString)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
-		}
-		newUpdate.Date_end = oldEnd
-	}
-
 	errBind := c.Bind(&newUpdate)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
@@ -362,15 +334,6 @@ func (handler *JobseekerHandler) UpdateEducation(c echo.Context) error {
 	}
 
 	newUpdate := EducationRequest{}
-
-	oldGradString := c.FormValue("grad_date")
-	if oldGradString != "" {
-		oldStart, err := time.Parse("2006-01-02", oldGradString)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
-		}
-		newUpdate.Graduation_date = oldStart
-	}
 
 	errBind := c.Bind(&newUpdate)
 	if errBind != nil {
@@ -478,23 +441,23 @@ func (handler *JobseekerHandler) UpdateLicense(c echo.Context) error {
 
 	newUpdate := LicenseRequest{}
 
-	oldPubDateString := c.FormValue("pub_date")
-	if oldPubDateString != "" {
-		oldPubDate, err := time.Parse("2006-01-02T15:04:05Z", oldPubDateString)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
-		}
-		newUpdate.Published_date = oldPubDate
-	}
+	// oldPubDateString := c.FormValue("pub_date")
+	// if oldPubDateString != "" {
+	// 	oldPubDate, err := time.Parse("2006-01-02T15:04:05Z", oldPubDateString)
+	// 	if err != nil {
+	// 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
+	// 	}
+	// 	newUpdate.Published_date = oldPubDate
+	// }
 
-	OldExpDateString := c.FormValue("exp_date")
-	if OldExpDateString != "" {
-		oldExpDate, err := time.Parse("2006-01-02T15:04:05Z", OldExpDateString)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
-		}
-		newUpdate.Expiry_date = oldExpDate
-	}
+	// OldExpDateString := c.FormValue("exp_date")
+	// if OldExpDateString != "" {
+	// 	oldExpDate, err := time.Parse("2006-01-02T15:04:05Z", OldExpDateString)
+	// 	if err != nil {
+	// 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
+	// 	}
+	// 	newUpdate.Expiry_date = oldExpDate
+	// }
 
 	oldLicense, _ := c.FormFile("license")
 	if oldLicense != nil {
