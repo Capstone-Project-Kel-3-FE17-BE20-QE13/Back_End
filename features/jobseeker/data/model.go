@@ -20,6 +20,20 @@ func CoreJobseekerToModel(input jobseeker.JobseekerCore) database.Jobseeker {
 	}
 }
 
+func CoreJobseekerToModelUpdate(input jobseeker.JobseekerCore) database.Jobseeker {
+	return database.Jobseeker{
+		Full_name:  input.Full_name,
+		Username:   input.Username,
+		Email:      input.Email,
+		Password:   input.Password,
+		Address:    input.Address,
+		Phone:      input.Phone,
+		Birth_date: input.Birth_date,
+		Gender:     input.Gender,
+		Resume:     input.Resume,
+	}
+}
+
 func CoreCVToModel(input jobseeker.CVCore) database.CV {
 	return database.CV{
 		JobseekerID: input.JobseekerID,
