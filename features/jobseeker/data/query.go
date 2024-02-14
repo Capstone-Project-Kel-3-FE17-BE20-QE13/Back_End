@@ -125,11 +125,7 @@ func (repo *JobseekerQuery) Login(email string) (jobseeker.JobseekerCore, error)
 	var dataSeeker database.Jobseeker
 	tx := repo.db.Where("email = ?", email).First(&dataSeeker)
 	if tx.Error != nil {
-		return jobseeker.JobseekerCore{}, errors.New(tx.Error.Error() + ", invalid email")
-	}
-
-	if tx.RowsAffected == 0 {
-		return jobseeker.JobseekerCore{}, errors.New("login failed, invalid email")
+		return jobseeker.JobseekerCore{}, errors.New(tx.Error.Error() + ", wrong email")
 	}
 
 	userCore := ModelJobseekerToCore(dataSeeker)
