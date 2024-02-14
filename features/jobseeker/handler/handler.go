@@ -65,7 +65,7 @@ func (handler *JobseekerHandler) LoginJobseeker(c echo.Context) error {
 
 	resLogin, token, err := handler.jobseekerService.Login(newLogin.Email, newLogin.Password)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, err.Error(), nil))
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
 	}
 
 	loginResponse := CoreJobseekerToResponseLogin(resLogin, token)

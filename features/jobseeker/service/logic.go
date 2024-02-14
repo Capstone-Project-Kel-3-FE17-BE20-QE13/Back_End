@@ -76,10 +76,18 @@ func (service *JobseekerService) Login(email string, password string) (jobseeker
 		return jobseeker.JobseekerCore{}, "", errors.New("password is required")
 	}
 
+	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+
+	// Membuat objek regex dari ekspresi reguler
+	regexpEmail := regexp.MustCompile(emailRegex)
+	if !regexpEmail.MatchString(email) {
+		return jobseeker.JobseekerCore{}, "", errors.New("please enter a valid email")
+	}
+
 	// get data from database that matches the given email
 	resLogin, err := service.jobseekerData.Login(email)
 	if err != nil {
-		return jobseeker.JobseekerCore{}, "", errors.New(err.Error() + "login error, cannot retrieve data")
+		return jobseeker.JobseekerCore{}, "", errors.New("wrong email")
 	}
 
 	// checking given password
