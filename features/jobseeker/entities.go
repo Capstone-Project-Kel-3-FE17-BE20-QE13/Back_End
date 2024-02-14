@@ -27,6 +27,13 @@ type JobseekerCore struct {
 	Skills              []SkillCore
 }
 
+type JobseekerRegistCore struct {
+	Full_name string `gorm:"not null" json:"full_name" form:"full_name"`
+	Username  string `gorm:"not null" json:"username" form:"username"`
+	Email     string `gorm:"not null;unique" json:"email" form:"email"`
+	Password  string `gorm:"not null" json:"password" form:"password"`
+}
+
 type CVCore struct {
 	ID          uint   `json:"id" form:"id"`
 	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
@@ -75,7 +82,9 @@ type SkillCore struct {
 
 // interface untuk Service Layer
 type JobseekerServiceInterface interface {
-	Register(input JobseekerCore) error
+	RegisterValidation(input JobseekerRegistCore) error
+	//EmailsUsernames() ([]JobseekerRegistCore, error)
+	Register(input JobseekerRegistCore) error
 	Login(email string, password string) (JobseekerCore, string, error)
 	UpdateProfile(seekerID uint, data JobseekerCore) error
 	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)
@@ -109,7 +118,9 @@ type JobseekerServiceInterface interface {
 
 // interface untuk Data Layer
 type JobseekerDataInterface interface {
-	Register(input JobseekerCore) error
+	//RegisterValidation(input JobseekerRegistCore) error
+	//EmailsUsernames() ([]JobseekerRegistCore, error)
+	Register(input JobseekerRegistCore) error
 	Login(email string) (JobseekerCore, error)
 	UpdateProfile(seekerID uint, data JobseekerCore) error
 	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)

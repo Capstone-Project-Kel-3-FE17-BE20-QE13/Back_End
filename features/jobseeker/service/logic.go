@@ -6,6 +6,8 @@ import (
 	"JobHuntz/utils/responses"
 	"errors"
 	"mime/multipart"
+	"regexp"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -28,7 +30,40 @@ func (service *JobseekerService) GetByIdJobSeeker(id uint) (*jobseeker.Jobseeker
 	return result, err
 }
 
-func (service *JobseekerService) Register(input jobseeker.JobseekerCore) error {
+func (service *JobseekerService) RegisterValidation(input jobseeker.JobseekerRegistCore) error {
+	// logic validation
+	if input.Email == "" || input.Full_name == "" || input.Password == "" || input.Username == "" {
+		return errors.New("please complete your data")
+	}
+
+	if len(input.Password) < 8 {
+		return errors.New("your password is not valid")
+	}
+
+	characters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+
+	for _, v := range input.Full_name {
+		if !strings.Contains(characters, string(v)) {
+			return errors.New("your name is not valid")
+		}
+	}
+
+	if strings.Contains(input.Password, " ") {
+		return errors.New("your password is not valid")
+	}
+
+	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+
+	// Membuat objek regex dari ekspresi reguler
+	regexpEmail := regexp.MustCompile(emailRegex)
+	if !regexpEmail.MatchString(input.Email) {
+		return errors.New("your email is not valid")
+	}
+
+	return nil
+}
+
+func (service *JobseekerService) Register(input jobseeker.JobseekerRegistCore) error {
 	// logic validation
 	err := service.jobseekerData.Register(input)
 	return err

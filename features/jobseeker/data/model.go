@@ -20,6 +20,15 @@ func CoreJobseekerToModel(input jobseeker.JobseekerCore) database.Jobseeker {
 	}
 }
 
+func CoreJobseekerRegistToModel(input jobseeker.JobseekerRegistCore) database.Jobseeker {
+	return database.Jobseeker{
+		Full_name: input.Full_name,
+		Username:  input.Username,
+		Email:     input.Email,
+		Password:  input.Password,
+	}
+}
+
 func CoreJobseekerToModelUpdate(input jobseeker.JobseekerCore) database.Jobseeker {
 	return database.Jobseeker{
 		Full_name:  input.Full_name,
@@ -92,6 +101,21 @@ func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 		Resume:              input.Resume,
 		Status_Verification: input.Status_Verification,
 	}
+}
+
+func ModelRegistToCore(data []database.Jobseeker) []jobseeker.JobseekerRegistCore {
+	var datasRegist []jobseeker.JobseekerRegistCore
+	for _, input := range data {
+		var inputData = jobseeker.JobseekerRegistCore{
+			Full_name: input.Full_name,
+			Username:  input.Username,
+			Email:     input.Email,
+			Password:  input.Password,
+		}
+		datasRegist = append(datasRegist, inputData)
+	}
+
+	return datasRegist
 }
 
 func ModelCVToCore(input database.CV) jobseeker.CVCore {
