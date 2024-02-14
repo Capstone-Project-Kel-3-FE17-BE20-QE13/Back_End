@@ -7,6 +7,8 @@ import (
 
 	"JobHuntz/app/database"
 	"JobHuntz/app/middlewares"
+	"JobHuntz/features/company"
+	"JobHuntz/features/jobseeker"
 	"JobHuntz/features/payment"
 	"JobHuntz/features/verification"
 
@@ -32,13 +34,8 @@ func (pq *paymentQuery) GetOrderDetail(dbRaw *sql.DB, userID uint) (verification
 	var dataOrder verification.OrderCore
 
 	query := `SELECT * FROM orders WHERE orders.company_id = ? OR orders.jobseeker_id = ?`
-	// "SELECT * FROM orders WHERE orders.company_id = ? OR orders.jobseeker_id = ?;"
 
 	rowID := dbRaw.QueryRow(query, userID, userID)
-
-	// if err := rowID.Scan(&dataOrder.CompanyID, &dataOrder.ID, &dataOrder.JobseekerID, &dataOrder.Price, &dataOrder.Status_order); err != nil {
-	// 	log.Fatal("cannot scan data: ")
-	// }
 
 	if err := rowID.Scan(&dataOrder.ID, &dataOrder.JobseekerID, &dataOrder.CompanyID, &dataOrder.Price, &dataOrder.Status_order); err != nil {
 		if err == sql.ErrNoRows {
@@ -99,28 +96,50 @@ func (pq *paymentQuery) CallbackMid(dbRaw *sql.DB, input payment.PaymentCore) er
 		return errors.New("error record not found ")
 	} else if tx.RowsAffected != 0 {
 		// Jika ada data yang diupdate, lanjutkan proses
+		fmt.Println("row affected: ", tx.RowsAffected)
 
-		data1 := "select * from jobseekers where id = ?"
-		tx1, err1 := dbRaw.Exec(data1, input.UserID)
-		if err1 != nil {
-			return err1
+		// data jobseeker
+		query1 := `select jobseekers.id from jobseekers
+		join orders on jobseekers.id = orders.jobseeker_id
+		where orders.id = ?`
+
+		rowID1 := dbRaw.QueryRow(query1, input.OrderID)
+
+		var dataJobseeker jobseeker.JobseekerCore
+		if err := rowID1.Scan(&dataJobseeker.ID); err != nil {
+			if err == sql.ErrNoRows {
+				//
+			}
 		}
 
-		data2 := "select * from companies where id = ?"
-		tx2, err2 := dbRaw.Exec(data2, input.UserID)
-		if err2 != nil {
-			return err2
+		fmt.Println("isi data jobseeker: ", dataJobseeker)
+
+		// data company
+		query2 := `select companies.id from companies
+		join orders on companies.id = orders.company_id
+		where orders.id = ?`
+
+		rowID2 := dbRaw.QueryRow(query2, input.OrderID)
+
+		var dataCompany company.CompanyCore
+		if err := rowID2.Scan(&dataCompany.ID); err != nil {
+			if err == sql.ErrNoRows {
+				//
+			}
 		}
 
-		if tx1 != nil && tx2 == nil {
+		fmt.Println("isi data company: ", dataCompany)
+
+		// -------------------------------------
+		if dataJobseeker.ID != 0 {
 			query1 := "UPDATE jobseekers SET status_verification = 'Verified' WHERE id = ?"
-			_, err := dbRaw.Exec(query1, input.UserID)
+			_, err := dbRaw.Exec(query1, dataJobseeker.ID)
 			if err != nil {
 				return err
 			}
-		} else if tx1 == nil && tx2 != nil {
+		} else {
 			query2 := "UPDATE companies SET status_verification = 'Verified' WHERE id = ?"
-			_, err := dbRaw.Exec(query2, input.UserID)
+			_, err := dbRaw.Exec(query2, dataCompany.ID)
 			if err != nil {
 				return err
 			}

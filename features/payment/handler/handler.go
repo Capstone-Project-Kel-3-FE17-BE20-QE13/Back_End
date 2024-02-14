@@ -104,28 +104,6 @@ func (tc *paymentHandler) Notification() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error to update data "+errCall.Error(), nil))
 		}
 
-		return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "transaction success", nil))
+		return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "your payment is successful", nil))
 	}
 }
-
-// func (tc *paymentHandler) AmountHandler(c echo.Context) error {
-// 	// Menerima nilai 'amount' dari permintaan HTTP
-// 	amountStr := c.FormValue("amount")
-
-// 	// Validasi dan Konversi ke Floating-Point
-// 	amount, err := strconv.ParseFloat(amountStr, 64)
-
-// 	// Penanganan Kesalahan Konversi
-// 	if err != nil {
-// 		// Tangani kesalahan, misalnya, kirim respons kesalahan ke klien
-// 		log.Error("Error parsing amount:", zap.Error(err))
-// 		return c.JSON(http.StatusBadRequest, ErrorResponse{"Invalid amount"})
-// 	}
-
-// 	// Penggunaan Nilai 'amount' yang Valid
-// 	// Di sini Anda dapat melakukan apa pun yang diperlukan dengan nilai 'amount' yang telah diuji dan dikonversi.
-// 	// Misalnya, menyimpannya ke database atau menggunakan nilainya dalam logika bisnis lainnya.
-
-// 	// Kembalikan respons berhasil jika semua langkah sebelumnya berhasil
-// 	return c.JSON(http.StatusOK, map[string]interface{}{"amount": amount})
-// }
