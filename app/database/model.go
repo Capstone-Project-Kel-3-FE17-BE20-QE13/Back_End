@@ -9,7 +9,7 @@ import (
 type Jobseeker struct {
 	gorm.Model
 	Full_name           string `gorm:"not null" json:"full_name" form:"full_name"`
-	Username            string `gorm:"not null" json:"username" form:"username"`
+	Username            string `gorm:"not null;unique" json:"username" form:"username"`
 	Email               string `gorm:"not null;unique" json:"email" form:"email"`
 	Password            string `gorm:"not null" json:"password" form:"password"`
 	Address             string `json:"address" form:"address"`
@@ -127,20 +127,11 @@ type Order struct {
 	Price        float64 `json:"price" form:"price"`
 	Status_order string  `json:"stat_order" form:"stat_order"`
 }
-type OrderItem struct {
-	gorm.Model
-	OrderID     uint `gorm:"not null" json:"orderId" form:"orderId"`
-	JobseekerID uint `gorm:"not null" json:"jobseeker_id" form:"jobseeker_id"`
-	CompanyID   uint `gorm:"not null" json:"company_id" form:"company_id"`
-	Price       uint `gorm:"not null" json:"price" form:"price"`
-	// 	Username     string `json:"username" form:"username"`
-	// 	Company_name string `json:"company_name" form:"company_name"`
-}
 
 type Payment struct {
-	ID          string `json:"id" gorm:"primaryKey"`
-	OrderID     string `gorm:"type:varchar(50)" json:"order_id" form:"order_id"`
-	Amount      string
+	ID          string         `json:"id" gorm:"primaryKey"`
+	OrderID     string         `gorm:"type:varchar(50)" json:"order_id" form:"order_id"`
+	Amount      string         `json:"amount" form:"amount"`
 	UserID      *uint          `json:"user_id" form:"user_id"`
 	BankAccount string         `gorm:"type:enum('bca', 'bri', 'bni'); default:'bca'"`
 	VANumber    string         `gorm:"type:varchar(50)"`

@@ -107,8 +107,8 @@ func (repo *JobseekerQuery) GetByIdJobSeeker(id uint) (*jobseeker.JobseekerCore,
 	return data, nil
 }
 
-func (repo *JobseekerQuery) Register(input jobseeker.JobseekerCore) error {
-	newSeekerGorm := CoreJobseekerToModel(input)
+func (repo *JobseekerQuery) Register(input jobseeker.JobseekerRegistCore) error {
+	newSeekerGorm := CoreJobseekerRegistToModel(input)
 	newSeekerGorm.Password = responses.HashPassword(input.Password)
 	newSeekerGorm.Status_Verification = "Unverified"
 

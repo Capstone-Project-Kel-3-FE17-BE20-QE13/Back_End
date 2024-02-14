@@ -34,15 +34,21 @@ func (handler *JobseekerHandler) GetByIdJobSeeker(c echo.Context) error {
 }
 
 func (handler *JobseekerHandler) RegisterJobseeker(c echo.Context) error {
-	newSeeker := JobseekerRequest{}
+	newSeeker := JobseekerRegistRequest{}
+
 	errBind := c.Bind(&newSeeker)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
 	}
 
-	seekerCore := RequestJobseekerToCore(newSeeker)
+	registCore := RequestJobseekerRegistToCore(newSeeker)
 
-	errCreate := handler.jobseekerService.Register(seekerCore)
+	errVal := handler.jobseekerService.RegisterValidation(registCore)
+	if errVal != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, errVal.Error(), nil))
+	}
+
+	errCreate := handler.jobseekerService.Register(registCore)
 	if errCreate != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
 	}
