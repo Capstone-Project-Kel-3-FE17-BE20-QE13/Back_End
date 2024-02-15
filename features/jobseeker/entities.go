@@ -1,6 +1,7 @@
 package jobseeker
 
 import (
+	"database/sql"
 	"mime/multipart"
 	"time"
 
@@ -95,14 +96,14 @@ type SkillCore struct {
 // interface untuk Service Layer
 type JobseekerServiceInterface interface {
 	RegisterValidation(input JobseekerRegistCore) error
-	//EmailsUsernames() ([]JobseekerRegistCore, error)
 	Register(input JobseekerRegistCore) error
 	Login(email string, password string) (JobseekerCore, string, error)
 	UpdateValidation(input JobseekerUpdateCore) error
 	UpdateProfile(seekerID uint, data JobseekerUpdateCore) error
 	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)
 	Photo(input *multipart.FileHeader) (*uploader.UploadResult, error)
-	AddCV(input CVCore) error
+	CountCV(dbRaw *sql.DB, seekerID uint) (uint, error)
+	AddCV(input CVCore, count uint) error
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error
 	RemoveCV(seekerID uint) error
@@ -131,14 +132,13 @@ type JobseekerServiceInterface interface {
 
 // interface untuk Data Layer
 type JobseekerDataInterface interface {
-	//RegisterValidation(input JobseekerRegistCore) error
-	//EmailsUsernames() ([]JobseekerRegistCore, error)
 	Register(input JobseekerRegistCore) error
 	AllEmails(email string) (JobseekerCore, error)
 	AllUsernames(username string) (JobseekerCore, error)
 	UpdateProfile(seekerID uint, data JobseekerUpdateCore) error
 	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)
 	Photo(input *multipart.FileHeader) (*uploader.UploadResult, error)
+	CountCV(dbRaw *sql.DB, seekerID uint) (uint, error)
 	AddCV(input CVCore) error
 	ReadCV(seekerID uint) (CVCore, error)
 	UpdateCV(input CVCore) error

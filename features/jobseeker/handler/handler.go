@@ -1,6 +1,8 @@
 package handler
 
 import (
+	config "JobHuntz/app/configs"
+	"JobHuntz/app/database"
 	"JobHuntz/app/middlewares"
 	"JobHuntz/features/jobseeker"
 	"JobHuntz/utils/responses"
@@ -113,6 +115,11 @@ func (handler *JobseekerHandler) CreateCV(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot get resp", nil))
 	}
 
+	cfg := config.InitConfig()
+	dbRaw := database.InitRawSql(cfg)
+
+	count, _ := handler.jobseekerService.CountCV(dbRaw, seekerID)
+
 	newCV := CVRequest{}
 	newCV.JobseekerID = seekerID
 	newCV.CV_file = responURL.Location
@@ -124,7 +131,7 @@ func (handler *JobseekerHandler) CreateCV(c echo.Context) error {
 
 	cvCore := RequestCVToCore(newCV)
 
-	errCreate := handler.jobseekerService.AddCV(cvCore)
+	errCreate := handler.jobseekerService.AddCV(cvCore, count)
 	if errCreate != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
 	}

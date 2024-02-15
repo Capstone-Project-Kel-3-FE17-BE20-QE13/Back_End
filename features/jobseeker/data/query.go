@@ -6,6 +6,7 @@ import (
 	"JobHuntz/utils/responses"
 	"bytes"
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"io"
@@ -209,6 +210,18 @@ func (repo *JobseekerQuery) Photo(fileHeader *multipart.FileHeader) (*uploader.U
 	}
 
 	return resp, nil
+}
+
+func (repo *JobseekerQuery) CountCV(dbRaw *sql.DB, seekerID uint) (uint, error) {
+	var count uint
+
+	query := `SELECT COUNT(cv_file) FROM cvs WHERE jobseeker_id = ? AND deleted_at IS NULL;`
+
+	rowID := dbRaw.QueryRow(query, seekerID)
+
+	rowID.Scan(&count)
+
+	return count, nil
 }
 
 func (repo *JobseekerQuery) AddCV(input jobseeker.CVCore) error {
