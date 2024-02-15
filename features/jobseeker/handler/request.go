@@ -25,10 +25,10 @@ type JobseekerRegistRequest struct {
 }
 
 type JobseekerUpdateRequest struct {
-	Full_name  string `gorm:"not null" json:"full_name" form:"full_name"`
-	Username   string `gorm:"not null" json:"username" form:"username"`
-	Email      string `gorm:"not null;unique" json:"email" form:"email"`
-	Password   string `gorm:"not null" json:"password" form:"password"`
+	Full_name  string `json:"full_name" form:"full_name"`
+	Username   string `json:"username" form:"username"`
+	Email      string `json:"email" form:"email"`
+	Password   string `json:"password" form:"password"`
 	Address    string `json:"address" form:"address"`
 	Phone      string `json:"phone" form:"phone"`
 	Birth_date string `json:"birth_date" form:"birth_date"`
@@ -94,8 +94,8 @@ func RequestJobseekerRegistToCore(input JobseekerRegistRequest) jobseeker.Jobsee
 	}
 }
 
-func RequestJobseekerUpdateToCore(input JobseekerUpdateRequest) jobseeker.JobseekerCore {
-	return jobseeker.JobseekerCore{
+func RequestJobseekerUpdateToCore(input JobseekerUpdateRequest) jobseeker.JobseekerUpdateCore {
+	return jobseeker.JobseekerUpdateCore{
 		Full_name:  input.Full_name,
 		Username:   input.Username,
 		Email:      input.Email,

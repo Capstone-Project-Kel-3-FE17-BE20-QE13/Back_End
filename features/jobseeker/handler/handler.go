@@ -87,6 +87,11 @@ func (handler *JobseekerHandler) UpdateJobseeker(c echo.Context) error {
 
 	newUpdateCore := RequestJobseekerUpdateToCore(newUpdate)
 
+	errVal := handler.jobseekerService.UpdateValidation(newUpdateCore)
+	if errVal != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, errVal.Error(), nil))
+	}
+
 	err := handler.jobseekerService.UpdateProfile(seekerID, newUpdateCore)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, err.Error(), nil))
