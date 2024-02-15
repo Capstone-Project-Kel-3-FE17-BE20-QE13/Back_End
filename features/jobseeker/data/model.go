@@ -29,7 +29,7 @@ func CoreJobseekerRegistToModel(input jobseeker.JobseekerRegistCore) database.Jo
 	}
 }
 
-func CoreJobseekerToModelUpdate(input jobseeker.JobseekerCore) database.Jobseeker {
+func CoreJobseekerToModelUpdate(input jobseeker.JobseekerUpdateCore) database.Jobseeker {
 	return database.Jobseeker{
 		Full_name:  input.Full_name,
 		Username:   input.Username,

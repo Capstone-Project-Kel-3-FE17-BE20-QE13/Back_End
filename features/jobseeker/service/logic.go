@@ -32,8 +32,23 @@ func (service *JobseekerService) GetByIdJobSeeker(id uint) (*jobseeker.Jobseeker
 
 func (service *JobseekerService) RegisterValidation(input jobseeker.JobseekerRegistCore) error {
 	// logic validation
-	if input.Email == "" || input.Full_name == "" || input.Password == "" || input.Username == "" {
+	if input.Email == "" {
+		return errors.New("email is required")
+	}
+
+	if input.Full_name == "" || input.Password == "" || input.Username == "" {
 		return errors.New("please complete your data")
+	}
+
+	// get data from database that matches the given email
+	resRegist1, _ := service.jobseekerData.AllEmails(input.Email)
+	if resRegist1.Email == input.Email {
+		return errors.New("duplicate entry")
+	}
+
+	resRegist2, _ := service.jobseekerData.AllUsernames(input.Username)
+	if resRegist2.Username == input.Username {
+		return errors.New("duplicate entry")
 	}
 
 	if len(input.Password) < 8 {
@@ -41,7 +56,6 @@ func (service *JobseekerService) RegisterValidation(input jobseeker.JobseekerReg
 	}
 
 	characters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-
 	for _, v := range input.Full_name {
 		if !strings.Contains(characters, string(v)) {
 			return errors.New("your name is not valid")
@@ -53,11 +67,9 @@ func (service *JobseekerService) RegisterValidation(input jobseeker.JobseekerReg
 	}
 
 	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
-
-	// Membuat objek regex dari ekspresi reguler
 	regexpEmail := regexp.MustCompile(emailRegex)
 	if !regexpEmail.MatchString(input.Email) {
-		return errors.New("your email is not valid")
+		return errors.New("please enter a valid email")
 	}
 
 	return nil
@@ -85,7 +97,7 @@ func (service *JobseekerService) Login(email string, password string) (jobseeker
 	}
 
 	// get data from database that matches the given email
-	resLogin, err := service.jobseekerData.Login(email)
+	resLogin, err := service.jobseekerData.AllEmails(email)
 	if err != nil {
 		return jobseeker.JobseekerCore{}, "", errors.New("wrong email")
 	}
@@ -104,7 +116,51 @@ func (service *JobseekerService) Login(email string, password string) (jobseeker
 	return resLogin, token, nil
 }
 
-func (service *JobseekerService) UpdateProfile(seekerID uint, data jobseeker.JobseekerCore) error {
+func (service *JobseekerService) UpdateValidation(input jobseeker.JobseekerUpdateCore) error {
+	if input.Password != "" {
+		if len(input.Password) < 8 {
+			return errors.New("your password is not valid")
+		} else if strings.Contains(input.Password, " ") {
+			return errors.New("your password is not valid")
+		}
+	}
+
+	// else if input.Password != "" && strings.Contains(input.Password, "") {
+	// 	return errors.New("password is required")
+	// }
+
+	// if input.Password == "" {
+	// 	return errors.New("password is required")
+	// }
+
+	if input.Email != "" {
+		// get data from database that matches the given email
+		resData1, _ := service.jobseekerData.AllEmails(input.Email)
+		if resData1.Email == input.Email {
+			return errors.New("email is already used")
+		}
+	}
+
+	if input.Username != "" {
+		resData2, _ := service.jobseekerData.AllUsernames(input.Username)
+		if resData2.Username == input.Username {
+			return errors.New("username is already used")
+		}
+	}
+
+	if input.Phone != "" {
+		numbers := "1234567890"
+		for _, v := range input.Phone {
+			if !strings.Contains(numbers, string(v)) {
+				return errors.New("please enter a valid phone number")
+			}
+		}
+	}
+
+	return nil
+}
+
+func (service *JobseekerService) UpdateProfile(seekerID uint, data jobseeker.JobseekerUpdateCore) error {
 	// logic validation
 	err := service.jobseekerData.UpdateProfile(seekerID, data)
 	return err

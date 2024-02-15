@@ -121,7 +121,7 @@ func (repo *JobseekerQuery) Register(input jobseeker.JobseekerRegistCore) error 
 }
 
 // Login implements user.UserDataInterface.
-func (repo *JobseekerQuery) Login(email string) (jobseeker.JobseekerCore, error) {
+func (repo *JobseekerQuery) AllEmails(email string) (jobseeker.JobseekerCore, error) {
 	var dataSeeker database.Jobseeker
 	tx := repo.db.Where("email = ?", email).First(&dataSeeker)
 	if tx.Error != nil {
@@ -132,7 +132,18 @@ func (repo *JobseekerQuery) Login(email string) (jobseeker.JobseekerCore, error)
 	return userCore, nil
 }
 
-func (repo *JobseekerQuery) UpdateProfile(seekerID uint, data jobseeker.JobseekerCore) error {
+func (repo *JobseekerQuery) AllUsernames(username string) (jobseeker.JobseekerCore, error) {
+	var dataSeeker database.Jobseeker
+	tx := repo.db.Where("username = ?", username).First(&dataSeeker)
+	if tx.Error != nil {
+		// return jobseeker.JobseekerCore{}, errors.New("duplicate entry")
+	}
+
+	userCore := ModelJobseekerToCore(dataSeeker)
+	return userCore, nil
+}
+
+func (repo *JobseekerQuery) UpdateProfile(seekerID uint, data jobseeker.JobseekerUpdateCore) error {
 	newUpdateGorm := CoreJobseekerToModelUpdate(data)
 	newUpdateGorm.Password = responses.HashPassword(data.Password)
 

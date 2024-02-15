@@ -34,6 +34,18 @@ type JobseekerRegistCore struct {
 	Password  string `gorm:"not null" json:"password" form:"password"`
 }
 
+type JobseekerUpdateCore struct {
+	Full_name  string `json:"full_name" form:"full_name"`
+	Username   string `json:"username" form:"username"`
+	Email      string `json:"email" form:"email"`
+	Password   string `json:"password" form:"password"`
+	Address    string `json:"address" form:"address"`
+	Phone      string `json:"phone" form:"phone"`
+	Birth_date string `json:"birth_date" form:"birth_date"`
+	Gender     string `json:"gender" form:"gender"`
+	Resume     string `json:"resume" form:"resume"`
+}
+
 type CVCore struct {
 	ID          uint   `json:"id" form:"id"`
 	JobseekerID uint   `json:"jobseeker_id" form:"jobseeker_id"`
@@ -86,7 +98,8 @@ type JobseekerServiceInterface interface {
 	//EmailsUsernames() ([]JobseekerRegistCore, error)
 	Register(input JobseekerRegistCore) error
 	Login(email string, password string) (JobseekerCore, string, error)
-	UpdateProfile(seekerID uint, data JobseekerCore) error
+	UpdateValidation(input JobseekerUpdateCore) error
+	UpdateProfile(seekerID uint, data JobseekerUpdateCore) error
 	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)
 	Photo(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
@@ -121,8 +134,9 @@ type JobseekerDataInterface interface {
 	//RegisterValidation(input JobseekerRegistCore) error
 	//EmailsUsernames() ([]JobseekerRegistCore, error)
 	Register(input JobseekerRegistCore) error
-	Login(email string) (JobseekerCore, error)
-	UpdateProfile(seekerID uint, data JobseekerCore) error
+	AllEmails(email string) (JobseekerCore, error)
+	AllUsernames(username string) (JobseekerCore, error)
+	UpdateProfile(seekerID uint, data JobseekerUpdateCore) error
 	PDF(input *multipart.FileHeader) (*s3manager.UploadOutput, error)
 	Photo(input *multipart.FileHeader) (*uploader.UploadResult, error)
 	AddCV(input CVCore) error
