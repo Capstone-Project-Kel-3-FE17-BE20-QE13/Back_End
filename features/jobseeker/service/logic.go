@@ -4,6 +4,7 @@ import (
 	"JobHuntz/app/middlewares"
 	"JobHuntz/features/jobseeker"
 	"JobHuntz/utils/responses"
+	"database/sql"
 	"errors"
 	"mime/multipart"
 	"regexp"
@@ -178,8 +179,17 @@ func (service *JobseekerService) Photo(input *multipart.FileHeader) (*uploader.U
 	return res, err
 }
 
-func (service *JobseekerService) AddCV(input jobseeker.CVCore) error {
+func (service *JobseekerService) CountCV(dbRaw *sql.DB, seekerID uint) (uint, error) {
 	// logic validation
+	res, err := service.jobseekerData.CountCV(dbRaw, seekerID)
+	return res, err
+}
+
+func (service *JobseekerService) AddCV(input jobseeker.CVCore, count uint) error {
+	if count == 1 {
+		return errors.New("your cv is already exist")
+	}
+
 	err := service.jobseekerData.AddCV(input)
 	return err
 }
