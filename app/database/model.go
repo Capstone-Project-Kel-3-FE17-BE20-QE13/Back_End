@@ -93,6 +93,7 @@ type Vacancy struct {
 	Job_type        string `json:"job_type" form:"job_type"`
 	Salary_range    string `json:"salary_range" form:"salary_range"`
 	Category        string `json:"category" form:"category"`
+	Address         string `json:"address" form:"address"`
 	Job_description string `json:"job_desc" form:"job_desc"`
 	Job_requirement string `json:"job_req" form:"job_req"`
 	Status          string `json:"status" form:"status"`
