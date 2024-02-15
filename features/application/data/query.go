@@ -4,8 +4,10 @@ import (
 	"JobHuntz/app/database"
 	"JobHuntz/features/application"
 	"JobHuntz/features/favorit"
+	"JobHuntz/features/jobseeker"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -36,16 +38,46 @@ func (repo *ApplyQuery) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.D
 	return dataCompany, nil
 }
 
-func (repo *ApplyQuery) CreateApplication(input application.Core) (uint, error) {
+func (repo *ApplyQuery) GetMyData(userID uint) (jobseeker.JobseekerCore, error) {
+	// simpan ke DB
+	var myDatas database.Jobseeker
+
+	if err := repo.db.First(&myDatas, "id = ?", userID).Error; err != nil {
+		return jobseeker.JobseekerCore{}, errors.New(err.Error())
+	}
+
+	myDatasCore := ModelGormJobseekerToCore(myDatas)
+
+	fmt.Println("isi dataku: ", myDatas)
+
+	return myDatasCore, nil
+}
+
+func (repo *ApplyQuery) CountApplication(dbRaw *sql.DB, userID uint) (uint, error) {
+	var count uint
+
+	query := `select count(status_application) from applications where jobseeker_id = ?;`
+
+	tx := dbRaw.QueryRow(query, userID)
+	if err := tx.Scan(&count); err != nil {
+		//
+	}
+
+	fmt.Println("isi countku: ", count)
+
+	return count, nil
+}
+
+func (repo *ApplyQuery) CreateApplication(input application.Core) error {
 	// simpan ke DB
 	newApplyGorm := CoreToModel(input)
 
 	tx := repo.db.Create(&newApplyGorm) // proses query insert
 	if tx.Error != nil {
-		return 0, tx.Error
+		return tx.Error
 	}
 
-	return newApplyGorm.ID, nil
+	return nil
 }
 
 func (repo *ApplyQuery) GetAllApplications(jobseekerID uint) ([]application.Core, error) {

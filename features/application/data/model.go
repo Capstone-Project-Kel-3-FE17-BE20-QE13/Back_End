@@ -3,6 +3,7 @@ package data
 import (
 	"JobHuntz/app/database"
 	"JobHuntz/features/application"
+	"JobHuntz/features/jobseeker"
 )
 
 func CoreToModel(input application.Core) database.Application {
@@ -58,4 +59,20 @@ func ModelGormToCore(data []database.Application) []application.Core {
 	}
 
 	return applicationsData
+}
+
+func ModelGormJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
+	return jobseeker.JobseekerCore{
+		ID:                  input.ID,
+		Full_name:           input.Full_name,
+		Username:            input.Username,
+		Email:               input.Email,
+		Password:            input.Password,
+		Address:             input.Address,
+		Phone:               input.Phone,
+		Birth_date:          input.Birth_date,
+		Gender:              input.Gender,
+		Resume:              input.Resume,
+		Status_Verification: input.Status_Verification,
+	}
 }

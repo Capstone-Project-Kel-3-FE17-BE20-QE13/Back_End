@@ -3,6 +3,7 @@ package service
 import (
 	"JobHuntz/features/application"
 	"JobHuntz/features/favorit"
+	"JobHuntz/features/jobseeker"
 	"database/sql"
 	"errors"
 )
@@ -28,15 +29,35 @@ func (uc *ApplyService) GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.D
 	return application, nil
 }
 
-func (uc *ApplyService) CreateApplication(input application.Core) (uint, error) {
+func (uc *ApplyService) GetMyData(userID uint) (jobseeker.JobseekerCore, error) {
+	res, err := uc.Repo.GetMyData(userID)
+	if err != nil {
+		return jobseeker.JobseekerCore{}, err
+	}
 
-	application, err := uc.Repo.CreateApplication(input)
+	return res, nil
+}
 
+func (uc *ApplyService) CountApplication(dbRaw *sql.DB, userID uint) (uint, error) {
+	res, err := uc.Repo.CountApplication(dbRaw, userID)
 	if err != nil {
 		return 0, err
 	}
+	return res, nil
+}
 
-	return application, nil
+func (uc *ApplyService) CreateApplication(input application.Core, count uint, status string) error {
+	if status == "Unverified" && count == 3 {
+		return errors.New("Unverified user can't make more than 3 applications")
+	} else {
+		err := uc.Repo.CreateApplication(input)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (uc *ApplyService) GetAllApplications(JobseekerID uint) ([]application.Core, error) {
