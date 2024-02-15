@@ -2,14 +2,13 @@ package service
 
 import (
 	"JobHuntz/features/vacancy"
-	jobs "JobHuntz/features/vacancy"
 )
 
 type JobService struct {
 	Repo vacancy.JobDataInterface
 }
 
-func NewJob(repo jobs.JobDataInterface) vacancy.JobServiceInterface {
+func NewJob(repo vacancy.JobDataInterface) vacancy.JobServiceInterface {
 	return &JobService{
 		Repo: repo,
 	}
@@ -20,7 +19,7 @@ func (service *JobService) CountJobsByUserID(userID uint) (int, error) {
 	return count, err
 }
 
-func (service *JobService) GetById(id uint) (*jobs.CompanyCore, error) {
+func (service *JobService) GetById(id uint) (*vacancy.CompanyCore, error) {
 	result, err := service.Repo.GetById(id)
 	return result, err
 }
