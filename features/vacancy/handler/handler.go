@@ -3,7 +3,6 @@ package handler
 import (
 	"JobHuntz/app/middlewares"
 	"JobHuntz/features/vacancy"
-	jobs "JobHuntz/features/vacancy"
 	"JobHuntz/utils/responses"
 	"net/http"
 	"strconv"
@@ -12,10 +11,10 @@ import (
 )
 
 type JobHandler struct {
-	jobService jobs.JobServiceInterface
+	jobService vacancy.JobServiceInterface
 }
 
-func NewJob(jobService jobs.JobServiceInterface) *JobHandler {
+func NewJob(jobService vacancy.JobServiceInterface) *JobHandler {
 	return &JobHandler{
 		jobService: jobService,
 	}
