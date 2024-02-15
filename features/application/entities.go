@@ -2,6 +2,7 @@ package application
 
 import (
 	"JobHuntz/features/favorit"
+	"JobHuntz/features/jobseeker"
 	"database/sql"
 )
 
@@ -28,7 +29,9 @@ type ListApplicantsCore struct {
 
 type ApplyDataInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error)
-	CreateApplication(input Core) (uint, error)
+	GetMyData(userID uint) (jobseeker.JobseekerCore, error)
+	CountApplication(dbRaw *sql.DB, userID uint) (uint, error)
+	CreateApplication(input Core) error
 	GetAllApplications(JobseekerID uint) ([]Core, error)
 	GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]ListApplicantsCore, error)
 	Edit(id uint, input Core) error
@@ -36,7 +39,9 @@ type ApplyDataInterface interface {
 
 type ApplyServiceInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error)
-	CreateApplication(input Core) (uint, error)
+	GetMyData(userID uint) (jobseeker.JobseekerCore, error)
+	CountApplication(dbRaw *sql.DB, userID uint) (uint, error)
+	CreateApplication(input Core, count uint, status string) error
 	GetAllApplications(JobseekerID uint) ([]Core, error)
 	GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]ListApplicantsCore, error)
 	EditApplication(id uint, input Core) error

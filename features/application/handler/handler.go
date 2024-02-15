@@ -24,6 +24,10 @@ func New(service application.ApplyServiceInterface) *ApplyHandler {
 }
 
 func (h *ApplyHandler) CreateApply(c echo.Context) error {
+	userID := middlewares.ExtractTokenUserId(c)
+
+	myData, _ := h.applyService.GetMyData(userID)
+
 	vacancyID := c.QueryParam("vacancy_id")
 
 	vacancyID_int, err := strconv.Atoi(vacancyID)
@@ -34,6 +38,8 @@ func (h *ApplyHandler) CreateApply(c echo.Context) error {
 	cfg := config.InitConfig()
 	dbRaw := database.InitRawSql(cfg)
 
+	resCount, _ := h.applyService.CountApplication(dbRaw, userID)
+
 	result, errGet := h.applyService.GetDataCompany(dbRaw, uint(vacancyID_int))
 	if errGet != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error get data company", nil))
@@ -42,7 +48,7 @@ func (h *ApplyHandler) CreateApply(c echo.Context) error {
 	fmt.Println("isi data company: ", result)
 
 	newApply := new(ApplyRequest)
-	newApply.JobseekerID = middlewares.ExtractTokenUserId(c)
+	newApply.JobseekerID = userID
 	newApply.VacancyID = uint(vacancyID_int)
 	newApply.Position = result.Position
 	newApply.Company_name = result.Company_name
@@ -55,7 +61,7 @@ func (h *ApplyHandler) CreateApply(c echo.Context) error {
 
 	//mapping dari request to Core
 	input := MapApplyReqToCoreApply(*newApply)
-	_, err = h.applyService.CreateApplication(input)
+	err = h.applyService.CreateApplication(input, resCount, myData.Status_Verification)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data, "+err.Error(), nil))
 	}
