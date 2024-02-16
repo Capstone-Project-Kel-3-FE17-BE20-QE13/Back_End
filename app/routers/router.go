@@ -138,7 +138,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.DELETE("/favorit/:favorit_id", favoritHandlerAPI.DeleteFavById, middlewares.JWTMiddleware())
 
 	// order
-	e.POST("/order", verifHandlerAPI.CreateOrder, middlewares.JWTMiddleware())
+	e.POST("/order/jobseeker", verifHandlerAPI.CreateOrderJobseeker, middlewares.JWTMiddleware())
+	e.POST("/order-company", verifHandlerAPI.CreateOrderCompany, middlewares.JWTMiddleware())
 
 	// payment
 	e.POST("/payments", paymentHandler.Payment(), middlewares.JWTMiddleware())
