@@ -26,14 +26,14 @@ func (handler *CompanyHandler) RegisterCompany(c echo.Context) error {
 	newCompany := CompanyRequest{}
 	errBind := c.Bind(&newCompany)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error bind data. data not valid", nil))
 	}
 
 	companyCore := RequestCompanyToCore(newCompany)
 
 	_, _, errCreate := handler.companyService.RegisterCompany(companyCore)
 	if errCreate != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error insert data"+errCreate.Error(), nil))
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error insert data"+errCreate.Error(), nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully registered", nil))
