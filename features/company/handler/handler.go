@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -114,11 +115,14 @@ func (handler *CompanyHandler) UpdateCompany(c echo.Context) error {
 		}
 	}
 
+	if _, err := strconv.Atoi(reqData.Phone); err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error invalid phone number format, only numeric allowed", nil))
+	}
+
 	err := handler.companyService.UpdateCompany(int(idJWT), companyCore, file, nameFile)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error update data. update failed", nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success.", nil))
-
 }
