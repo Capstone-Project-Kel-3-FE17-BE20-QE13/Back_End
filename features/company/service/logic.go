@@ -58,7 +58,7 @@ func (service *companyService) LoginCompany(email string, password string) (data
 		return nil, "", errors.New("password tidak sesuai.")
 	}
 
-	token, errJwt := middlewares.CreateToken(data.ID)
+	token, errJwt := middlewares.CreateToken(int(data.ID))
 	if errJwt != nil {
 		return nil, "", errJwt
 	}

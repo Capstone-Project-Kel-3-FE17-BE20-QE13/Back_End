@@ -93,30 +93,45 @@ func (repo *ApplyQuery) GetAllApplications(jobseekerID uint) ([]application.Core
 	return allApplicationsCore, nil
 }
 
-func (repo *ApplyQuery) GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]application.ListApplicantsCore, error) {
-	var listApplicants []application.ListApplicantsCore
+// GetAllApplicationsCompany implements application.ApplyDataInterface.
+func (repo *ApplyQuery) GetAllApplicationsCompany(vacancyID uint) ([]application.Core, error) {
+	var applicationsDataGorm []database.Application
 
-	query := `SELECT applications.id, applications.jobseeker_id, jobseekers.full_name, jobseekers.username, jobseekers.email, 
-	applications.vacancy_id, applications.position, applications.company_name, applications.status_application 
-	FROM applications 
-	JOIN jobseekers ON applications.jobseeker_id = jobseekers.id
-	WHERE applications.vacancy_id = ?`
-
-	rows, err := dbRaw.Query(query, vacancyID_int)
-	if err != nil {
-		return nil, errors.New("failed to read data applicants" + err.Error())
+	tx := repo.db.Where("vacancy_id = ?", vacancyID).Find(&applicationsDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
 	}
 
-	for rows.Next() {
-		var dataApplicant application.ListApplicantsCore
-		if err := rows.Scan(&dataApplicant.ID, &dataApplicant.JobseekerID, &dataApplicant.Full_name, &dataApplicant.Username, &dataApplicant.Email, &dataApplicant.VacancyID, &dataApplicant.Position, &dataApplicant.Company_name, &dataApplicant.Status_application); err != nil {
-			return nil, errors.New("failed to read each data applicant" + err.Error())
-		}
-		listApplicants = append(listApplicants, dataApplicant)
-	}
+	//mapping
+	allApplicationsCore := ModelGormToCore(applicationsDataGorm)
 
-	return listApplicants, nil
+	return allApplicationsCore, nil
 }
+
+// func (repo *ApplyQuery) GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]application.ListApplicantsCore, error) {
+// 	var listApplicants []application.ListApplicantsCore
+
+// 	query := `SELECT applications.id, applications.jobseeker_id, jobseekers.full_name, jobseekers.username, jobseekers.email,
+// 	applications.vacancy_id, applications.position, applications.company_name, applications.status_application
+// 	FROM applications
+// 	JOIN jobseekers ON applications.jobseeker_id = jobseekers.id
+// 	WHERE applications.vacancy_id = ?`
+
+// 	rows, err := dbRaw.Query(query, vacancyID_int)
+// 	if err != nil {
+// 		return nil, errors.New("failed to read data applicants" + err.Error())
+// 	}
+
+// 	for rows.Next() {
+// 		var dataApplicant application.ListApplicantsCore
+// 		if err := rows.Scan(&dataApplicant.ID, &dataApplicant.JobseekerID, &dataApplicant.Full_name, &dataApplicant.Username, &dataApplicant.Email, &dataApplicant.VacancyID, &dataApplicant.Position, &dataApplicant.Company_name, &dataApplicant.Status_application); err != nil {
+// 			return nil, errors.New("failed to read each data applicant" + err.Error())
+// 		}
+// 		listApplicants = append(listApplicants, dataApplicant)
+// 	}
+
+// 	return listApplicants, nil
+// }
 
 func (repo *ApplyQuery) Edit(id uint, input application.Core) error {
 	dataApplication := database.Application{

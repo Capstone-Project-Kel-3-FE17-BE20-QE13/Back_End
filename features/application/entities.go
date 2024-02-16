@@ -33,7 +33,7 @@ type ApplyDataInterface interface {
 	CountApplication(dbRaw *sql.DB, userID uint) (uint, error)
 	CreateApplication(input Core) error
 	GetAllApplications(JobseekerID uint) ([]Core, error)
-	GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]ListApplicantsCore, error)
+	GetAllApplicationsCompany(VacancyID uint) ([]Core, error)
 	Edit(id uint, input Core) error
 }
 
@@ -43,6 +43,6 @@ type ApplyServiceInterface interface {
 	CountApplication(dbRaw *sql.DB, userID uint) (uint, error)
 	CreateApplication(input Core, count uint, status string) error
 	GetAllApplications(JobseekerID uint) ([]Core, error)
-	GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]ListApplicantsCore, error)
+	GetAllApplicationsCompany(VacancyID uint) ([]Core, error)
 	EditApplication(id uint, input Core) error
 }

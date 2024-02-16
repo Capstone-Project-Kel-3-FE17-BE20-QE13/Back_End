@@ -82,22 +82,32 @@ func (h *ApplyHandler) AppHistoryJobseeker(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
 }
 
-func (handler *ApplyHandler) AppHistoryCompany(c echo.Context) error {
-	vacancyID := c.QueryParam("vacancy_id")
-	vacancyID_int, errConv := strconv.Atoi(vacancyID)
-	if errConv != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+func (h *ApplyHandler) AppHistoryCompany(c echo.Context) error {
+	userID := middlewares.ExtractTokenUserId(c)
+	result, err := h.applyService.GetAllApplicationsCompany(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
 	}
-
-	cfg := config.InitConfig()
-	dbRaw := database.InitRawSql(cfg)
-
-	result, errFirst := handler.applyService.GetAllApplicationsCompany(dbRaw, vacancyID_int)
-	if errFirst != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	var applyResponse []ApplyResponse
+	for _, v := range result {
+		applyResponse = append(applyResponse, MapCoreApplyToApplyRes(v))
 	}
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
+	// vacancyID := c.QueryParam("vacancy_id")
+	// vacancyID_int, errConv := strconv.Atoi(vacancyID)
+	// if errConv != nil {
+	// 	return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	// }
 
-	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data applicants", result))
+	// cfg := config.InitConfig()
+	// dbRaw := database.InitRawSql(cfg)
+
+	// result, errFirst := handler.applyService.GetAllApplicationsCompany(dbRaw, vacancyID_int)
+	// if errFirst != nil {
+	// 	return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	// }
+
+	// return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read data applicants", result))
 }
 
 func (h *ApplyHandler) EditApplicationStatus(c echo.Context) error {
