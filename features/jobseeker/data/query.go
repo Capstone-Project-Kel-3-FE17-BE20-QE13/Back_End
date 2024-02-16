@@ -146,10 +146,6 @@ func (repo *JobseekerQuery) AllUsernames(username string) (jobseeker.JobseekerCo
 
 func (repo *JobseekerQuery) UpdateProfile(seekerID uint, data jobseeker.JobseekerUpdateCore) error {
 	newUpdateGorm := CoreJobseekerToModelUpdate(data)
-	if data.Password != "" {
-		newUpdateGorm.Password = responses.HashPassword(data.Password)
-	}
-
 	txUpdates := repo.db.Model(&database.Jobseeker{}).Where("id = ?", seekerID).Updates(newUpdateGorm)
 	if txUpdates.Error != nil {
 		return txUpdates.Error

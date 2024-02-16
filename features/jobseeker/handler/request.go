@@ -25,10 +25,10 @@ type JobseekerRegistRequest struct {
 }
 
 type JobseekerUpdateRequest struct {
-	Full_name  string `json:"full_name" form:"full_name"`
-	Username   string `json:"username" form:"username"`
-	Email      string `json:"email" form:"email"`
-	Password   string `json:"password" form:"password"`
+	Full_name string `json:"full_name" form:"full_name"`
+	Username  string `json:"username" form:"username"`
+	//Email     string `json:"email" form:"email"`
+	//Password   string `json:"password" form:"password"`
 	Address    string `json:"address" form:"address"`
 	Phone      string `json:"phone" form:"phone"`
 	Birth_date string `json:"birth_date" form:"birth_date"`
@@ -98,8 +98,6 @@ func RequestJobseekerUpdateToCore(input JobseekerUpdateRequest) jobseeker.Jobsee
 	return jobseeker.JobseekerUpdateCore{
 		Full_name:  input.Full_name,
 		Username:   input.Username,
-		Email:      input.Email,
-		Password:   input.Password,
 		Address:    input.Address,
 		Phone:      input.Phone,
 		Birth_date: input.Birth_date,

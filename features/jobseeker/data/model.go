@@ -33,8 +33,6 @@ func CoreJobseekerToModelUpdate(input jobseeker.JobseekerUpdateCore) database.Jo
 	return database.Jobseeker{
 		Full_name:  input.Full_name,
 		Username:   input.Username,
-		Email:      input.Email,
-		Password:   input.Password,
 		Address:    input.Address,
 		Phone:      input.Phone,
 		Birth_date: input.Birth_date,
