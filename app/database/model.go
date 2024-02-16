@@ -23,7 +23,7 @@ type Jobseeker struct {
 	Cvs                 []CV
 	Licenses            []License
 	Skills              []Skill
-	Order               Order
+	OrderJobseeker      OrderJobseeker
 }
 
 type CV struct {
@@ -75,7 +75,7 @@ type Company struct {
 	Description         string `json:"description" form:"description"`
 	Status_Verification string `json:"status_verification" form:"status_verification"`
 	Banners             string `json:"banners" form:"banners"`
-	Order               Order
+	OrderCompany        OrderCompany
 }
 
 type Skill struct {
@@ -121,10 +121,16 @@ type Favourite struct {
 	Jobseeker    Jobseeker
 }
 
-type Order struct {
+type OrderJobseeker struct {
 	ID           string  `gorm:"type:varchar(40);primary_key" json:"id" form:"id"`
-	JobseekerID  *uint   `json:"jobseeker_id" form:"jobseeker_id"`
-	CompanyID    *uint   `json:"company_id" form:"company_id"`
+	JobseekerID  uint    `json:"jobseeker_id" form:"jobseeker_id"`
+	Price        float64 `json:"price" form:"price"`
+	Status_order string  `json:"stat_order" form:"stat_order"`
+}
+
+type OrderCompany struct {
+	ID           string  `gorm:"type:varchar(40);primary_key" json:"id" form:"id"`
+	CompanyID    uint    `json:"company_id" form:"company_id"`
 	Price        float64 `json:"price" form:"price"`
 	Status_order string  `json:"stat_order" form:"stat_order"`
 }
@@ -133,7 +139,7 @@ type Payment struct {
 	ID          string         `json:"id" gorm:"primaryKey"`
 	OrderID     string         `gorm:"type:varchar(50)" json:"order_id" form:"order_id"`
 	Amount      string         `json:"amount" form:"amount"`
-	UserID      *uint          `json:"user_id" form:"user_id"`
+	UserID      uint           `json:"user_id" form:"user_id"`
 	BankAccount string         `gorm:"type:enum('bca', 'bri', 'bni'); default:'bca'"`
 	VANumber    string         `gorm:"type:varchar(50)"`
 	Status      string         `gorm:"type:varchar(50)"`
@@ -141,3 +147,16 @@ type Payment struct {
 	UpdatedAt   time.Time      `gorm:"type:datetime"`
 	DeletedAt   gorm.DeletedAt `gorm:"index"`
 }
+
+// type PaymentCompany struct {
+// 	ID          string         `json:"id" gorm:"primaryKey"`
+// 	OrderID     string         `gorm:"type:varchar(50)" json:"order_id" form:"order_id"`
+// 	Amount      string         `json:"amount" form:"amount"`
+// 	CompanyID   uint           `json:"company_id" form:"company_id"`
+// 	BankAccount string         `gorm:"type:enum('bca', 'bri', 'bni'); default:'bca'"`
+// 	VANumber    string         `gorm:"type:varchar(50)"`
+// 	Status      string         `gorm:"type:varchar(50)"`
+// 	CreatedAt   time.Time      `gorm:"type:datetime"`
+// 	UpdatedAt   time.Time      `gorm:"type:datetime"`
+// 	DeletedAt   gorm.DeletedAt `gorm:"index"`
+// }

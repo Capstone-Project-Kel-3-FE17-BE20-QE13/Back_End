@@ -7,7 +7,7 @@ import (
 type createPaymentRequest struct {
 	OrderID     string `json:"order_id"`
 	Amount      string `json:"amount"`
-	UserID      *uint  `json:"user_id" form:"user_id"`
+	UserID      uint   `json:"user_id" form:"user_id"`
 	BankAccount string `json:"bank_account"`
 }
 

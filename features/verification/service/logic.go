@@ -29,14 +29,14 @@ func (service *verificationService) GetDataCompany(userID uint) (company.Company
 	return res, err
 }
 
-func (service *verificationService) AddOrder(input verification.OrderCore) error {
+func (service *verificationService) AddOrderJobseeker(input verification.OrderJobseekerCore) error {
 	// logic validation
-	err := service.verificationData.AddOrder(input)
+	err := service.verificationData.AddOrderJobseeker(input)
 	return err
 }
 
-// func (service *verificationService) AddOrderCompany(input verification.OrderCore) error {
-// 	// logic validation
-// 	err := service.verificationData.AddOrderCompany(input)
-// 	return err
-// }
+func (service *verificationService) AddOrderCompany(input verification.OrderCompanyCore) error {
+	// logic validation
+	err := service.verificationData.AddOrderCompany(input)
+	return err
+}

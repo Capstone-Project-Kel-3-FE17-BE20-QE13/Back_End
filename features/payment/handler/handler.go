@@ -44,22 +44,30 @@ func (tc *paymentHandler) Payment() echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, responses.ResponseFormat(http.StatusUnauthorized, "", "Missing or Malformed JWT", nil, nil))
 		}
 
-		res, err := tc.service.GetOrderDetail(dbRaw, uint(userID))
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error get data"+err.Error(), nil))
+		res1, err1 := tc.service.GetOrderJobseekerDetail(dbRaw, uint(userID))
+		if err1 != nil {
+			// return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error get data"+err.Error(), nil))
 		}
 
-		amountString := strconv.FormatFloat(res.Price, 'f', -1, 64)
+		res2, err2 := tc.service.GetOrderCompanyDetail(dbRaw, uint(userID))
+		if err2 != nil {
+			// return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error get data"+err.Error(), nil))
+		}
+
+		amountString1 := strconv.FormatFloat(res1.Price, 'f', -1, 64)
+		amountString2 := strconv.FormatFloat(res2.Price, 'f', -1, 64)
 
 		// mendapatkan data dari form data
 		request := createPaymentRequest{}
-		request.OrderID = res.ID
-		request.Amount = amountString
 
-		if res.CompanyID != nil {
-			request.UserID = res.CompanyID
-		} else if res.CompanyID == nil {
-			request.UserID = res.JobseekerID
+		if res1.ID != "" {
+			request.OrderID = res1.ID
+			request.Amount = amountString1
+			request.UserID = res1.JobseekerID
+		} else {
+			request.OrderID = res2.ID
+			request.Amount = amountString2
+			request.UserID = res2.CompanyID
 		}
 
 		errBind := c.Bind(&request)
@@ -68,7 +76,7 @@ func (tc *paymentHandler) Payment() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, responses.ResponseFormat(http.StatusBadRequest, "", "Bad request"+errBind.Error(), nil, nil))
 		}
 
-		fmt.Printf("log: %v\n", request)
+		fmt.Printf("isi request: %v\n", request)
 
 		payment, err := tc.service.Payment(RequestToCore(request))
 		if err != nil {
@@ -81,9 +89,7 @@ func (tc *paymentHandler) Payment() echo.HandlerFunc {
 		log.Sugar().Infoln(payment)
 
 		return c.JSON(http.StatusOK, responses.ResponseFormat(http.StatusOK, "", "Successful Operation", paymentResp(payment), nil))
-
 	}
-
 }
 
 func (tc *paymentHandler) Notification() echo.HandlerFunc {

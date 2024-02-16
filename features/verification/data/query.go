@@ -45,8 +45,8 @@ func (repo *VerificationQuery) GetDataCompany(userID uint) (company.CompanyCore,
 	return dataCore, nil
 }
 
-func (repo *VerificationQuery) AddOrder(input verification.OrderCore) error {
-	newOrder := CoreOrderToModel(input)
+func (repo *VerificationQuery) AddOrderJobseeker(input verification.OrderJobseekerCore) error {
+	newOrder := CoreOrderJobseekerToModel(input)
 
 	tx := repo.db.Create(&newOrder) // proses query insert
 	if tx.Error != nil {
@@ -56,13 +56,13 @@ func (repo *VerificationQuery) AddOrder(input verification.OrderCore) error {
 	return nil
 }
 
-// func (repo *VerificationQuery) AddOrderCompany(input verification.OrderCompanyCore) error {
-// 	newOrder := CoreCompanyToModel(input)
+func (repo *VerificationQuery) AddOrderCompany(input verification.OrderCompanyCore) error {
+	newOrder := CoreOrderCompanyToModel(input)
 
-// 	tx := repo.db.Create(&newOrder) // proses query insert
-// 	if tx.Error != nil {
-// 		return tx.Error
-// 	}
+	tx := repo.db.Create(&newOrder) // proses query insert
+	if tx.Error != nil {
+		return tx.Error
+	}
 
-// 	return nil
-// }
+	return nil
+}

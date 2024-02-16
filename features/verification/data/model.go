@@ -39,11 +39,19 @@ func ModeCompanyToCore(input database.Company) company.CompanyCore {
 	}
 }
 
-func CoreOrderToModel(input verification.OrderCore) database.Order {
-	return database.Order{
+func CoreOrderJobseekerToModel(input verification.OrderJobseekerCore) database.OrderJobseeker {
+	return database.OrderJobseeker{
+		ID:           input.ID,
+		JobseekerID:  input.JobseekerID,
+		Price:        input.Price,
+		Status_order: input.Status_order,
+	}
+}
+
+func CoreOrderCompanyToModel(input verification.OrderCompanyCore) database.OrderCompany {
+	return database.OrderCompany{
 		ID:           input.ID,
 		CompanyID:    input.CompanyID,
-		JobseekerID:  input.JobseekerID,
 		Price:        input.Price,
 		Status_order: input.Status_order,
 	}

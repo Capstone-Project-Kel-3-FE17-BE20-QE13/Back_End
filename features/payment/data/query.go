@@ -7,8 +7,6 @@ import (
 
 	"JobHuntz/app/database"
 	"JobHuntz/app/middlewares"
-	"JobHuntz/features/company"
-	"JobHuntz/features/jobseeker"
 	"JobHuntz/features/payment"
 	"JobHuntz/features/verification"
 
@@ -27,23 +25,45 @@ func New(db *gorm.DB) payment.PaymentData {
 	}
 }
 
-func (pq *paymentQuery) GetOrderDetail(dbRaw *sql.DB, userID uint) (verification.OrderCore, error) {
+func (pq *paymentQuery) GetOrderJobseekerDetail(dbRaw *sql.DB, userID uint) (verification.OrderJobseekerCore, error) {
 	// var order_id string
 	// var price float64
 
-	var dataOrder verification.OrderCore
+	var dataOrder verification.OrderJobseekerCore
 
-	query := `SELECT * FROM orders WHERE orders.company_id = ? OR orders.jobseeker_id = ?`
+	query := `SELECT * FROM order_jobseekers WHERE jobseeker_id = ?`
 
-	rowID := dbRaw.QueryRow(query, userID, userID)
+	rowID := dbRaw.QueryRow(query, userID)
 
-	if err := rowID.Scan(&dataOrder.ID, &dataOrder.JobseekerID, &dataOrder.CompanyID, &dataOrder.Price, &dataOrder.Status_order); err != nil {
+	if err := rowID.Scan(&dataOrder.ID, &dataOrder.JobseekerID, &dataOrder.Price, &dataOrder.Status_order); err != nil {
 		if err == sql.ErrNoRows {
 			// Handle jika tidak ada data ditemukan
-			return verification.OrderCore{}, errors.New("no data found")
+			return verification.OrderJobseekerCore{}, errors.New("no data found")
 		}
 		log.Fatal("cannot scan data: ")
 	}
+	return dataOrder, nil
+}
+
+func (pq *paymentQuery) GetOrderCompanyDetail(dbRaw *sql.DB, userID uint) (verification.OrderCompanyCore, error) {
+	// var order_id string
+	// var price float64
+
+	var dataOrder verification.OrderCompanyCore
+
+	query := `SELECT * FROM order_companies WHERE company_id = ?`
+
+	rowID := dbRaw.QueryRow(query, userID)
+
+	if err := rowID.Scan(&dataOrder.ID, &dataOrder.CompanyID, &dataOrder.Price, &dataOrder.Status_order); err != nil {
+		if err == sql.ErrNoRows {
+			// Handle jika tidak ada data ditemukan
+			return verification.OrderCompanyCore{}, errors.New("no data found")
+		}
+		log.Fatal("cannot scan data: ")
+	}
+
+	fmt.Println("isi order detail: ", dataOrder)
 	return dataOrder, nil
 }
 
@@ -65,8 +85,8 @@ func (pq *paymentQuery) Payment(request payment.PaymentCore) (payment.PaymentCor
 		log.Error("error while charging payment")
 		return payment.PaymentCore{}, errors.New("internal server error")
 	}
-	fmt.Printf("log ppayment data : %v\n", paymentData)
-	fmt.Printf("log ppayment model: %v\n", paymentModels(paymentData))
+	fmt.Printf("log payment data : %v\n", paymentData)
+	fmt.Printf("log payment model: %v\n", paymentModels(paymentData))
 	return paymentModels(paymentData), nil
 }
 
@@ -99,14 +119,11 @@ func (pq *paymentQuery) CallbackMid(dbRaw *sql.DB, input payment.PaymentCore) er
 		fmt.Println("row affected: ", tx.RowsAffected)
 
 		// data jobseeker
-		query1 := `select jobseekers.id from jobseekers
-		join orders on jobseekers.id = orders.jobseeker_id
-		where orders.id = ?`
-
+		query1 := `SELECT id, jobseeker_id, price, status_order FROM order_jobseekers WHERE id = ?`
 		rowID1 := dbRaw.QueryRow(query1, input.OrderID)
 
-		var dataJobseeker jobseeker.JobseekerCore
-		if err := rowID1.Scan(&dataJobseeker.ID); err != nil {
+		var dataJobseeker verification.OrderJobseekerCore
+		if err := rowID1.Scan(&dataJobseeker.ID, &dataJobseeker.JobseekerID, &dataJobseeker.Price, &dataJobseeker.Status_order); err != nil {
 			if err == sql.ErrNoRows {
 				//
 			}
@@ -115,14 +132,12 @@ func (pq *paymentQuery) CallbackMid(dbRaw *sql.DB, input payment.PaymentCore) er
 		fmt.Println("isi data jobseeker: ", dataJobseeker)
 
 		// data company
-		query2 := `select companies.id from companies
-		join orders on companies.id = orders.company_id
-		where orders.id = ?`
+		query2 := `SELECT id, company_id, price, status_order FROM order_companies WHERE id = ?`
 
 		rowID2 := dbRaw.QueryRow(query2, input.OrderID)
 
-		var dataCompany company.CompanyCore
-		if err := rowID2.Scan(&dataCompany.ID); err != nil {
+		var dataCompany verification.OrderCompanyCore
+		if err := rowID2.Scan(&dataCompany.ID, &dataCompany.CompanyID, &dataCompany.Price, &dataCompany.Status_order); err != nil {
 			if err == sql.ErrNoRows {
 				//
 			}
@@ -131,15 +146,15 @@ func (pq *paymentQuery) CallbackMid(dbRaw *sql.DB, input payment.PaymentCore) er
 		fmt.Println("isi data company: ", dataCompany)
 
 		// -------------------------------------
-		if dataJobseeker.ID != 0 {
+		if dataJobseeker.ID != "" {
 			query1 := "UPDATE jobseekers SET status_verification = 'Verified' WHERE id = ?"
-			_, err := dbRaw.Exec(query1, dataJobseeker.ID)
+			_, err := dbRaw.Exec(query1, dataJobseeker.JobseekerID)
 			if err != nil {
 				return err
 			}
 		} else {
 			query2 := "UPDATE companies SET status_verification = 'Verified' WHERE id = ?"
-			_, err := dbRaw.Exec(query2, dataCompany.ID)
+			_, err := dbRaw.Exec(query2, dataCompany.CompanyID)
 			if err != nil {
 				return err
 			}
