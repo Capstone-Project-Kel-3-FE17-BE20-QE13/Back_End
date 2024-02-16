@@ -69,7 +69,7 @@ func (uc *ApplyService) GetAllApplications(JobseekerID uint) ([]application.Core
 }
 
 func (uc *ApplyService) GetAllApplicationsCompany(VacancyID uint) ([]application.Core, error) {
-	result, err := uc.Repo.GetAllApplications(VacancyID)
+	result, err := uc.Repo.GetAllApplicationsCompany(VacancyID)
 	if err != nil {
 		return nil, err
 	}

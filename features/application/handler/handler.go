@@ -83,15 +83,28 @@ func (h *ApplyHandler) AppHistoryJobseeker(c echo.Context) error {
 }
 
 func (h *ApplyHandler) AppHistoryCompany(c echo.Context) error {
-	userID := middlewares.ExtractTokenUserId(c)
-	result, err := h.applyService.GetAllApplicationsCompany(userID)
+	//userID := middlewares.ExtractTokenUserId(c)
+
+	vacancyID := c.QueryParam("vacancy_id")
+	vacancyID_int, errConv := strconv.Atoi(vacancyID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	result, err := h.applyService.GetAllApplicationsCompany(uint(vacancyID_int))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data, "+err.Error(), nil))
 	}
+
+	fmt.Println("isi result: ", result)
+
 	var applyResponse []ApplyResponse
 	for _, v := range result {
 		applyResponse = append(applyResponse, MapCoreApplyToApplyRes(v))
 	}
+
+	fmt.Println("isi applications: ", applyResponse)
+
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "successfully get all applications history", applyResponse))
 	// vacancyID := c.QueryParam("vacancy_id")
 	// vacancyID_int, errConv := strconv.Atoi(vacancyID)
