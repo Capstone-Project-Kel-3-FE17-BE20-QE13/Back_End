@@ -118,30 +118,6 @@ func (service *JobseekerService) Login(email string, password string) (jobseeker
 }
 
 func (service *JobseekerService) UpdateValidation(input jobseeker.JobseekerUpdateCore) error {
-	if input.Password != "" {
-		if len(input.Password) < 8 {
-			return errors.New("your password is not valid")
-		} else if strings.Contains(input.Password, " ") {
-			return errors.New("your password is not valid")
-		}
-	}
-
-	// else if input.Password != "" && strings.Contains(input.Password, "") {
-	// 	return errors.New("password is required")
-	// }
-
-	// if input.Password == "" {
-	// 	return errors.New("password is required")
-	// }
-
-	if input.Email != "" {
-		// get data from database that matches the given email
-		resData1, _ := service.jobseekerData.AllEmails(input.Email)
-		if resData1.Email == input.Email {
-			return errors.New("email is already used")
-		}
-	}
-
 	if input.Username != "" {
 		resData2, _ := service.jobseekerData.AllUsernames(input.Username)
 		if resData2.Username == input.Username {
