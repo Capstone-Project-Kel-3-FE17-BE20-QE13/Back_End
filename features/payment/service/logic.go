@@ -27,8 +27,13 @@ func New(ud payment.PaymentData, v *validator.Validate) payment.PaymentService {
 	}
 }
 
-func (ps *paymentService) GetOrderDetail(dbRaw *sql.DB, userID uint) (verification.OrderCore, error) {
-	res, err := ps.query.GetOrderDetail(dbRaw, userID)
+func (ps *paymentService) GetOrderJobseekerDetail(dbRaw *sql.DB, userID uint) (verification.OrderJobseekerCore, error) {
+	res, err := ps.query.GetOrderJobseekerDetail(dbRaw, userID)
+	return res, err
+}
+
+func (ps *paymentService) GetOrderCompanyDetail(dbRaw *sql.DB, userID uint) (verification.OrderCompanyCore, error) {
+	res, err := ps.query.GetOrderCompanyDetail(dbRaw, userID)
 	return res, err
 }
 

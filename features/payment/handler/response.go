@@ -11,7 +11,7 @@ type paymentResponse struct {
 	Amount      string          `json:"amount"`
 	BankAccount string          `json:"bank_account"`
 	VANumber    string          `json:"va_number"`
-	UserID      *uint           `json:"user_id" form:"user_id"`
+	UserID      uint            `json:"user_id" form:"user_id"`
 	Status      string          `json:"status"`
 	CreatedAt   utils.LocalTime `json:"created_at"`
 	UpdatedAt   utils.LocalTime `json:"updated_at"`
