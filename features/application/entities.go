@@ -30,7 +30,7 @@ type ApplyDataInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error)
 	CreateApplication(input Core) (uint, error)
 	GetAllApplications(JobseekerID uint) ([]Core, error)
-	GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]ListApplicantsCore, error)
+	GetAllApplicationsCompany(VacancyID uint) ([]Core, error)
 	Edit(id uint, input Core) error
 }
 
@@ -38,6 +38,6 @@ type ApplyServiceInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (favorit.DataCompanyCore, error)
 	CreateApplication(input Core) (uint, error)
 	GetAllApplications(JobseekerID uint) ([]Core, error)
-	GetAllApplicationsCompany(dbRaw *sql.DB, vacancyID_int int) ([]ListApplicantsCore, error)
+	GetAllApplicationsCompany(VacancyID uint) ([]Core, error)
 	EditApplication(id uint, input Core) error
 }

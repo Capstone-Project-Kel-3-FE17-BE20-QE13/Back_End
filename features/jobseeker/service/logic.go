@@ -54,7 +54,7 @@ func (service *JobseekerService) Login(email string, password string) (jobseeker
 	}
 
 	// create token used for access other endpoints
-	token, err := middlewares.CreateToken(resLogin.ID)
+	token, err := middlewares.CreateToken(int(resLogin.ID))
 	if err != nil {
 		return jobseeker.JobseekerCore{}, "", errors.New(err.Error() + "cannot create token")
 	}

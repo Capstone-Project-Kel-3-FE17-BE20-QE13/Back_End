@@ -52,7 +52,7 @@ func (repo *CompanyQuery) RegisterCompany(input company.CompanyCore) (data *comp
 
 	result := companyGorm.ModelRegisterToCore()
 
-	generatedToken, err := middlewares.CreateToken(result.ID)
+	generatedToken, err := middlewares.CreateToken(int(result.ID))
 	if err != nil {
 		return nil, "", err
 	}
