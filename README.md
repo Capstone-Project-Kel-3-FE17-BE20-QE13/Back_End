@@ -10,3 +10,31 @@ JobHuntz is a web application that allows company to post job openings and job s
 
 ## OPENAPI Swaggerhub
 https://app.swaggerhub.com/apis/zidan70/Job-Huntz-Swaggerhub/1.0.0
+
+## Fitur Utama
+- Autentikasi
+- Manajemen Lowongan
+- Manajemen Lamaran
+- Proses Penerimaan Pelamar
+- Payment Gateway Premium
+
+### Instalasi
+1. Clone repositori ini menggunakan Git:
+   ```bash
+   git clone https://github.com/Capstone-Project-Kel-3-FE17-BE20-QE13/Back_End.git
+
+2. Masuk ke direktori aplikasi:
+    ```
+    cd Back_End
+
+3. Instal dependensi yang diperlukan:
+    ```
+    go mod tidy
+
+
+### Menjalankan Server
+Untuk menjalankan server, gunakan perintah:
+    ```
+    go run main.go
+
+Server akan berjalan di http://localhost:8080 atau port yang telah kamu tentukan.
