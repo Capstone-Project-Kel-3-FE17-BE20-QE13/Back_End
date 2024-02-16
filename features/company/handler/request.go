@@ -17,7 +17,7 @@ type CompanyRequestUpdate struct {
 	Email        string `json:"email" form:"email"`
 	Full_name    string `json:"full_name" form:"full_name"`
 	Address      string `json:"address" form:"address"`
-	Phone        string `json:"phone" form:"phone"`
+	Phone        string `json:"phone" form:"phone" validate:"numeric"`
 	Company_size string `json:"company_size" form:"company_size"`
 	Website      string `json:"website" form:"website"`
 	Description  string `json:"description" form:"description"`
