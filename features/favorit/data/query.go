@@ -48,7 +48,7 @@ func (repo *FavQuery) CreateFavorit(input favorit.Core) (uint, error) {
 	return newFavGorm.ID, nil
 }
 
-func (repo *FavQuery) GetAllFavorit() ([]favorit.Core, error) {
+func (repo *FavQuery) GetAllFavorit(userID uint) ([]favorit.Core, error) {
 	var productsDataGorm []database.Favourite
 	tx := repo.db.Find(&productsDataGorm) // select * from users;
 	if tx.Error != nil {
