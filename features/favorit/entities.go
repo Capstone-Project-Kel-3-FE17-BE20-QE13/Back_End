@@ -20,7 +20,7 @@ type DataCompanyCore struct {
 type FavDataInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (DataCompanyCore, error)
 	CreateFavorit(input Core) (uint, error)
-	GetAllFavorit() ([]Core, error)
+	GetAllFavorit(userID uint) ([]Core, error)
 	// DeleteFavById(JobId uint) error
 	DeleteFavById(input []Core, id int) error
 }
@@ -28,7 +28,7 @@ type FavDataInterface interface {
 type FavServiceInterface interface {
 	GetDataCompany(dbRaw *sql.DB, vacancyID uint) (DataCompanyCore, error)
 	CreateFavorit(input Core) (uint, error)
-	GetAllFavorit() ([]Core, error)
+	GetAllFavorit(userID uint) ([]Core, error)
 	// DeleteFavById(JobId uint) error
 	DeleteFavById(input []Core, id int) error
 }

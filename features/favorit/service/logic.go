@@ -36,8 +36,8 @@ func (uc *FavService) CreateFavorit(input favorit.Core) (uint, error) {
 	return application, nil
 }
 
-func (uc *FavService) GetAllFavorit() ([]favorit.Core, error) {
-	results, err := uc.Repo.GetAllFavorit()
+func (uc *FavService) GetAllFavorit(userID uint) ([]favorit.Core, error) {
+	results, err := uc.Repo.GetAllFavorit(userID)
 	return results, err
 }
 
