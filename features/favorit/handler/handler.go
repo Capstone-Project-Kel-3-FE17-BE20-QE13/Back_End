@@ -64,7 +64,7 @@ func (h *FavHandler) CreateFavorit(c echo.Context) error {
 }
 
 func (h *FavHandler) GetAllFavorit(c echo.Context) error {
-	// Mengambil ID pengguna dari token JWT yang terkait dengan permintaan
+	// all favourites didapatkan berdasarkan jobseeker id yg login
 	userID := middlewares.ExtractTokenUserId(c)
 	result, err := h.favService.GetAllFavorit(userID)
 	if err != nil {
@@ -76,15 +76,6 @@ func (h *FavHandler) GetAllFavorit(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusFound, "success read data", storeResponse))
 }
-
-// func (h *FavHandler) GetAllFavorit(c echo.Context) error {
-// 	result, errFind := h.favService.GetAllFavorit()
-// 	if errFind != nil {
-// 		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFind.Error(), nil))
-// 	}
-
-// 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success read all favourites", result))
-// }
 
 func (h *FavHandler) DeleteFavById(c echo.Context) error {
 	favID := c.Param("favorit_id")
