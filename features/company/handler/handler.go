@@ -70,7 +70,11 @@ func (handler *CompanyHandler) GetById(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))
 	}
 
+	fmt.Println("isi url gambar: ", result.Banners)
+
 	companyresul := CoreResponGetByid(*result)
+
+	fmt.Println("isi url gambar: ", companyresul.Banners)
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "success.", companyresul))
 }

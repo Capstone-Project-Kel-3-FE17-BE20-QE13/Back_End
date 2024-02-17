@@ -1,21 +1,23 @@
 package company
 
-import "mime/multipart"
+import (
+	"mime/multipart"
+)
 
 type CompanyCore struct {
-	ID                  uint
-	Company_name        string `validate:"required"`
-	Full_name           string `validate:"required"`
-	Email               string `validate:"required"`
-	Password            string `validate:"required"`
-	Company_type        string `validate:"required"`
-	Company_size        string `validate:"required"`
-	Website             string `validate:"required"`
-	Description         string
-	Status_Verification string
-	Banners             string
-	Address             string
-	Phone               string
+	ID                  uint   `json:"id" form:"id"`
+	Company_name        string `validate:"required" gorm:"not null" json:"company_name" form:"company_name"`
+	Full_name           string `validate:"required" json:"full_name" form:"full_name"`
+	Email               string `validate:"required" gorm:"not null;unique" json:"email" form:"email"`
+	Password            string `validate:"required" gorm:"not null" json:"password" form:"password"`
+	Company_type        string `validate:"required" gorm:"not null" json:"company_type" form:"company_type"`
+	Company_size        string `validate:"required" gorm:"not null" json:"company_size" form:"company_size"`
+	Website             string `validate:"required" gorm:"not null" json:"website" form:"website"`
+	Description         string `json:"description" form:"description"`
+	Status_Verification string `json:"status_verification" form:"status_verification"`
+	Banners             string `json:"banners" form:"banners"`
+	Address             string `json:"address" form:"address"`
+	Phone               string `json:"phone" form:"phone"`
 	Token               string
 }
 
