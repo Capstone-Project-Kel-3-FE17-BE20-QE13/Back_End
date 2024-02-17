@@ -18,6 +18,7 @@ type Jobseeker struct {
 	Gender              string `json:"gender" form:"gender"`
 	Resume              string `json:"resume" form:"resume"`
 	Status_Verification string `json:"stat_verif" form:"stat_verif"`
+	Banners             string `json:"banners" form:"banners"`
 	Careers             []Career
 	Educations          []Education
 	Cvs                 []CV
