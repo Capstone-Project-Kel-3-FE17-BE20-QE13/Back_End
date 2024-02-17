@@ -94,7 +94,7 @@ func (handler *CompanyHandler) UpdateCompany(c echo.Context) error {
 
 	fmt.Println("data:", companyCore)
 
-	fileHeader, _ := c.FormFile("image_url")
+	fileHeader, _ := c.FormFile("banners")
 
 	var file multipart.File
 	if fileHeader != nil {
@@ -115,8 +115,11 @@ func (handler *CompanyHandler) UpdateCompany(c echo.Context) error {
 		}
 	}
 
-	if _, err := strconv.Atoi(reqData.Phone); err != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error invalid phone number format, only numeric allowed", nil))
+	newPhone := c.FormValue("phone")
+	if newPhone != "" {
+		if _, err := strconv.Atoi(reqData.Phone); err != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error invalid phone number format, only numeric allowed", nil))
+		}
 	}
 
 	err := handler.companyService.UpdateCompany(int(idJWT), companyCore, file, nameFile)
