@@ -6,7 +6,7 @@ import (
 
 type JobseekerRequest struct {
 	Full_name           string `gorm:"not null" json:"full_name" form:"full_name"`
-	Username            string `gorm:"not null" json:"username" form:"username"`
+	Username            string `gorm:"not null;unique" json:"username" form:"username"`
 	Email               string `gorm:"not null;unique" json:"email" form:"email"`
 	Password            string `gorm:"not null" json:"password" form:"password"`
 	Address             string `json:"address" form:"address"`
@@ -15,6 +15,7 @@ type JobseekerRequest struct {
 	Gender              string `json:"gender" form:"gender"`
 	Resume              string `json:"resume" form:"resume"`
 	Status_Verification string `json:"stat_verif" form:"stat_verif"`
+	Banners             string `json:"banners" form:"banners"`
 }
 
 type JobseekerRegistRequest struct {
@@ -34,6 +35,7 @@ type JobseekerUpdateRequest struct {
 	Birth_date string `json:"birth_date" form:"birth_date"`
 	Gender     string `json:"gender" form:"gender"`
 	Resume     string `json:"resume" form:"resume"`
+	Banners    string `json:"banners" form:"banners"`
 }
 
 type CVRequest struct {
@@ -82,6 +84,7 @@ func RequestJobseekerToCore(input JobseekerRequest) jobseeker.JobseekerCore {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		Status_Verification: input.Status_Verification,
+		Banners:             input.Banners,
 	}
 }
 
@@ -103,6 +106,7 @@ func RequestJobseekerUpdateToCore(input JobseekerUpdateRequest) jobseeker.Jobsee
 		Birth_date: input.Birth_date,
 		Gender:     input.Gender,
 		Resume:     input.Resume,
+		Banners:    input.Banners,
 	}
 }
 

@@ -17,6 +17,7 @@ func CoreJobseekerToModel(input jobseeker.JobseekerCore) database.Jobseeker {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		Status_Verification: input.Status_Verification,
+		Banners:             input.Banners,
 	}
 }
 
@@ -38,6 +39,7 @@ func CoreJobseekerToModelUpdate(input jobseeker.JobseekerUpdateCore) database.Jo
 		Birth_date: input.Birth_date,
 		Gender:     input.Gender,
 		Resume:     input.Resume,
+		Banners:    input.Banners,
 	}
 }
 
@@ -98,6 +100,7 @@ func ModelJobseekerToCore(input database.Jobseeker) jobseeker.JobseekerCore {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		Status_Verification: input.Status_Verification,
+		Banners:             input.Banners,
 	}
 }
 
