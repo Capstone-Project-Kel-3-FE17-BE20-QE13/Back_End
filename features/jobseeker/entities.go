@@ -21,6 +21,7 @@ type JobseekerCore struct {
 	Gender              string `json:"gender" form:"gender"`
 	Resume              string `json:"resume" form:"resume"`
 	Status_Verification string `json:"stat_verif" form:"stat_verif"`
+	Banners             string `json:"banners" form:"banners"`
 	Careers             []CareerCore
 	Educations          []EducationCore
 	Cvs                 []CVCore
@@ -43,6 +44,7 @@ type JobseekerUpdateCore struct {
 	Birth_date string `json:"birth_date" form:"birth_date"`
 	Gender     string `json:"gender" form:"gender"`
 	Resume     string `json:"resume" form:"resume"`
+	Banners    string `json:"banners" form:"banners"`
 }
 
 type CVCore struct {

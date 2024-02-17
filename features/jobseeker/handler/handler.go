@@ -80,6 +80,15 @@ func (handler *JobseekerHandler) UpdateJobseeker(c echo.Context) error {
 
 	newUpdate := JobseekerUpdateRequest{}
 
+	newBanners, _ := c.FormFile("banners")
+	if newBanners != nil {
+		newBannersURL, errURL := handler.jobseekerService.Photo(newBanners)
+		if errURL != nil {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "cannot get the photo's url", nil))
+		}
+		newUpdate.Banners = newBannersURL.SecureURL
+	}
+
 	errBind := c.Bind(&newUpdate)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error bind data. data not valid", nil))

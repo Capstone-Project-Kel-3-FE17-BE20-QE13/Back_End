@@ -23,6 +23,7 @@ type JobseekerResponse struct {
 	Gender              string `json:"gender" form:"gender"`
 	Resume              string `json:"resume" form:"resume"`
 	Status_Verification string `json:"stat_verif" form:"stat_verif"`
+	Banners             string `json:"banners" form:"banners"`
 	Careers             []CareerResponse
 }
 
@@ -37,6 +38,7 @@ type JobseekerResponseById struct {
 	Gender              string `json:"gender" form:"gender"`
 	Resume              string `json:"resume" form:"resume"`
 	Status_Verification string `json:"stat_verif" form:"stat_verif"`
+	Banners             string `json:"banners" form:"banners"`
 	Careers             []CareerResponse
 	Educations          []EducationResponse
 	Cvs                 []CvResponse
@@ -149,6 +151,7 @@ func CoreResponById(data jobseeker.JobseekerCore) JobseekerResponseById {
 		Gender:              data.Gender,
 		Resume:              data.Resume,
 		Status_Verification: data.Status_Verification,
+		Banners:             data.Banners,
 		Careers:             career,
 		Educations:          educations,
 		Cvs:                 cvs,
@@ -170,6 +173,7 @@ func CoreJobseekerToResponse(input jobseeker.JobseekerCore) JobseekerResponse {
 		Gender:              input.Gender,
 		Resume:              input.Resume,
 		Status_Verification: input.Status_Verification,
+		Banners:             input.Banners,
 	}
 }
 
