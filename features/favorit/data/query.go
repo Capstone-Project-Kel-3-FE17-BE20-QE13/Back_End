@@ -50,7 +50,7 @@ func (repo *FavQuery) CreateFavorit(input favorit.Core) (uint, error) {
 
 func (repo *FavQuery) GetAllFavorit(userID uint) ([]favorit.Core, error) {
 	var productsDataGorm []database.Favourite
-	tx := repo.db.Find(&productsDataGorm) // select * from users;
+	tx := repo.db.Where("jobseeker_id = ?", userID).Find(&productsDataGorm)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
