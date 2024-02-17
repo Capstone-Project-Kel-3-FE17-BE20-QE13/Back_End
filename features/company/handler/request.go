@@ -21,7 +21,7 @@ type CompanyRequestUpdate struct {
 	Company_size string `json:"company_size" form:"company_size"`
 	Website      string `json:"website" form:"website"`
 	Description  string `json:"description" form:"description"`
-	Banners      string `json:"image_url" form:"banners"`
+	Banners      string `json:"banners" form:"banners"`
 }
 
 func RequestCompanyUpdateToCore(input CompanyRequestUpdate) company.CompanyCore {
