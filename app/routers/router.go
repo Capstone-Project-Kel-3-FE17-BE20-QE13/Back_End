@@ -77,6 +77,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/login/company", companyHandlerAPI.LoginCompany)
 	e.GET("/company", companyHandlerAPI.GetById, middlewares.JWTMiddleware())
 	e.PUT("/company", companyHandlerAPI.UpdateCompany, middlewares.JWTMiddleware())
+	e.GET("/company-getjobseeker", jobseekerHandlerAPI.GetjobseekerByCompany, middlewares.JWTMiddleware())
 
 	// jobseekers
 	e.POST("/register/jobseekers", jobseekerHandlerAPI.RegisterJobseeker)

@@ -31,6 +31,84 @@ func New(db *gorm.DB) jobseeker.JobseekerDataInterface {
 	}
 }
 
+// GetjobseekerByCompany implements jobseeker.JobseekerDataInterface.
+func (repo *JobseekerQuery) GetjobseekerByCompany(input uint) (*jobseeker.JobseekerCore, error) {
+	var jobData database.Jobseeker
+	tx := repo.db.Preload("Cvs").Preload("Careers").Preload("Educations").Preload("Licenses").Preload("Skills").First(&jobData, input)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	data := &jobseeker.JobseekerCore{
+		ID:                  jobData.ID,
+		Full_name:           jobData.Full_name,
+		Username:            jobData.Username,
+		Email:               jobData.Email,
+		Address:             jobData.Address,
+		Phone:               jobData.Phone,
+		Birth_date:          jobData.Birth_date,
+		Gender:              jobData.Gender,
+		Resume:              jobData.Resume,
+		Status_Verification: jobData.Status_Verification,
+		Banners:             jobData.Banners,
+		Careers:             make([]jobseeker.CareerCore, len(jobData.Careers)),
+		Educations:          make([]jobseeker.EducationCore, len(jobData.Educations)),
+		Cvs:                 make([]jobseeker.CVCore, len(jobData.Cvs)),
+		Licenses:            make([]jobseeker.LicenseCore, len(jobData.Licenses)),
+		Skills:              make([]jobseeker.SkillCore, len(jobData.Skills)),
+	}
+
+	for i, license := range jobData.Licenses {
+		data.Licenses[i] = jobseeker.LicenseCore{
+			ID:             license.ID,
+			JobseekerID:    license.JobseekerID,
+			License_name:   license.License_name,
+			Published_date: license.Published_date,
+			Expiry_date:    license.Expiry_date,
+			License_file:   license.License_file,
+		}
+	}
+
+	for i, skil := range jobData.Skills {
+		data.Skills[i] = jobseeker.SkillCore{
+			ID:          skil.ID,
+			JobseekerID: skil.JobseekerID,
+			Skill:       skil.Skill,
+			Description: skil.Description,
+		}
+	}
+
+	for i, cvs := range jobData.Cvs {
+		data.Cvs[i] = jobseeker.CVCore{
+			JobseekerID: cvs.ID,
+			CV_file:     cvs.CV_file,
+		}
+	}
+
+	for i, education := range jobData.Educations {
+		data.Educations[i] = jobseeker.EducationCore{
+			ID:              education.ID,
+			JobseekerID:     education.JobseekerID,
+			Education_level: education.Education_level,
+			Major:           education.Major,
+			Graduation_date: education.Graduation_date,
+			Jobseeker:       data,
+		}
+	}
+
+	for i, career := range jobData.Careers {
+		data.Careers[i] = jobseeker.CareerCore{
+			ID:           career.ID,
+			JobseekerID:  career.JobseekerID,
+			Position:     career.Position,
+			Company_name: career.Company_name,
+			Date_start:   career.Date_start,
+			Date_end:     career.Date_end,
+			Jobseeker:    data,
+		}
+	}
+	return data, nil
+}
 func (repo *JobseekerQuery) GetByIdJobSeeker(id uint) (*jobseeker.JobseekerCore, error) {
 	var jobData database.Jobseeker
 	tx := repo.db.Preload("Cvs").Preload("Careers").Preload("Educations").Preload("Licenses").Preload("Skills").First(&jobData, id)

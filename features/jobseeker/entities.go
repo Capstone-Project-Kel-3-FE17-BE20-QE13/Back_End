@@ -128,6 +128,7 @@ type JobseekerServiceInterface interface {
 	UpdateSkill(skillID uint, data SkillCore) error
 	RemoveSkill(skillID uint) error
 	GetByIdJobSeeker(id uint) (*JobseekerCore, error)
+	GetjobseekerByCompany(input uint) (*JobseekerCore, error)
 }
 
 // interface untuk Data Layer
@@ -164,4 +165,5 @@ type JobseekerDataInterface interface {
 	UpdateSkill(skillID uint, data SkillCore) error
 	RemoveSkill(skillID uint) error
 	GetByIdJobSeeker(id uint) (*JobseekerCore, error)
+	GetjobseekerByCompany(input uint) (*JobseekerCore, error)
 }
