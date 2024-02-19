@@ -22,6 +22,7 @@ type JobseekerCore struct {
 	Resume              string `json:"resume" form:"resume"`
 	Status_Verification string `json:"stat_verif" form:"stat_verif"`
 	Banners             string `json:"banners" form:"banners"`
+	Roles               string
 	Careers             []CareerCore
 	Educations          []EducationCore
 	Cvs                 []CVCore

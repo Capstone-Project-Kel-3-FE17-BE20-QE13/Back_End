@@ -1,8 +1,8 @@
 module JobHuntz
 
-go 1.22
+go 1.19
 
-toolchain go1.22.0
+// toolchain go1.22.0
 
 // go 1.19
 

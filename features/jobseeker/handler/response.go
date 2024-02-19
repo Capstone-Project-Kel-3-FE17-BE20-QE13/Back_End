@@ -9,6 +9,7 @@ type LoginResponse struct {
 	Full_name string `gorm:"not null" json:"full_name" form:"full_name"`
 	Email     string `gorm:"not null;unique" json:"email" form:"email"`
 	Token     string `json:"token" form:"token"`
+	Roles     string `json:"roles" form:"roles"`
 }
 
 type JobseekerResponse struct {
@@ -182,6 +183,7 @@ func CoreJobseekerToResponseLogin(input jobseeker.JobseekerCore, token string) L
 		ID:        input.ID,
 		Full_name: input.Full_name,
 		Email:     input.Email,
+		Roles:     "jobseker",
 		Token:     token,
 	}
 }
