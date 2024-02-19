@@ -38,3 +38,17 @@ Untuk menjalankan server, gunakan perintah:
     go run main.go
 
 Server akan berjalan di http://localhost:8080 atau port yang telah kamu tentukan.
+
+### Env
+
+export DBUSER=''
+export DBPASS=''
+export DBHOST='127.0.0.1'
+export DBPORT='3306'
+export DBNAME='db_ku'
+export JWTSECRET='sup3rs3cr3t'
+
+export CLOUDINARY_KEY=''
+export CLOUDINARY_SECRET=''
+export CLOUDINARY_CLOUD_NAME=''
+export MIDTRANS_SERVERKEY=''
