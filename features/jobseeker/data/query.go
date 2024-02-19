@@ -137,8 +137,8 @@ func (repo *JobseekerQuery) AllEmails(email string) (jobseeker.JobseekerCore, er
 func (repo *JobseekerQuery) AllUsernames(username string) (jobseeker.JobseekerCore, error) {
 	var dataSeeker database.Jobseeker
 	tx := repo.db.Where("username = ?", username).First(&dataSeeker)
-	if tx.Error != nil {
-		// return jobseeker.JobseekerCore{}, errors.New("duplicate entry")
+	if tx.Error == nil {
+		return jobseeker.JobseekerCore{}, errors.New("username is already used")
 	}
 
 	userCore := ModelJobseekerToCore(dataSeeker)
