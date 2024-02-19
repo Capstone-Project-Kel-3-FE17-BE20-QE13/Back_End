@@ -35,7 +35,23 @@ func (handler *JobseekerHandler) GetByIdJobSeeker(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get my profile", res))
 }
+func (handler *JobseekerHandler) GetjobseekerByCompany(c echo.Context) error {
+	jobseekerID := c.QueryParam("jobseeker_id")
 
+	jobseekerID_int, errConv := strconv.Atoi(jobseekerID)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, "error convert id param", nil))
+	}
+
+	result, errFirst := handler.jobseekerService.GetjobseekerByCompany(uint(jobseekerID_int))
+	if errFirst != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+	}
+
+	jobseekerResponse := CoreResponById(*result)
+
+	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get detail license", jobseekerResponse))
+}
 func (handler *JobseekerHandler) RegisterJobseeker(c echo.Context) error {
 	newSeeker := JobseekerRegistRequest{}
 

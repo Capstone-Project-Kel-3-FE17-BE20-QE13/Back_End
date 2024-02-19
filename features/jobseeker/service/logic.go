@@ -25,6 +25,12 @@ func New(repo jobseeker.JobseekerDataInterface) jobseeker.JobseekerServiceInterf
 	}
 }
 
+func (service *JobseekerService) GetjobseekerByCompany(input uint) (*jobseeker.JobseekerCore, error) {
+	// logic validation
+	res, err := service.jobseekerData.GetByIdJobSeeker(input)
+	return res, err
+}
+
 // GetByIdJobSeeker implements jobseeker.JobseekerServiceInterface.
 func (service *JobseekerService) GetByIdJobSeeker(id uint) (*jobseeker.JobseekerCore, error) {
 	result, err := service.jobseekerData.GetByIdJobSeeker(id)
