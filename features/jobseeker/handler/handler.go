@@ -154,7 +154,7 @@ func (handler *JobseekerHandler) GetCV(c echo.Context) error {
 
 	result, errFirst := handler.jobseekerService.ReadCV(seekerID)
 	if errFirst != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, "error read data. "+errFirst.Error(), nil))
+		return c.JSON(http.StatusNotFound, responses.WebResponse(http.StatusNotFound, "cannot find data "+errFirst.Error(), nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully get cv", result))
