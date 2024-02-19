@@ -12,7 +12,7 @@ import (
 type JobseekerCore struct {
 	ID                  uint   `json:"id" form:"id"`
 	Full_name           string `gorm:"not null" json:"full_name" form:"full_name"`
-	Username            string `gorm:"not null" json:"username" form:"username"`
+	Username            string `gorm:"not null:unique" json:"username" form:"username"`
 	Email               string `gorm:"not null;unique" json:"email" form:"email"`
 	Password            string `gorm:"not null" json:"password" form:"password"`
 	Address             string `json:"address" form:"address"`
