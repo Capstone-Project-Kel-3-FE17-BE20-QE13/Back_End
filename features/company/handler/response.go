@@ -38,12 +38,14 @@ type CompanyResponById struct {
 
 type LoginResponse struct {
 	Email string `gorm:"not null;unique" json:"email" form:"email"`
+	Roles string `gorm:"not null;unique" json:"roles" form:"roles"`
 	Token string `json:"token" form:"token"`
 }
 
 func ResponCompanyToResponseLogin(input company.CompanyCore, token string) LoginResponse {
 	return LoginResponse{
 		Email: input.Email,
+		Roles: input.Roles,
 		Token: token,
 	}
 }

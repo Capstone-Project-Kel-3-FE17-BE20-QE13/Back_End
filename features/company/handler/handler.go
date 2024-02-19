@@ -56,6 +56,7 @@ func (handler *CompanyHandler) LoginCompany(c echo.Context) error {
 		"id":        result.ID,
 		"full_name": result.Full_name,
 		"email":     result.Email,
+		"roles":     "company",
 		"token":     token,
 	}
 

@@ -19,6 +19,7 @@ type CompanyCore struct {
 	Address             string `json:"address" form:"address"`
 	Phone               string `json:"phone" form:"phone"`
 	Token               string
+	Roles               string
 }
 
 type CompanyDataInterface interface {
