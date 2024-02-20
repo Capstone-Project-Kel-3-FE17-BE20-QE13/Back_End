@@ -183,7 +183,7 @@ func CoreJobseekerToResponseLogin(input jobseeker.JobseekerCore, token string) L
 		ID:        input.ID,
 		Full_name: input.Full_name,
 		Email:     input.Email,
-		Roles:     "jobseker",
+		Roles:     "jobseeker",
 		Token:     token,
 	}
 }
