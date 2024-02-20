@@ -14,7 +14,7 @@ import (
 
 func TestGetId(t *testing.T) {
 	repo := new(mocks.CompanyData)
-	hash := new(hashMock.HashService)
+	hash := new(hashMock.HashMock)
 	srv := New(repo, hash)
 	returnData := &company.CompanyCore{
 		ID:                  1,
@@ -40,7 +40,7 @@ func TestGetId(t *testing.T) {
 
 func TestRegisterCompany(t *testing.T) {
 	repo := new(mocks.CompanyData)
-	hash := new(hashMock.HashService)
+	hash := new(hashMock.HashMock)
 	inputData := company.CompanyCore{
 		Company_name: "Hanapi bagas",
 		Full_name:    "Hello",
@@ -88,7 +88,7 @@ func TestRegisterCompany(t *testing.T) {
 
 func TestLoginCompany(t *testing.T) {
 	repo := new(mocks.CompanyData)
-	hash := new(hashMock.HashService)
+	hash := new(hashMock.HashMock)
 	email := "alta@mail.com"
 	password := "qwerty123"
 
@@ -130,7 +130,7 @@ func TestLoginCompany(t *testing.T) {
 
 func TestUpdateCompany(t *testing.T) {
 	repo := new(mocks.CompanyData)
-	hash := new(hashMock.HashService)
+	hash := new(hashMock.HashMock)
 	srv := New(repo, hash)
 	mockFile := new(multipart.File)
 
