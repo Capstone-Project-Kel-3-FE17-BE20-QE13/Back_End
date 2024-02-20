@@ -51,11 +51,11 @@ func (service *companyService) LoginCompany(email string, password string) (data
 
 	data, err = service.companyData.LoginCompany(email, password)
 	if err != nil {
-		return nil, "", errors.New("Email atau password salah")
+		return nil, "", errors.New("email atau password salah")
 	}
 	isValid := service.hashService.CheckPasswordHash(data.Password, password)
 	if !isValid {
-		return nil, "", errors.New("password tidak sesuai.")
+		return nil, "", errors.New("password tidak sesuai")
 	}
 
 	token, errJwt := middlewares.CreateToken(int(data.ID))
