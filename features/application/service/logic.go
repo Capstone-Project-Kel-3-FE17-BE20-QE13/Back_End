@@ -48,7 +48,7 @@ func (uc *ApplyService) CountApplication(dbRaw *sql.DB, userID uint) (uint, erro
 
 func (uc *ApplyService) CreateApplication(input application.Core, count uint, status string) error {
 	if status == "Unverified" && count == 3 {
-		return errors.New("Unverified user can't make more than 3 applications")
+		return errors.New("unverified user can't make more than 3 applications")
 	} else {
 		err := uc.Repo.CreateApplication(input)
 
