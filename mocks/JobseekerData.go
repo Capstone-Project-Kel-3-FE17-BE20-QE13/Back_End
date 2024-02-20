@@ -11,6 +11,8 @@ import (
 
 	s3manager "github.com/aws/aws-sdk-go/service/s3/s3manager"
 
+	sql "database/sql"
+
 	uploader "github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
@@ -107,6 +109,90 @@ func (_m *JobseekerData) AddSkill(input jobseeker.SkillCore) error {
 	}
 
 	return r0
+}
+
+// AllEmails provides a mock function with given fields: email
+func (_m *JobseekerData) AllEmails(email string) (jobseeker.JobseekerCore, error) {
+	ret := _m.Called(email)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AllEmails")
+	}
+
+	var r0 jobseeker.JobseekerCore
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (jobseeker.JobseekerCore, error)); ok {
+		return rf(email)
+	}
+	if rf, ok := ret.Get(0).(func(string) jobseeker.JobseekerCore); ok {
+		r0 = rf(email)
+	} else {
+		r0 = ret.Get(0).(jobseeker.JobseekerCore)
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(email)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// AllUsernames provides a mock function with given fields: username
+func (_m *JobseekerData) AllUsernames(username string) (jobseeker.JobseekerCore, error) {
+	ret := _m.Called(username)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AllUsernames")
+	}
+
+	var r0 jobseeker.JobseekerCore
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (jobseeker.JobseekerCore, error)); ok {
+		return rf(username)
+	}
+	if rf, ok := ret.Get(0).(func(string) jobseeker.JobseekerCore); ok {
+		r0 = rf(username)
+	} else {
+		r0 = ret.Get(0).(jobseeker.JobseekerCore)
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(username)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// CountCV provides a mock function with given fields: dbRaw, seekerID
+func (_m *JobseekerData) CountCV(dbRaw *sql.DB, seekerID uint) (uint, error) {
+	ret := _m.Called(dbRaw, seekerID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CountCV")
+	}
+
+	var r0 uint
+	var r1 error
+	if rf, ok := ret.Get(0).(func(*sql.DB, uint) (uint, error)); ok {
+		return rf(dbRaw, seekerID)
+	}
+	if rf, ok := ret.Get(0).(func(*sql.DB, uint) uint); ok {
+		r0 = rf(dbRaw, seekerID)
+	} else {
+		r0 = ret.Get(0).(uint)
+	}
+
+	if rf, ok := ret.Get(1).(func(*sql.DB, uint) error); ok {
+		r1 = rf(dbRaw, seekerID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetByIdJobSeeker provides a mock function with given fields: id
@@ -371,27 +457,29 @@ func (_m *JobseekerData) GetSkillList(seekerID uint) ([]jobseeker.SkillCore, err
 	return r0, r1
 }
 
-// Login provides a mock function with given fields: email
-func (_m *JobseekerData) Login(email string) (jobseeker.JobseekerCore, error) {
-	ret := _m.Called(email)
+// GetjobseekerByCompany provides a mock function with given fields: input
+func (_m *JobseekerData) GetjobseekerByCompany(input uint) (*jobseeker.JobseekerCore, error) {
+	ret := _m.Called(input)
 
 	if len(ret) == 0 {
-		panic("no return value specified for Login")
+		panic("no return value specified for GetjobseekerByCompany")
 	}
 
-	var r0 jobseeker.JobseekerCore
+	var r0 *jobseeker.JobseekerCore
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) (jobseeker.JobseekerCore, error)); ok {
-		return rf(email)
+	if rf, ok := ret.Get(0).(func(uint) (*jobseeker.JobseekerCore, error)); ok {
+		return rf(input)
 	}
-	if rf, ok := ret.Get(0).(func(string) jobseeker.JobseekerCore); ok {
-		r0 = rf(email)
+	if rf, ok := ret.Get(0).(func(uint) *jobseeker.JobseekerCore); ok {
+		r0 = rf(input)
 	} else {
-		r0 = ret.Get(0).(jobseeker.JobseekerCore)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*jobseeker.JobseekerCore)
+		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(email)
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(input)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -488,7 +576,7 @@ func (_m *JobseekerData) ReadCV(seekerID uint) (jobseeker.CVCore, error) {
 }
 
 // Register provides a mock function with given fields: input
-func (_m *JobseekerData) Register(input jobseeker.JobseekerCore) error {
+func (_m *JobseekerData) Register(input jobseeker.JobseekerRegistCore) error {
 	ret := _m.Called(input)
 
 	if len(ret) == 0 {
@@ -496,7 +584,7 @@ func (_m *JobseekerData) Register(input jobseeker.JobseekerCore) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(jobseeker.JobseekerCore) error); ok {
+	if rf, ok := ret.Get(0).(func(jobseeker.JobseekerRegistCore) error); ok {
 		r0 = rf(input)
 	} else {
 		r0 = ret.Error(0)
@@ -668,7 +756,7 @@ func (_m *JobseekerData) UpdateLicense(licenseID uint, data jobseeker.LicenseCor
 }
 
 // UpdateProfile provides a mock function with given fields: seekerID, data
-func (_m *JobseekerData) UpdateProfile(seekerID uint, data jobseeker.JobseekerCore) error {
+func (_m *JobseekerData) UpdateProfile(seekerID uint, data jobseeker.JobseekerUpdateCore) error {
 	ret := _m.Called(seekerID, data)
 
 	if len(ret) == 0 {
@@ -676,7 +764,7 @@ func (_m *JobseekerData) UpdateProfile(seekerID uint, data jobseeker.JobseekerCo
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(uint, jobseeker.JobseekerCore) error); ok {
+	if rf, ok := ret.Get(0).(func(uint, jobseeker.JobseekerUpdateCore) error); ok {
 		r0 = rf(seekerID, data)
 	} else {
 		r0 = ret.Error(0)
