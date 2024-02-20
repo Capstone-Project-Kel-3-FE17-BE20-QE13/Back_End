@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"mime/multipart"
+
 	"testing"
 
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"

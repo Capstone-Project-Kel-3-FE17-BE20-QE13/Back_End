@@ -122,7 +122,7 @@ func (handler *JobseekerHandler) UpdateJobseeker(c echo.Context) error {
 
 	err := handler.jobseekerService.UpdateProfile(seekerID, newUpdateCore)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(http.StatusInternalServerError, err.Error(), nil))
+		return c.JSON(http.StatusBadRequest, responses.WebResponse(http.StatusBadRequest, err.Error(), nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse(http.StatusOK, "successfully update profile", nil))
